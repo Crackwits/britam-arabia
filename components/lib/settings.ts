@@ -1,0 +1,2 @@
+export const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL ?? "https://britamcms.crackwits.com";
+export const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN ?? "62fcd42e5ab279d5c2a318cfc98b393ed953b442b09fe0f1e833d23b36ab14e0e9975a182cbaff3a6f8059021cba6ddd2d23322517fff2bd1f3f1e8b9c97320a4360bd7254a776381a22fec7082680e14fc3f9a444b857a86cfa1a38b8a0b2514996d604de077b0dd4d2befd7b3ad15f7d7196b9922c62a245f448afad2b0f28";

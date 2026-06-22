@@ -5,12 +5,181 @@
   --foreground: #171717;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+@theme {
+  /* ── Fonts ───────────────────────────────────────────── */
+  --font-en: var(--font-en);
+  --font-ar: var(--font-ar);
+
+  /* ── Colors ──────────────────────────────────────────── */
+  --color-blue950: #22285C;
+  --color-blue900: #38429A;
+  --color-blue800: #0025E3;
+  --color-blue700: #AFB3D7;
+  --color-blue600: #0029FF;
+  --color-blue500: #1441FF;
+  --color-blue400: #3F75FF;
+  --color-blue300: #75ABFF;
+  --color-blue200: #A9CEFF;
+  --color-blue100: #CFE6FF;
+  --color-blue50: #E5F1FF;
+  --color-neutral200: #D8D9DF;
+  --color-neurtal900: #34343F;
+  --color-neutral500: #6E6F89;
+  --color-neutral50: #F8F8F8;
+
+  --color-neutralLight: #B5B6C4;
+  --color-navy900: #001239;
+  --color-darkLight: #6E6F89;
+  --color-primaryDefault: #0034A5;
+  --color-darkDefault: #34343F;
+  --color-richNavy: #001239;
+  --color-f7f7f7: #F7F7F7;
+  --color-fcfcff: #FCFCFF;
+  --color-footerbg: #00031E;
+  --color-lightLighter: #B5B6C4;
+  --color-e2e2e2: #E2E2E2;
+
+  /* ── Font sizes ──────────────────────────────────────── */
+  --font-size-xs: 12px;
+  --line-height-xs: 20px;
+  --font-size-sm: 14px;
+  --line-height-sm: 22px;
+  --font-size-base: 16px;
+  --line-height-base: 24px;
+  --font-size-lg: 18px;
+  --line-height-lg: 26px;
+  --font-size-xl: 20px;
+  --line-height-xl: 28px;
+  --font-size-2xl: 24px;
+  --line-height-2xl: 32px;
+  --font-size-3xl: 32px;
+  --line-height-3xl: 40px;
+  --font-size-4xl: 40px;
+  --line-height-4xl: 48px;
+  --font-size-5xl: 48px;
+  --line-height-5xl: 56px;
+  --font-size-6xl: 56px;
+  --line-height-6xl: 64px;
+  --font-size-7xl: 64px;
+  --line-height-7xl: 72px;
+  --font-size-h1: 64px;
+  --line-height-h1: 72px;
+  --font-size-h2: 56px;
+  --line-height-h2: 64px;
+  --font-size-h3: 48px;
+  --line-height-h3: 56px;
+  --font-size-h4: 40px;
+  --line-height-h4: 48px;
+  --font-size-h5: 32px;
+  --line-height-h5: 40px;
+  --font-size-h6: 24px;
+  --line-height-h6: 32px;
+
+  /* ── Screens ─────────────────────────────────────────── */
+  --breakpoint-xxl: 1600px;
+
+  /* ── Animations ──────────────────────────────────────── */
+  --animate-marquee: marquee 25s linear infinite;
+  --animate-scroll-rtl: scroll-rtl 20s linear infinite;
+  --animate-slideIn: slideIn 0.2s ease forwards;
+
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+
+
+  @keyframes scroll-rtl {
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes slideIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 }
+
+
+
+/* ── Base styles ─────────────────────────────────────────── */
+@layer base {
+  html[lang="en"] {
+    font-family: var(--font-en);
+  }
+
+  html[lang="ar"] {
+    font-family: var(--font-ar);
+  }
+
+  /* Scrollbar hide utility */
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer utilities {
+  [dir="rtl"] {
+    .footer-clip {
+      clip-path: polygon(0 0,
+          calc(100% - 20px) 0,
+          100% 20px,
+          100% 100%,
+          0 100%);
+    }
+
+    @media (min-width: 991px) {
+      .footer-clip {
+        clip-path: polygon(0 0,
+            calc(100% - 60px) 0,
+            100% 60px,
+            100% 100%,
+            0 100%);
+      }
+    }
+  }
+
+  [dir="ltr"] {
+    .footer-clip {
+      clip-path: polygon(20px 0, 100% 0, 100% 100%, 0 100%, 0 20px);
+    }
+
+    @media (min-width: 991px) {
+      .footer-clip {
+        clip-path: polygon(60px 0, 100% 0, 100% 100%, 0 100%, 0 60px);
+      }
+    }
+  }
+}
+
+/* Add this block into your existing globals.css */
+
+
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -22,5 +191,114 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+[dir="rtl"] {
+
+  .ck-prose ul,
+  .ck-prose ol {
+    padding-right: 1.25rem;
+  }
+
+  .ck-prose li {
+    border-right: 2px solid #ED0000;
+    padding-right: 8px;
+  }
+
+  .ck-prose blockquote {
+    border-right: 3px solid #ED0000;
+    padding-right: 1rem;
+  }
+}
+
+[dir="ltr"] {
+
+  .ck-prose ul,
+  .ck-prose ol {
+    padding-left: 1.25rem;
+  }
+
+  .ck-prose li {
+    border-left: 2px solid #ED0000;
+    padding-left: 8px;
+  }
+
+  .ck-prose blockquote {
+    border-left: 3px solid #ED0000;
+    padding-left: 1rem;
+  }
+}
+
+/* ─── CKEditor 5 HTML output styles ─────────────────────────────────────────
+   Add these inside your globals.css under @layer base or directly at root.
+   Scoped to .ck-prose so they never bleed into other components.
+────────────────────────────────────────────────────────────────────────────── */
+.ck-prose hr {
+  height: 1px;
+  margin-top: 36px;
+  margin-bottom: 36px;
+  color: #B5B6C4;
+}
+
+.ck-prose p {
+  margin-bottom: 1rem;
+}
+
+.ck-prose p:last-child {
+  margin-bottom: 0;
+}
+
+.ck-prose strong {
+  font-weight: 600;
+  color: inherit;
+}
+
+.ck-prose em {
+  font-style: italic;
+}
+
+.ck-prose ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ck-prose ol {
+  list-style-type: decimal;
+}
+
+
+.ck-prose a {
+  color: #0034A5;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.ck-prose a:hover {
+  opacity: 0.75;
+}
+
+.ck-prose h2,
+.ck-prose h3,
+.ck-prose h4 {
+  font-weight: 700;
+  color: #0D1B5E;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.ck-prose ul,
+.ck-prose ol {
+  margin-bottom: 1rem;
+}
+
+.ck-prose li {
+  color: #001239;
+  margin-bottom: 8px;
+}
+
+.ck-prose blockquote {
+  color: #6b7280;
+  font-style: italic;
+  margin: 1rem 0;
 }
