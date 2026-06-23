@@ -11,9 +11,9 @@ import WhiteTriangle from "@/public/svg/whitetriangle";
 import OrangeTriangle from "@/public/svg/orangetriangle";
 import { GlobalSettingAttributes } from "@/components/lib/types";
 // ─── Types ────────────────────────────────────────────────────────────────────
-
+type SupportedLocale = keyof typeof translations; // → "en" | "ar"
 interface ContactSectionProps {
-  locale: string;
+  locale: SupportedLocale;
   globalSettings: GlobalSettingAttributes | null;
   heading: string;
   body: string;
@@ -22,7 +22,7 @@ interface ContactSectionProps {
 // ─── Translations ─────────────────────────────────────────────────────────────
 
 const translations = {
-  "en": {
+  en: {
     inquiryLine: "MAKE AN INQUIRY",
     fullName: "Enter your full name",
     email: "Enter your email",
@@ -40,7 +40,7 @@ const translations = {
       message: "Please tell us how we can help",
     },
   },
-  "ar": {
+  ar: {
     inquiryLine: "أرسل استفسارك",
     fullName: "أدخل الاسم الكامل",
     email: "أدخل البريد الإلكتروني",
@@ -62,7 +62,7 @@ const translations = {
 
 // ─── Zod Schema (built per-locale so error messages match the UI language) ────
 
-function buildContactSchema(locale: string) {
+function buildContactSchema(locale: SupportedLocale) {
   const t = translations[locale].errors;
   return z.object({
     fullName: z.string().trim().min(2, t.fullName),
@@ -221,7 +221,7 @@ export default function HpContactSection({ locale, globalSettings, heading, body
           <div className="pointer-events-none absolute inset-0 bg-black/35" />
           <div
             aria-hidden="true"
-            className={`absolute top-0 z-10 h-20 w-20 ${isArabic ? "right-0" : "left-0"
+            className={`absolute top-0 z-10 h-20 w-20 ${isArabic ? "right-0 rotate-90" : "left-0"
               }`}
           >
             <WhiteTriangle />
@@ -229,7 +229,7 @@ export default function HpContactSection({ locale, globalSettings, heading, body
           </div>
           <div
             aria-hidden="true"
-            className={`absolute top-0 z-10 h-20 w-20 ${isArabic ? "right-0" : "left-0"
+            className={`absolute top-0 z-10 h-20 w-20 ${isArabic ? "right-0 rotate-90" : "left-0"
               }`}
           >
             <OrangeTriangle />
@@ -375,21 +375,21 @@ export default function HpContactSection({ locale, globalSettings, heading, body
               sm:flex-row sm:gap-10 pt-6">
                 <div>
                   <p className="text-sm sm:mb-2 mb-6">{t.phoneLabel}</p>
-                  <a href={`tel:${globalSettings.phone}`} target="_blank" className="hover:underline text-sm font-medium">{globalSettings.phone}</a>
+                  <a href={`tel:${globalSettings?.phone}`} target="_blank" className="hover:underline text-sm font-medium">{globalSettings?.phone}</a>
                 </div>
                 <div>
                   <p className="text-sm sm:mb-2 mb-6">{t.emailLabel}</p>
-                  <a href={`mailto:${globalSettings.email}`} target="_blank" className="hover:underline text-sm font-medium">{globalSettings.email}</a>
+                  <a href={`mailto:${globalSettings?.email}`} target="_blank" className="hover:underline text-sm font-medium">{globalSettings?.email}</a>
                 </div>
 
               </div>
               <div className="pt-6 text-white">
                 <p className="text-sm mb-2">{t.addressLabel}</p>
-                <a href={globalSettings.address_link} target="_blank" className="hover:underline text-sm font-medium">
+                <a href={globalSettings?.address_link} target="_blank" className="hover:underline text-sm font-medium">
                   
                   {isArabic
-                        ? globalSettings.address_ar
-                        : globalSettings.address_en
+                        ? globalSettings?.address_ar
+                        : globalSettings?.address_en
                   }
                 </a>
               </div>

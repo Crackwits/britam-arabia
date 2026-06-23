@@ -19,9 +19,10 @@ interface HomePageTemplateProps {
     lang: string;
 }
 
+
 export default function HomeTemplate({ homedata, globalSettings, lang }: HomePageTemplateProps) {
     const isArabic = lang === 'ar';
-
+    const locale: "ar" | "en" = lang === "ar" ? "ar" : "en";
     return (
         <>
             <Navbar activeSection="homehero" lang={lang} />
@@ -59,7 +60,7 @@ export default function HomeTemplate({ homedata, globalSettings, lang }: HomePag
             <TestimonialsSection isArabic={isArabic}
                 testimonials_title={homedata.testimonials_title}
                 testimonials={homedata.testimonials} />
-            <HpContactSection locale={lang} globalSettings={globalSettings} heading={homedata.inquiry_cta_heading} body={homedata.inquiry_cta_body} />
+            <HpContactSection locale={locale} globalSettings={globalSettings} heading={homedata.inquiry_cta_heading} body={homedata.inquiry_cta_body} />
         </>
     );
 }
