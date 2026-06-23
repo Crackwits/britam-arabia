@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { getSingleType } from "@/components/lib/api";
+import { getSingleType, getCollection } from "@/components/lib/api";
 import { buildMetadata } from "@/components/lib/seo";
-import type { GlobalSettingAttributes, HomePageAttributes } from "@/components/lib/types";
+import type { Capabilities, GlobalSettingAttributes, HomePageAttributes } from "@/components/lib/types";
 import HomeTemplate from "@/components/design/templates/Home";
 
 type Params = Promise<{ lang: string }>; // ← add this
@@ -21,7 +21,10 @@ export default async function HomePage({ params }: { params: Params }) {
   const { lang } = await params;
 
   const globalsettings = await getSingleType<GlobalSettingAttributes>("global-setting", lang);
-
+  const capabilities = await getCollection<Capabilities>("integrated-capabilities", lang,
+    {
+        image: true,
+    });
   const page = await getSingleType<HomePageAttributes>("home-page", lang,
     {
       image: true,
@@ -43,7 +46,7 @@ export default async function HomePage({ params }: { params: Params }) {
 
   return (
     <>
-      <HomeTemplate homedata={page} globalSettings={globalsettings} lang={lang} />
+      <HomeTemplate homedata={page} capabilities={capabilities} globalSettings={globalsettings} lang={lang} />
     </>
   );
 }

@@ -1,7 +1,7 @@
 
 import HeroBanner from "../../organisms/heros/Herobanner";
 import PartnershipBanner from "../../organisms/heros/Partnershipbanner";
-import { HomePageAttributes } from "@/components/lib/types";
+import { Capabilities, HomePageAttributes } from "@/components/lib/types";
 import Navbar from "../../organisms/layout/Navbar";
 import MediaBlock from "@/components/core/molecules/MediaBlock";
 import WhatYouGetSection from "../../organisms/sections/Whatyougetsection";
@@ -15,12 +15,13 @@ import { GlobalSettingAttributes } from "@/components/lib/types";
 
 interface HomePageTemplateProps {
     homedata: HomePageAttributes;
+    capabilities: Capabilities[];
     globalSettings: GlobalSettingAttributes | null;
     lang: string;
 }
 
 
-export default function HomeTemplate({ homedata, globalSettings, lang }: HomePageTemplateProps) {
+export default function HomeTemplate({ homedata,capabilities, globalSettings, lang }: HomePageTemplateProps) {
     const isArabic = lang === 'ar';
     const locale: "ar" | "en" = lang === "ar" ? "ar" : "en";
     return (
@@ -35,7 +36,7 @@ export default function HomeTemplate({ homedata, globalSettings, lang }: HomePag
                 cta2_link=""
                 image={homedata.section1_image} />
 
-            <WhatYouGetSection section2_title={homedata.section2_title} intro_what_you_get={homedata.intro_what_you_get} />
+            <WhatYouGetSection section2_title={homedata.section2_title} intro_what_you_get={homedata.intro_what_you_get} titleclass=""/>
             <WhyChooseUsSection section3_title={homedata.section3_title} intro_why_choose_us={homedata.intro_why_choose_us} />
             <MediaBlock isArabic={isArabic} title={homedata.section4_title}
                 desc={homedata.section4_desc}
@@ -55,7 +56,7 @@ export default function HomeTemplate({ homedata, globalSettings, lang }: HomePag
                 project_title={homedata.project_title}
                 critical_projects={homedata.critical_projects} />
             <ServicesEntry isArabic={isArabic} services_entry_heading={homedata.services_entry_heading}
-                services_entry_items={homedata.services_entry_items} />
+                services_entry_items={capabilities} />
 
             <TestimonialsSection isArabic={isArabic}
                 testimonials_title={homedata.testimonials_title}

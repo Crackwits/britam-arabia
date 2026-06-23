@@ -2,21 +2,21 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { MediaItem } from "@/components/lib/types";
+import { Capabilities, MediaItem } from "@/components/lib/types";
 import { STRAPI_URL } from "@/components/lib/settings";
 import Link from "next/link";
 
 interface Props {
     isArabic: boolean;
     services_entry_heading: string;
-    services_entry_items: MediaItem[];
+    services_entry_items: Capabilities[];
 }
 
 const getMediaUrl = (url?: string) =>
     url ? `${STRAPI_URL}${url}` : '';
 
 interface CardProps {
-    item: MediaItem;
+    item: Capabilities;
     index: number;
     isArabic: boolean;
     visible: boolean;
@@ -72,7 +72,7 @@ function ServiceCard({ item, index, isArabic, visible }: CardProps) {
                 </p>
 
                 <Link
-                    href="/our-journey"
+                    href={`/capabilities/${item.slug}`}
                     target="_blank"
                     className="pb-2 uppercase group inline-flex items-center gap-2 text-darkDefault font-medium tracking-[0.84px] text-sm transition-transform duration-200 focus:outline-none focus-visible:underline"
                 >

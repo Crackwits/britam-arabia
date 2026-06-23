@@ -7,6 +7,7 @@ import { WhatYouGetItem } from '@/components/lib/types';
 interface WhatYouGetSectionProps {
     section2_title: string;
     intro_what_you_get: WhatYouGetItem[];
+    titleclass: string;
 }
 
 function useInView(threshold = 0.15) {
@@ -30,6 +31,7 @@ function useInView(threshold = 0.15) {
 export default function WhatYouGetSection({
     section2_title,
     intro_what_you_get,
+    titleclass,
 }: WhatYouGetSectionProps) {
     const { ref: headingRef, visible: headingVisible } = useInView(0.2);
     const { ref: gridRef, visible: gridVisible } = useInView(0.1);
@@ -42,7 +44,7 @@ export default function WhatYouGetSection({
                 <div ref={headingRef}>
                     <h2
                         className={[
-                            'text-navy900 uppercase font-medium tracking-[-1.92px] pb-4 text-4xl sm:text-5xl lg:text-6xl text-center mx-auto w-full mb-16',
+                            'text-navy900 uppercase font-medium tracking-[-1.92px] pb-4 text-4xl sm:text-5xl lg:text-6xl max-w-[740px] text-center mx-auto w-full mb-16',
                             'transition-all duration-700 ease-out',
                             headingVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
                         ].join(' ')}
@@ -74,7 +76,7 @@ export default function WhatYouGetSection({
                             </span>
 
                             {/* Title */}
-                            <h3 className="text-2xl font-medium tracking-[-0.48px] text-richNavy mb-2">
+                            <h3 className={`text-2xl font-medium tracking-[-0.48px] text-richNavy mb-2 ${titleclass}`}>
                                 {item.title}
                             </h3>
 

@@ -159,6 +159,25 @@ export interface CriticalEnvironments extends StrapiAttributes {
     content: string;
 }
 
+export interface Capabilities extends StrapiAttributes{
+    id: number;
+    slug: string;
+    title: string;
+    description: string;
+    image: CoverType;
+    hero_image: CoverType;
+    hero_subheading: string;
+    hero_heading: string;
+    section1_title: string;
+    section1_description: string;
+    section1_image: CoverType;
+    section2_title: string;
+    section2_content: WhatYouGetItem[];
+    section3_title:string;
+    section3_desc: string;
+    section3_image: CoverType;
+}
+
 export interface TeamMember{
     id: number;
     name: string;

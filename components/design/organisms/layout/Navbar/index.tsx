@@ -202,7 +202,8 @@ export default function Navbar({ activeSection, lang }: Props) {
             onClick={onClick}
             className="text-white text-sm font-medium tracking-[0.84px] uppercase hover:opacity-60 transition-opacity whitespace-nowrap"
         >
-            {oppLocale.toUpperCase()}
+            {oppLocale === "ar" ? "ع" : "EN"}
+            {/* {oppLocale.toUpperCase()} */}
         </Link>
     );
 
