@@ -14,7 +14,7 @@ import { GlobalSettingAttributes } from "@/components/lib/types";
 
 interface ContactSectionProps {
   locale: string;
-  globalSettings: GlobalSettingAttributes;
+  globalSettings: GlobalSettingAttributes | null;
   heading: string;
   body: string;
 }

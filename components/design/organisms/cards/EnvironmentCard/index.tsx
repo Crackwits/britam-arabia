@@ -26,25 +26,25 @@ export default function EnvironmentCard({
         >
             <Link
                 href={`/critical-environments/${project.slug}`}
-                className="group flex items-center gap-4 border-b border-gray-200 py-5 transition-colors duration-200 hover:bg-blue-50/60 px-2 -mx-2 rounded-sm"
+                className="group flex items-center gap-4 border-b border-lightLighter py-5 transition-colors duration-200 hover:bg-f7f7f7 -mx-2"
             >
                 {/* Index */}
-                <span className="w-8 shrink-0 text-sm font-semibold text-gray-400 tabular-nums transition-colors duration-200 group-hover:text-[#1B2A6B]">
+                <span className="w-8 shrink-0 text-sm tracking-[0.84px] font-medium text-primaryDefault tabular-nums transition-colors duration-200">
                     {formatIndex(index)}
                 </span>
 
                 {/* Project name — shifts right on hover */}
-                <span className="flex-1 text-base font-semibold text-gray-900 transition-all duration-200 group-hover:translate-x-1 group-hover:text-[#1B2A6B]">
+                <span className="flex-1 text-base font-medium text-darkDefault tracking-[-0.48px] uppercase transition-all duration-200 group-hover:translate-x-1">
                     {project.name}
                 </span>
 
                 {/* Industry — right-aligned */}
-                <span className="ml-auto shrink-0 text-xs font-semibold uppercase tracking-widest text-gray-400 transition-colors duration-200 group-hover:text-gray-600">
+                <span className="ml-auto shrink-0 text-xs uppercase text-darkLight transition-colors duration-200">
                     {project.industry}
                 </span>
 
                 {/* Arrow — appears on hover */}
-                <svg
+                {/* <svg
                     className="ml-3 h-4 w-4 shrink-0 translate-x-0 text-[#D0021B] opacity-0 transition-all duration-200 group-hover:translate-x-1 group-hover:opacity-100"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -56,7 +56,7 @@ export default function EnvironmentCard({
                         strokeLinejoin="round"
                         d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
                     />
-                </svg>
+                </svg> */}
             </Link>
         </motion.div>
     );

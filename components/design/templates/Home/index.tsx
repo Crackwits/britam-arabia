@@ -15,7 +15,7 @@ import { GlobalSettingAttributes } from "@/components/lib/types";
 
 interface HomePageTemplateProps {
     homedata: HomePageAttributes;
-    globalSettings: GlobalSettingAttributes;
+    globalSettings: GlobalSettingAttributes | null;
     lang: string;
 }
 

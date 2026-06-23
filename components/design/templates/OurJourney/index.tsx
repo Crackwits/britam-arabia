@@ -28,15 +28,16 @@ export default function OurJourneyTemplate({ ourJourneydata, critical_environmen
             <OurJourneySection2 isArabic={isArabic} title={ourJourneydata.section2_title}
                 desc={ourJourneydata.section2_desc}
                 image={ourJourneydata.section2_image} />
+            <CriticalEnvironmentsSection section3_title={ourJourneydata.section3_title}
+                section3_desc={ourJourneydata.section3_desc}
+                critical_environments={critical_environments} />
             <MediaBlock isArabic={isArabic} title=""
                 desc={ourJourneydata.section4_desc}
                 cta=""
                 cta2_label=""
                 cta2_link=""
                 image={ourJourneydata.section4_image} />
-            <CriticalEnvironmentsSection section3_title={ourJourneydata.section3_title}
-                section3_desc={ourJourneydata.section3_desc}
-                critical_environments={critical_environments} />
+
             <LeadershipSection
                 section5_leadership={ourJourneydata.section5_leadership}
                 section5_heading={ourJourneydata.section5_heading}
