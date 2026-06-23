@@ -11,9 +11,9 @@ import WhiteTriangle from "@/public/svg/whitetriangle";
 import OrangeTriangle from "@/public/svg/orangetriangle";
 import { GlobalSettingAttributes } from "@/components/lib/types";
 // ─── Types ────────────────────────────────────────────────────────────────────
-type SupportedLocale = keyof typeof translations; // → "en" | "ar"
+// type SupportedLocale = keyof typeof translations; // → "en" | "ar"
 interface ContactSectionProps {
-  locale: SupportedLocale;
+  locale: "en" | "ar";
   globalSettings: GlobalSettingAttributes | null;
   heading: string;
   body: string;
@@ -62,7 +62,7 @@ const translations = {
 
 // ─── Zod Schema (built per-locale so error messages match the UI language) ────
 
-function buildContactSchema(locale: SupportedLocale) {
+function buildContactSchema(locale: "en" | "ar") {
   const t = translations[locale].errors;
   return z.object({
     fullName: z.string().trim().min(2, t.fullName),
@@ -229,7 +229,7 @@ export default function HpContactSection({ locale, globalSettings, heading, body
           </div>
           <div
             aria-hidden="true"
-            className={`absolute top-0 z-10 h-20 w-20 ${isArabic ? "right-0 rotate-90" : "left-0"
+            className={`absolute top-0 z-10 h-20 w-20 ${isArabic ? "hidden" : "left-0"
               }`}
           >
             <OrangeTriangle />
