@@ -7,6 +7,7 @@ import { STRAPI_URL } from "@/components/lib/settings";
 interface PageHeroProps {
     image: CoverType | null;
     title: string;
+    subtitle:string;
 }
 
 const getMediaUrl = (url?: string) =>
@@ -18,7 +19,7 @@ const isVideo = (mime?: string, url?: string): boolean => {
     return false;
 };
 
-export default function PageHero({ image, title }: PageHeroProps) {
+export default function PageHero({ image, title, subtitle }: PageHeroProps) {
     const mediaUrl = getMediaUrl(image?.url);
     const mediaIsVideo = isVideo(image?.mime, image?.url);
     const [visible, setVisible] = useState(false);
@@ -59,7 +60,18 @@ export default function PageHero({ image, title }: PageHeroProps) {
             {/* z-10 — dark overlay */}
             <div className="absolute inset-0 z-10 bg-black/50" aria-hidden="true" />
             <div className="relative z-10 py-9 md:py-16 px-4 max-w-7xl mx-auto w-full">
-                <div className="max-w-[730px] w-full">
+                {/* <div className="max-w-[730px] w-full"> */}
+                    {subtitle && (
+                        <p
+                            className={[
+                                "text-white text-lg md:text-xl pb-4",
+                                "transition-all duration-700 ease-out delay-150",
+                                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
+                            ].join(" ")}
+                        >
+                            {subtitle}
+                        </p>
+                    )}
                     <h1
                         className={[
                             "text-white font-medium tracking-[-1.92px] pb-8",
@@ -70,7 +82,7 @@ export default function PageHero({ image, title }: PageHeroProps) {
                     >
                         {title}
                     </h1>
-                </div>
+                {/* </div> */}
             </div>
         </section>
     );

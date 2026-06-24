@@ -189,7 +189,7 @@ export default function HpContactSection({ locale, globalSettings, heading, body
       className="w-full bg-white"
       aria-labelledby="contact-section-heading"
     >
-      <div className="w-full max-w-7xl mx-auto bg-white px-4 py-20 md:py-30 overflow-hidden">
+      <div className="w-full max-w-7xl mx-auto bg-white px-4 py-15 md:py-25 overflow-hidden">
         {/* ── Heading ── */}
         <motion.div variants={headingVariants}>
           <h2

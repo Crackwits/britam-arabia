@@ -11,11 +11,13 @@ export const formatIndex = (n: number, pad = 2): string =>
 interface EnvironmentCardProps {
     project: CriticalEnvironments;
     index: number;
+    lang: string;
 }
 
 export default function EnvironmentCard({
     project,
     index,
+    lang,
 }: EnvironmentCardProps) {
     return (
         <motion.div
@@ -25,7 +27,7 @@ export default function EnvironmentCard({
             transition={{ duration: 0.5, delay: index * 0.08, ease: "easeOut" }}
         >
             <Link
-                href={`/critical-environments/${project.slug}`}
+                href={`/${lang}/critical-environments/${project.slug}`}
                 className="group flex items-center gap-4 border-b border-lightLighter py-5 transition-colors duration-200 hover:bg-f7f7f7 -mx-2"
             >
                 {/* Index */}

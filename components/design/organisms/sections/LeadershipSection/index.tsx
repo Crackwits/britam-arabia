@@ -121,7 +121,7 @@ export default function LeadershipSection({
     return (
         <section
             ref={ref}
-            className="w-full bg-white px-4 py-20 md:py-30 overflow-hidden">
+            className="w-full bg-white px-4 py-15 md:py-25 overflow-hidden">
             <div className="max-w-7xl mx-auto">
                 <div style={fadeUpStyle(inView, 0)} className="inline-flex items-center gap-2 mb-4">
                     <HeadingTriangle />

@@ -16,7 +16,7 @@ export default function CapabilitiesTemplate({ data, lang }: CapabilitiesTemplat
     return (
         <>
             <Navbar activeSection="homehero" lang={lang} />
-            <PageHero image={data.hero_image} title={data.hero_heading} />
+            <PageHero image={data.hero_image} title={data.hero_heading} subtitle={data.hero_subheading}/>
             <MediaBlock isArabic={isArabic} title={data.section1_title}
                 desc={data.section1_description}
                 cta=""

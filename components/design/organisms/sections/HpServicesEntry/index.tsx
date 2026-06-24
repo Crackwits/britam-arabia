@@ -5,10 +5,13 @@ import { motion } from "framer-motion";
 import { Capabilities, MediaItem } from "@/components/lib/types";
 import { STRAPI_URL } from "@/components/lib/settings";
 import Link from "next/link";
+import HeadingTriangle from "@/public/svg/headingtriangle";
 
 interface Props {
+    lang: string;
     isArabic: boolean;
     services_entry_heading: string;
+    services_entry_subheading: string;
     services_entry_items: Capabilities[];
 }
 
@@ -19,10 +22,11 @@ interface CardProps {
     item: Capabilities;
     index: number;
     isArabic: boolean;
+    lang: string;
     visible: boolean;
 }
 
-function ServiceCard({ item, index, isArabic, visible }: CardProps) {
+function ServiceCard({ item, index, isArabic, lang, visible }: CardProps) {
     const imageUrl = getMediaUrl(item.image?.url);
     const isEven = index % 2 === 0;
 
@@ -43,7 +47,7 @@ function ServiceCard({ item, index, isArabic, visible }: CardProps) {
                         : "opacity-0 translate-x-8",   // odd cards slide from right
             ].join(" ")}
         >
-            <Link href={`/capabilities/${item.slug}`}>
+            <Link href={`/${lang}/capabilities/${item.slug}`}>
                 {/* ── Image ── */}
                 <div
                     className="relative w-full overflow-hidden"
@@ -64,7 +68,7 @@ function ServiceCard({ item, index, isArabic, visible }: CardProps) {
             </Link>
             {/* ── Text block ── */}
             <div className="mt-5 flex flex-col">
-                <Link href={`/capabilities/${item.slug}`}>
+                <Link href={`/${lang}/capabilities/${item.slug}`}>
                     <h3 className="text-2xl font-medium tracking-[-0.48px] text-richNavy mb-2">
                         {item.title}
                     </h3>
@@ -74,7 +78,7 @@ function ServiceCard({ item, index, isArabic, visible }: CardProps) {
                     </p>
                 </Link>
                 <Link
-                    href={`/capabilities/${item.slug}`}
+                    href={`/${lang}/capabilities/${item.slug}`}
                     target="_blank"
                     className="pb-2 uppercase group inline-flex items-center gap-2 text-darkDefault font-medium tracking-[0.84px] text-sm transition-transform duration-200 focus:outline-none focus-visible:underline"
                 >
@@ -109,8 +113,10 @@ function ServiceCard({ item, index, isArabic, visible }: CardProps) {
 }
 
 export default function ServicesEntry({
+    lang,
     isArabic,
     services_entry_heading,
+    services_entry_subheading,
     services_entry_items,
 }: Props) {
     const ref = useRef<HTMLElement>(null);
@@ -135,10 +141,22 @@ export default function ServicesEntry({
     return (
         <section
             ref={ref}
-            className="w-full bg-white px-4 py-20 md:py-30 overflow-hidden"
+            className="w-full bg-white px-4 py-15 md:py-25 overflow-hidden"
             aria-labelledby="services-entry-heading"
         >
             <div className="mx-auto max-w-7xl">
+                {services_entry_subheading && (
+                    <div
+                        className="inline-flex gap-2 mb-4"
+                        aria-hidden="false"
+                    >
+                        <HeadingTriangle />
+                        <span className="text-primaryDefault text-xl md:text-lg font-medium uppercase">
+                            {services_entry_subheading}
+                        </span>
+                    </div>
+                )}
+
                 {/* ── Heading ── */}
                 <h2
                     id="services-entry-heading"
@@ -159,6 +177,7 @@ export default function ServicesEntry({
                             item={item}
                             index={index}
                             isArabic={isArabic}
+                            lang={lang}
                             visible={visible}
                         />
                     ))}

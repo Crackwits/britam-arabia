@@ -5,18 +5,20 @@ import { CriticalEnvironments } from "@/components/lib/types";
 import EnvironmentCard from "../../cards/EnvironmentCard";
 
 interface CriticalEnvironmentsSectionProps {
+    lang: string;
     section3_title: string;
     section3_desc: string;
     critical_environments: CriticalEnvironments[];
 }
 export default function CriticalEnvironmentsSection({
+    lang,
     section3_title,
     section3_desc,
     critical_environments,
 }: CriticalEnvironmentsSectionProps) {
     return (
         <section aria-labelledby="critical-environments"
-        className="w-full bg-white px-4 py-20 md:py-30 overflow-hidden">
+        className="w-full bg-white px-4 py-15 md:py-25 overflow-hidden">
             <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-20">
 
@@ -51,6 +53,7 @@ export default function CriticalEnvironmentsSection({
                                     key={project.id}
                                     project={project}
                                     index={index}
+                                    lang={lang}
                                 />
                             ))}
                     </div>

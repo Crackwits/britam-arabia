@@ -18,7 +18,7 @@ export default function OurJourneyTemplate({ ourJourneydata, critical_environmen
     return (
         <>
             <Navbar activeSection="homehero" lang={lang} />
-            <PageHero image={ourJourneydata.image} title={ourJourneydata.hero_headline} />
+            <PageHero image={ourJourneydata.image} title={ourJourneydata.hero_headline} subtitle=""/>
             <MediaBlock isArabic={isArabic} title={ourJourneydata.section1_title}
                 desc={ourJourneydata.section1_desc}
                 cta=""
@@ -28,7 +28,7 @@ export default function OurJourneyTemplate({ ourJourneydata, critical_environmen
             <OurJourneySection2 isArabic={isArabic} title={ourJourneydata.section2_title}
                 desc={ourJourneydata.section2_desc}
                 image={ourJourneydata.section2_image} />
-            <CriticalEnvironmentsSection section3_title={ourJourneydata.section3_title}
+            <CriticalEnvironmentsSection lang={lang} section3_title={ourJourneydata.section3_title}
                 section3_desc={ourJourneydata.section3_desc}
                 critical_environments={critical_environments} />
             <MediaBlock isArabic={isArabic} title=""

@@ -49,7 +49,7 @@ export default function MediaBlock({
     return (
         <section
             ref={ref}
-            className="w-full bg-white px-4 py-20 md:py-30 overflow-hidden"
+            className="w-full bg-white px-4 py-15 md:py-25 overflow-hidden"
         >
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 

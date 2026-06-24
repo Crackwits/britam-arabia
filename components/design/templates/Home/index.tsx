@@ -55,7 +55,8 @@ export default function HomeTemplate({ homedata,capabilities, globalSettings, la
                 kpis={homedata.kpis}
                 project_title={homedata.project_title}
                 critical_projects={homedata.critical_projects} />
-            <ServicesEntry isArabic={isArabic} services_entry_heading={homedata.services_entry_heading}
+            <ServicesEntry lang={lang} isArabic={isArabic} services_entry_heading={homedata.services_entry_heading}
+                services_entry_subheading=""
                 services_entry_items={capabilities} />
 
             <TestimonialsSection isArabic={isArabic}

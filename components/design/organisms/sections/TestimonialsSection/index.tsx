@@ -107,7 +107,7 @@ export default function TestimonialsSection({
             variants={sectionVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
-            className="w-full bg-white px-4 py-20 md:py-30 overflow-hidden"
+            className="w-full bg-white px-4 py-15 md:py-25 overflow-hidden"
             aria-labelledby="testimonials-heading"
         >
             <div className="mx-auto max-w-7xl">

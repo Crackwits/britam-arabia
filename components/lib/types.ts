@@ -91,6 +91,13 @@ export interface KPIS {
     number: string;
     suffix: string;
 }
+export interface IconText {
+    id: number;
+    title: string;
+    description: string;
+    icon: CoverType;
+
+}
 export interface CriticalProjects {
     id: number;
     name: string;
@@ -159,7 +166,7 @@ export interface CriticalEnvironments extends StrapiAttributes {
     content: string;
 }
 
-export interface Capabilities extends StrapiAttributes{
+export interface Capabilities extends StrapiAttributes {
     id: number;
     slug: string;
     title: string;
@@ -173,12 +180,12 @@ export interface Capabilities extends StrapiAttributes{
     section1_image: CoverType;
     section2_title: string;
     section2_content: WhatYouGetItem[];
-    section3_title:string;
+    section3_title: string;
     section3_desc: string;
     section3_image: CoverType;
 }
 
-export interface TeamMember{
+export interface TeamMember {
     id: number;
     name: string;
     position: string;
@@ -207,10 +214,22 @@ export interface OurJourneyAttributes extends StrapiAttributes {
     section5_body: string;
     team_members: TeamMember[]
 }
-// Example: Blog post (collection type)
-// export interface PostAttributes extends StrapiAttributes {
-//     title: string;
-//     slug: string;
-//     content: string;
-//     seo: StrapiSEO;
-// }
+
+export interface OurApproachAttributes extends StrapiAttributes {
+    hero_headline: string;
+    image: CoverType;
+    section1_title: string;
+    section1_desc: string;
+    section1_image: CoverType;
+    section2_title: string;
+    section2_content: WhatYouGetItem[];
+    section3_subheading: string;
+    section3_heading: string;
+    section3_desc: string;
+    section3_steps: WhatYouGetItem[];
+    section4_subheading: string;
+    section4_heading: string;
+    measurable_impacts: IconText[];
+    section5_heading:string;
+    section5_subheading: string;
+}

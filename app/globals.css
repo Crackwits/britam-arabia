@@ -234,10 +234,7 @@ body {
   letter-spacing: -0.48px;
 }
 
-.project-content p.darkDefault {
-  color: #34343f;
-  margin-bottom: 0px;
-}
+
 
 .project-content p strong {
   font-weight: 500;
@@ -248,6 +245,7 @@ body {
   letter-spacing: -0.48px;
 
 }
+
 
 [dir="rtl"] {
 
@@ -296,8 +294,28 @@ body {
   color: #B5B6C4;
 }
 
+.ck-prose p.darkDefault {
+  color: #34343f;
+  margin-bottom: 0px;
+}
+
 .ck-prose p {
+  color: #6E6F89;
+  font-family: Gotham;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px;
+  letter-spacing: -0.48px;
   margin-bottom: 1rem;
+}
+
+.ck-prose p strong, .ck-prose h4{
+  color: #001239;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 32px;
+  letter-spacing: -0.48px;
 }
 
 .ck-prose p:last-child {
@@ -335,8 +353,7 @@ body {
 }
 
 .ck-prose h2,
-.ck-prose h3,
-.ck-prose h4 {
+.ck-prose h3 {
   font-weight: 700;
   color: #0D1B5E;
   margin-top: 1.5rem;
