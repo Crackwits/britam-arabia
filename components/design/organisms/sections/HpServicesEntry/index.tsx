@@ -43,34 +43,36 @@ function ServiceCard({ item, index, isArabic, visible }: CardProps) {
                         : "opacity-0 translate-x-8",   // odd cards slide from right
             ].join(" ")}
         >
-            {/* ── Image ── */}
-            <div
-                className="relative w-full overflow-hidden"
-                style={{
-                    clipPath: 'polygon(80px 0, 100% 0, 100% 100%, 0 100%, 0 80px)',
-                    aspectRatio: "9 / 8",
-                }}
-            >
-                <img
-                    src={imageUrl}
-                    alt={item.image?.alternativeText ?? item.title}
-                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                    loading="lazy"
-                    decoding="async"
-                />
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/20 to-transparent" />
-            </div>
-
+            <Link href={`/capabilities/${item.slug}`}>
+                {/* ── Image ── */}
+                <div
+                    className="relative w-full overflow-hidden"
+                    style={{
+                        clipPath: 'polygon(80px 0, 100% 0, 100% 100%, 0 100%, 0 80px)',
+                        aspectRatio: "9 / 8",
+                    }}
+                >
+                    <img
+                        src={imageUrl}
+                        alt={item.image?.alternativeText ?? item.title}
+                        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                        loading="lazy"
+                        decoding="async"
+                    />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/20 to-transparent" />
+                </div>
+            </Link>
             {/* ── Text block ── */}
             <div className="mt-5 flex flex-col">
-                <h3 className="text-2xl font-medium tracking-[-0.48px] text-richNavy mb-2">
-                    {item.title}
-                </h3>
+                <Link href={`/capabilities/${item.slug}`}>
+                    <h3 className="text-2xl font-medium tracking-[-0.48px] text-richNavy mb-2">
+                        {item.title}
+                    </h3>
 
-                <p className="text-base text-darkLight mb-8">
-                    {item.description}
-                </p>
-
+                    <p className="text-base text-darkLight mb-8">
+                        {item.description}
+                    </p>
+                </Link>
                 <Link
                     href={`/capabilities/${item.slug}`}
                     target="_blank"
@@ -101,6 +103,7 @@ function ServiceCard({ item, index, isArabic, visible }: CardProps) {
                 </Link>
                 <span className="w-12 h-[1px] bg-[#ED0000] block" aria-hidden="true" />
             </div>
+
         </motion.article>
     );
 }

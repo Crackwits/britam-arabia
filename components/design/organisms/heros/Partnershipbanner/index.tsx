@@ -37,7 +37,7 @@ export default function PartnershipBanner({ homedata }: PartnershipBannerProps) 
     return (
         <section
             ref={ref}
-            className="w-full bg-primaryDefault py-8 px-4"
+            className="w-full bg-neutralLighter py-8 px-4"
             aria-label="Partnership"
         >
             <div
@@ -50,12 +50,12 @@ export default function PartnershipBanner({ homedata }: PartnershipBannerProps) 
                 {/* Left: text */}
                 <div className="flex-1 text-center md:rtl:text-right md:ltr:text-left order-2 md:order-1">
                     {homedata.partner_headline && (
-                        <p className="text-white text-sm sm:text-2xl font-medium tracking-[-0.48] uppercase pb-2">
+                        <p className="text-darkDefault text-sm sm:text-2xl font-medium tracking-[-0.48] uppercase pb-2">
                             {homedata.partner_headline}
                         </p>
                     )}
                     {homedata.partner_subheadline && (
-                        <p className="text-white text-xs sm:text-base max-w-[1000px] w-full">
+                        <p className="text-darkDefault text-xs sm:text-base max-w-[1000px] w-full">
                             {homedata.partner_subheadline}
                         </p>
                     )}
