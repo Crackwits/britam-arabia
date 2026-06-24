@@ -12,7 +12,9 @@ export async function generateMetadata({
     params: Params;
 }): Promise<Metadata> {
     const { lang } = await params;
-    const page = await getSingleType<OurApproachAttributes>("our-approach", lang);
+    const page = await getSingleType<OurApproachAttributes>("our-approach", lang, {
+        seo: { populate: "*", }
+    });
     if (!page?.seo) return { title: "Britam Arabia" };
     return buildMetadata(page.seo, lang, "/our-approach");
 }

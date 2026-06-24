@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { getBySlug, getCollection } from "@/components/lib/api";
 import { buildMetadata } from "@/components/lib/seo";
-import type { CriticalEnvironments } from "@/components/lib/types";
-import CriticalEnvironmentTemplate from "@/components/design/templates/CriticalEnvironmentTemplate";
+import type { InsightsAttributes } from "@/components/lib/types";
 import { notFound } from "next/navigation";
-
+import InsightDetailTemplate from "@/components/design/templates/InsightDetailTemplate";
 // ── Both dynamic segments are in params ───────────────────────────────────────
 type Params = Promise<{ lang: string; slug: string }>;
 
@@ -14,8 +13,8 @@ export async function generateStaticParams() {
 
     const paths = await Promise.all(
         locales.map(async (lang) => {
-            const items = await getCollection<CriticalEnvironments>(
-                "critical-projects",
+            const items = await getCollection<InsightsAttributes>(
+                "insights",
                 lang,
             );
             return items.map((item) => ({ lang, slug: item.slug }));
@@ -33,8 +32,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
     const { lang, slug } = await params; // ← slug now comes from params
 
-    const page = await getBySlug<CriticalEnvironments>(
-        "critical-projects",
+    const page = await getBySlug<InsightsAttributes>(
+        "insights",
         slug, // correct arg order: slug second
         lang,
         {
@@ -44,19 +43,19 @@ export async function generateMetadata({
     );
 
     if (!page?.seo) return { title: "Britam Arabia" };
-    return buildMetadata(page.seo, lang, `/critical-environments/${slug}`);
+    return buildMetadata(page.seo, lang, `/insights/${slug}`);
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
-export default async function CriticalEnvironmentPage({
+export default async function InsightDetailPage({
     params,
 }: {
     params: Params;
 }) {
     const { lang, slug } = await params;
 
-    const page = await getBySlug<CriticalEnvironments>(
-        "critical-projects",
+    const page = await getBySlug<InsightsAttributes>(
+        "insights",
         slug,
         lang,
         {
@@ -66,5 +65,5 @@ export default async function CriticalEnvironmentPage({
 
     if (!page) notFound(); // renders app/not-found.tsx
 
-    return <CriticalEnvironmentTemplate data={page} lang={lang} />;
+    return <InsightDetailTemplate data={page} lang={lang} />;
 }

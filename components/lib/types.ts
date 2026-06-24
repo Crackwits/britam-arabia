@@ -233,3 +233,20 @@ export interface OurApproachAttributes extends StrapiAttributes {
     section5_heading:string;
     section5_subheading: string;
 }
+
+export interface InsightHeroAttributes extends StrapiAttributes{
+    hero_headline: string;
+    image: CoverType;
+    intro_title: string;
+    intro_desc: string;
+}
+
+export interface InsightsAttributes extends StrapiAttributes{
+    id: number;
+    slug: string;
+    title: string;
+    date: string;
+    thumbnail: CoverType;
+    cover: CoverType;
+    content: string;
+}

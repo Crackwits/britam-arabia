@@ -12,7 +12,9 @@ export async function generateMetadata({
   params: Params;
 }): Promise<Metadata> {
   const { lang } = await params;
-  const page = await getSingleType<HomePageAttributes>("home-page", lang);
+  const page = await getSingleType<HomePageAttributes>("home-page", lang, {
+    seo: { populate: "*", }
+  });
   if (!page?.seo) return { title: "Britam Arabia" };
   return buildMetadata(page.seo, lang, "/");
 }
@@ -23,7 +25,7 @@ export default async function HomePage({ params }: { params: Params }) {
   const globalsettings = await getSingleType<GlobalSettingAttributes>("global-setting", lang);
   const capabilities = await getCollection<Capabilities>("integrated-capabilities", lang,
     {
-        image: true,
+      image: true,
     });
   const page = await getSingleType<HomePageAttributes>("home-page", lang,
     {
