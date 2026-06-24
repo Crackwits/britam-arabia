@@ -7,6 +7,7 @@ import WhatYouGetSection from "../../organisms/sections/Whatyougetsection";
 import OurApproach from "../../organisms/sections/OurApproach";
 import ServicesEntry from "../../organisms/sections/HpServicesEntry";
 import { OurApproachAttributes } from "@/components/lib/types";
+import ImpactSection from "../../organisms/sections/ImpactSection";
 
 interface OurApproachTemplateProps {
     data: OurApproachAttributes;
@@ -35,8 +36,15 @@ export default function OurApproachTemplate({ data, capabilities, lang }: OurApp
                 desc={data.section3_desc}
                 steps={data.section3_steps} />
 
-            <ServicesEntry lang={lang} isArabic={isArabic} services_entry_heading={data.section5_heading} 
-             services_entry_subheading={data.section5_subheading}
+            <ImpactSection
+                subheading={data.section4_subheading}
+                heading={data.section4_heading}
+                measurable_impacts={data.measurable_impacts}
+                isArabic={isArabic}
+            />
+
+            <ServicesEntry lang={lang} isArabic={isArabic} services_entry_heading={data.section5_heading}
+                services_entry_subheading={data.section5_subheading}
                 services_entry_items={capabilities} />
         </>
     );
