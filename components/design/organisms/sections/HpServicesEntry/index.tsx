@@ -79,7 +79,6 @@ function ServiceCard({ item, index, isArabic, lang, visible }: CardProps) {
                 </Link>
                 <Link
                     href={`/${lang}/capabilities/${item.slug}`}
-                    target="_blank"
                     className="pb-2 uppercase group inline-flex items-center gap-2 text-darkDefault font-medium tracking-[0.84px] text-sm transition-transform duration-200 focus:outline-none focus-visible:underline"
                 >
                     {isArabic ? "استكشف" : "Explore"}

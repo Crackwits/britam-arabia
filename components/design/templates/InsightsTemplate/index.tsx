@@ -2,6 +2,7 @@
 import { InsightHeroAttributes, InsightsAttributes } from "@/components/lib/types";
 import Navbar from "../../organisms/layout/Navbar";
 import PageHero from "../../organisms/heros/PageHero";
+import InsightsSection from "../../organisms/sections/InsightsSection";
 
 interface InsightsTemplateProps {
     herodata: InsightHeroAttributes;
@@ -16,7 +17,13 @@ export default function InsightsTemplate({ herodata, data, lang }: InsightsTempl
         <>
             <Navbar activeSection="homehero" lang={lang} />
             <PageHero image={herodata.image} title={herodata.hero_headline} subtitle="" />
-            
+            <InsightsSection
+                intro_title={herodata.intro_title}
+                intro_desc={herodata.intro_desc}
+                insights={data}
+                isArabic={isArabic}
+                lang={lang}
+            />
         </>
     );
 }

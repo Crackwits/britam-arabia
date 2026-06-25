@@ -148,7 +148,6 @@ export interface HomePageAttributes extends StrapiAttributes {
     critical_projects: CriticalProjects[];
 
     services_entry_heading: string;
-    services_entry_items: MediaItem[];
     testimonials_title: string;
     testimonials: WhatYouGetItem[];
 

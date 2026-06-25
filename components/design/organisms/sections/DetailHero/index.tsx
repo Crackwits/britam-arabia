@@ -34,7 +34,7 @@ export default function DetailHero({ subheading, heading, cover }: DetailHeroPro
     const imageUrl = getMediaUrl(cover?.url);
 
     return (
-        <section className="w-full bg-white py-15 md:py-25 overflow-hidden">
+        <section className="w-full bg-white pt-15 md:pt-25 overflow-hidden">
             {/* Industry label + Project title */}
             <div
                 ref={headerRef}
@@ -44,7 +44,7 @@ export default function DetailHero({ subheading, heading, cover }: DetailHeroPro
                 <p className="font-base text-darkLight pb-3">
                     {subheading}
                 </p>
-                <h1 className="font-medium text-darkDefault pb-12 tracking-[-0.96px] text-4xl sm:text-5xl lg:text-6xl">
+                <h1 className="font-medium text-darkDefault max-w-4xl pb-12 tracking-[-0.96px] text-4xl sm:text-5xl lg:text-6xl">
                     {heading}
                 </h1>
             </div>
