@@ -130,7 +130,7 @@ export async function getCollection<T>(
     contentType: string,
     locale: string,
     populate: string | Record<string, unknown> = "*",
-    filters?: Record<string, string>
+    filters?: Record<string, unknown>
 ): Promise<T[]> {
     const params: Record<string, string> = {
         locale,
@@ -151,10 +151,27 @@ export async function getCollection<T>(
     }
 
     // ── Filters ───────────────────────────────────────────────────────────────
+    // if (filters) {
+    //     Object.entries(filters).forEach(([k, v]) => {
+    //         params[`filters[${k}][$eq]`] = v;
+    //     });
+    // }
+
     if (filters) {
-        Object.entries(filters).forEach(([k, v]) => {
-            params[`filters[${k}][$eq]`] = v;
-        });
+        const flattenFilters = (
+            obj: Record<string, unknown>,
+            prefix = "filters"
+        ) => {
+            Object.entries(obj).forEach(([k, v]) => {
+                const key = `${prefix}[${k}]`;
+                if (typeof v === "object" && v !== null) {
+                    flattenFilters(v as Record<string, unknown>, key);
+                } else {
+                    params[key] = String(v);
+                }
+            });
+        };
+        flattenFilters(filters);
     }
 
     const data = await strapiGet<{ data: T[] }>(contentType, params);

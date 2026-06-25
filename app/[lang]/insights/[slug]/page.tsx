@@ -54,6 +54,15 @@ export default async function InsightDetailPage({
 }) {
     const { lang, slug } = await params;
 
+    const relatedinsights = await getCollection<InsightsAttributes>("insights",
+        lang,
+        {
+            thumbnail: true,
+            cover: true,  // populate cover image relation
+        },
+        { slug: { $ne: slug } }
+    );
+
     const page = await getBySlug<InsightsAttributes>(
         "insights",
         slug,
@@ -65,5 +74,5 @@ export default async function InsightDetailPage({
 
     if (!page) notFound(); // renders app/not-found.tsx
 
-    return <InsightDetailTemplate data={page} lang={lang} />;
+    return <InsightDetailTemplate data={page} relatedinsights={relatedinsights} lang={lang} />;
 }
