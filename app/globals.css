@@ -287,10 +287,10 @@ body {
     padding-right: 1rem;
   }
 
-  .ck-prose ul,
+  /* .ck-prose ul,
   .ck-prose ol {
     padding-right: 1.25rem;
-  }
+  } */
 
   .ck-prose li {
     border-right: 2px solid #ED0000;
@@ -314,10 +314,10 @@ body {
     padding-left: 1rem;
   }
 
-  .ck-prose ul,
+  /* .ck-prose ul,
   .ck-prose ol {
     padding-left: 1.25rem;
-  }
+  } */
 
   .ck-prose li {
     border-left: 2px solid #ED0000;
@@ -348,16 +348,18 @@ body {
 
 .ck-prose p {
   color: #6E6F89;
-  font-family: Gotham;
-  font-size: 24px;
+  font-size: 18px;
   font-style: normal;
   font-weight: 400;
-  line-height: 32px;
+  line-height: 26px;
   letter-spacing: -0.48px;
   margin-bottom: 1rem;
 }
 
-.ck-prose p strong,
+.ck-prose p strong {
+  color: #001239;
+}
+
 .ck-prose h4 {
   color: #001239;
   font-size: 24px;
@@ -430,11 +432,13 @@ html.lenis body {
 }
 
 .lenis.lenis-smooth {
-  scroll-behavior: auto !important; /* let Lenis control scroll, not CSS */
+  scroll-behavior: auto !important;
+  /* let Lenis control scroll, not CSS */
 }
 
 .lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain; /* opt-out specific elements like modals */
+  overscroll-behavior: contain;
+  /* opt-out specific elements like modals */
 }
 
 .lenis.lenis-stopped {

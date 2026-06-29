@@ -318,78 +318,77 @@ export default function Navbar({ activeSection, lang }: Props) {
                             }}
                         >
                             <div className="flex flex-col h-full p-6 max-w-[485px] w-full mx-auto">
+                                <div className='max-w-[385px]  h-full mx-auto w-full'>
+                                    <div className="flex items-center justify-end mb-20 gap-8">
+                                        {/* <LangToggle onClick={() => setMenuOpen(false)} /> */}
 
-                                <div className="flex items-center justify-start mb-20 gap-8">
-                                    <LangToggle onClick={() => setMenuOpen(false)} />
+                                        <Link
+                                            href={withLocale(pathname, '/contact-us')}
+                                            onClick={() => setMenuOpen(false)}
+                                            className="md:hidden block px-4 py-3 border border-white text-white text-sm tracking-[0.84px] uppercase font-medium hover:text-[#22285C] hover:bg-white transition-colors"
+                                        >
+                                            {t('inquireNow')}
+                                        </Link>
 
-                                    <Link
-                                        href={withLocale(pathname, '/contact-us')}
-                                        onClick={() => setMenuOpen(false)}
-                                        className=" px-4 py-3 border border-white text-white text-sm tracking-[0.84px] uppercase font-medium hover:text-[#22285C] hover:bg-white transition-colors"
-                                    >
-                                        {t('inquireNow')}
-                                    </Link>
-
-                                    <button
-                                        onClick={() => setMenuOpen(false)}
-                                        className="text-white font-medium text-sm tracking-[0.84px] flex items-center gap-3 hover:opacity-60 transition-opacity cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white rounded"
-                                        aria-label={t('close')}
-                                    >
-                                        {t('close')} <span aria-hidden="true">✕</span>
-                                    </button>
-                                </div>
-
-                                <nav aria-label="Main navigation">
-                                    <ul className="flex flex-col gap-4 list-none p-0 m-0">
-                                        {NAV_LINK_KEYS.map((item, index) => (
-                                            <motion.li
-                                                key={item.key}
-                                                custom={index}
-                                                variants={itemVariants}
-                                                initial="hidden"
-                                                animate="visible"
-                                            >
-                                                <Link
-                                                    href={withLocale(pathname, item.href)}
-                                                    onClick={() => setMenuOpen(false)}
-                                                    className="block text-white text-3xl font-medium tracking-[-0.68px] hover:opacity-60 transition-opacity focus:outline-none focus-visible:underline"
+                                        <button
+                                            onClick={() => setMenuOpen(false)}
+                                            className="text-white font-medium text-sm tracking-[0.84px] flex items-center gap-3 hover:opacity-60 transition-opacity cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white rounded"
+                                            aria-label={t('close')}
+                                        >
+                                            {t('close')} <span aria-hidden="true">✕</span>
+                                        </button>
+                                    </div>
+                                    <nav aria-label="Main navigation ">
+                                        <ul className="flex flex-col gap-4 list-none p-0 m-0">
+                                            {NAV_LINK_KEYS.map((item, index) => (
+                                                <motion.li
+                                                    key={item.key}
+                                                    custom={index}
+                                                    variants={itemVariants}
+                                                    initial="hidden"
+                                                    animate="visible"
                                                 >
-                                                    {t(item.key)}
-                                                </Link>
-                                            </motion.li>
-                                        ))}
-                                    </ul>
-                                </nav>
+                                                    <Link
+                                                        href={withLocale(pathname, item.href)}
+                                                        onClick={() => setMenuOpen(false)}
+                                                        className="block text-white text-3xl tracking-[-0.68px] hover:opacity-60 transition-opacity focus:outline-none focus-visible:underline"
+                                                    >
+                                                        {t(item.key)}
+                                                    </Link>
+                                                </motion.li>
+                                            ))}
+                                        </ul>
+                                    </nav>
 
-                                <motion.div
-                                    custom={NAV_LINK_KEYS.length}
-                                    variants={itemVariants}
-                                    initial="hidden"
-                                    animate="visible"
-                                    className="mt-auto pt-10"
-                                >
-                                    <p className="text-white/50 text-xs uppercase tracking-widest mb-4">
-                                        {t('followUs')}
-                                    </p>
-                                    <div className="flex items-center gap-4">
-                                        {SOCIAL_LINKS.map((s) => (
-                                            <a
-                                                key={s.label}
-                                                href={s.href}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                aria-label={s.label}
-                                                className="
+                                    <motion.div
+                                        custom={NAV_LINK_KEYS.length}
+                                        variants={itemVariants}
+                                        initial="hidden"
+                                        animate="visible"
+                                        className="mt-auto pt-30"
+                                    >
+                                        <p className="text-white/50 text-xs uppercase tracking-widest mb-4">
+                                            {t('followUs')}
+                                        </p>
+                                        <div className="flex items-center gap-4">
+                                            {SOCIAL_LINKS.map((s) => (
+                                                <a
+                                                    key={s.label}
+                                                    href={s.href}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    aria-label={s.label}
+                                                    className="
                                                 flex h-9 w-9 items-center justify-center rounded-full border-[0.5px] border-darkDefault text-white transition-colors duration-200
                                                 hover:bg-white/20 focus-visible:outline-none
                                                 focus-visible:ring-2 focus-visible:ring-white/60
                                               "                                            >
-                                                <SocialIcon type={s.icon} />
-                                            </a>
-                                        ))}
-                                    </div>
-                                </motion.div>
-
+                                                    <SocialIcon type={s.icon} />
+                                                </a>
+                                            ))}
+                                        </div>
+                                    </motion.div>
+                                </div>
                             </div>
                         </motion.div>
                     </>

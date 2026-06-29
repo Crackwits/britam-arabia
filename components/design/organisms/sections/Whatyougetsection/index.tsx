@@ -71,7 +71,7 @@ export default function WhatYouGetSection({
                             }}
                         >
                             {/* Number */}
-                            <span className="text-primaryDefault text-sm tracking-[4.2px] uppercase font-bold">
+                            <span className="text-primaryDefault text-sm tracking-[4.2px] uppercase font-bold pb-2">
                                 {String(index + 1).padStart(2, '0')}
                             </span>
 
