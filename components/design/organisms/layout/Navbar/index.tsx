@@ -52,7 +52,7 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
         ourApproach: 'Our Approach',
         insights: 'Insights',
         lifeAtBritam: 'Life at Britam',
-        inquireNow: 'Inquire Now',
+        inquireNow: 'Schedule Assessment',
         menu: 'Menu',
         openMenu: 'Open navigation menu',
         close: 'Close',
@@ -63,7 +63,7 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
         ourApproach: 'نهجنا',
         insights: 'رؤى',
         lifeAtBritam: 'الحياة في بريتام',
-        inquireNow: 'استفسر الآن',
+        inquireNow: 'جدول التقييم',
         menu: 'القائمة',
         openMenu: 'فتح قائمة التنقل',
         close: 'إغلاق',
@@ -229,11 +229,11 @@ export default function Navbar({ activeSection, lang }: Props) {
                         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                             <Image
                                 src={BritamFooter}
-                                width={133}
-                                height={48}
+                                width={161}
+                                height={58}
                                 alt="Britam Arabia"
                                 quality={100}
-                                className="w-auto object-contain h-12"
+                                className="w-auto object-contain h-14"
                                 priority
                             />
                         </motion.div>
@@ -254,7 +254,7 @@ export default function Navbar({ activeSection, lang }: Props) {
                                     href={withLocale(pathname, '/contact-us')}
                                     whileHover={{ scale: 1.04 }}
                                     whileTap={{ scale: 0.97 }}
-                                    className="hidden sm:flex px-6 py-3 items-center justify-center border border-white text-white hover:text-[#22285C] hover:bg-white text-sm uppercase tracking-[0.84px] font-medium transition-colors whitespace-nowrap"
+                                    className="hidden sm:flex px-6 py-4 items-center justify-center border border-white text-white hover:text-[#22285C] hover:bg-white text-sm uppercase tracking-[0.84px] font-medium transition-colors whitespace-nowrap"
                                 >
                                     {t('inquireNow')}
                                 </MotionLink>

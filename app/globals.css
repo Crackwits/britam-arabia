@@ -423,3 +423,20 @@ body {
   font-style: italic;
   margin: 1rem 0;
 }
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important; /* let Lenis control scroll, not CSS */
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain; /* opt-out specific elements like modals */
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
