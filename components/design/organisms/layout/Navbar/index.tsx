@@ -312,12 +312,12 @@ export default function Navbar({ activeSection, lang }: Props) {
                             style={{
                                 position: 'fixed', top: 0, bottom: 0,
                                 ...(isArabic ? { left: 0 } : { right: 0 }),
-                                width: '100%', maxWidth: '480px',
-                                zIndex: 9999, backgroundColor: '#1c2151',
+                                width: '100%', maxWidth: '485px',
+                                zIndex: 9999, backgroundColor: '#001F63',
                                 overflowY: 'auto', pointerEvents: 'auto',
                             }}
                         >
-                            <div className="flex flex-col h-full p-6 max-w-[400px] w-full mx-auto">
+                            <div className="flex flex-col h-full p-6 max-w-[485px] w-full mx-auto">
 
                                 <div className="flex items-center justify-start mb-20 gap-8">
                                     <LangToggle onClick={() => setMenuOpen(false)} />
@@ -325,7 +325,7 @@ export default function Navbar({ activeSection, lang }: Props) {
                                     <Link
                                         href={withLocale(pathname, '/contact-us')}
                                         onClick={() => setMenuOpen(false)}
-                                        className="px-4 py-3 border border-white text-white text-sm tracking-[0.84px] uppercase font-medium hover:text-[#22285C] hover:bg-white transition-colors"
+                                        className=" px-4 py-3 border border-white text-white text-sm tracking-[0.84px] uppercase font-medium hover:text-[#22285C] hover:bg-white transition-colors"
                                     >
                                         {t('inquireNow')}
                                     </Link>

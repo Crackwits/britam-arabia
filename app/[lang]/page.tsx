@@ -39,7 +39,6 @@ export default async function HomePage({ params }: { params: Params }) {
       kpis: true,
       testimonials: true,
       critical_projects: { populate: "*" },
-      services_entry_items: { populate: "*" },
     });
 
   if (!page) {
