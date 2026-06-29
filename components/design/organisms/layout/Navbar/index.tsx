@@ -365,7 +365,7 @@ export default function Navbar({ activeSection, lang }: Props) {
                                         variants={itemVariants}
                                         initial="hidden"
                                         animate="visible"
-                                        className="mt-auto pt-30"
+                                        className="mt-auto pt-15 md:pt-20 lg:pt-30"
                                     >
                                         <p className="text-white/50 text-xs uppercase tracking-widest mb-4">
                                             {t('followUs')}
@@ -388,6 +388,8 @@ export default function Navbar({ activeSection, lang }: Props) {
                                             ))}
                                         </div>
                                     </motion.div>
+
+
                                 </div>
                             </div>
                         </motion.div>

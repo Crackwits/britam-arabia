@@ -113,7 +113,10 @@ export default function TestimonialsSection({
             <div className="mx-auto max-w-7xl">
                 {/* ── Label + Heading ── */}
                 <div className="text-center">
-                    <div className="inline-flex items-center gap-2 mb-4">
+                    <div
+                        className="inline-flex items-center gap-2 mb-4"
+                        aria-hidden="false"
+                    >
                         <HeadingTriangle />
                         <span className="text-primaryDefault text-xl md:text-lg font-medium uppercase">
                             {label}
