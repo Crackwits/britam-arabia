@@ -393,6 +393,18 @@ export default function CareerDetailsSection({
                             t={t}
                         />
 
+                        {/* Status messages */}
+                        {submitState === "success" && (
+                            <p role="status" className="text-sm font-medium text-primaryDefault">
+                                {t.success}
+                            </p>
+                        )}
+                        {submitState === "error" && (
+                            <p role="alert" className="text-sm font-medium text-[#ED0000]">
+                                {t.genericError}
+                            </p>
+                        )}
+
                         {/* Submit */}
                         <div className={`mt-16 mb-21 flex ${isArabic ? "justify-start" : "justify-start"} pt-2`}>
                             <motion.button
@@ -415,17 +427,7 @@ export default function CareerDetailsSection({
                             </motion.button>
                         </div>
 
-                        {/* Status messages */}
-                        {submitState === "success" && (
-                            <p role="status" className="text-sm font-medium text-green-700">
-                                {t.success}
-                            </p>
-                        )}
-                        {submitState === "error" && (
-                            <p role="alert" className="text-sm font-medium text-red-600">
-                                {t.genericError}
-                            </p>
-                        )}
+
                     </form>
                 </motion.div>
             </div>
