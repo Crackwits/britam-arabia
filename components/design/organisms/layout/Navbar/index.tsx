@@ -5,6 +5,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import BritamFooter from '@/public/britam-footer.png';
+import BritamGrey from '@/public/britam-grey.png';
 import { usePathname } from 'next/navigation';
 import { FACEBOOK_URL, INSTAGRAM_URL, TWITTER_URL, LINKEDIN_URL, YOUTUBE_URL, WHATSAPP_URL } from "@/utils/consts";
 
@@ -90,7 +91,7 @@ const NAV_LINK_KEYS = [
 
 
 const TRANSPARENT_SECTIONS = new Set(['insights-banner', 'herobanner']);
-const SOLID_BG = '#001F63';
+const SOLID_BG = '#FFFFFF';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -173,6 +174,8 @@ export default function Navbar({ activeSection, lang }: Props) {
         [activeSection],
     );
 
+    const isDark = TRANSPARENT_SECTIONS.has(activeSection);
+
     useEffect(() => {
         const onScroll = () => setIsScrolled(window.scrollY > 20);
         onScroll();
@@ -192,7 +195,7 @@ export default function Navbar({ activeSection, lang }: Props) {
         <Link
             href={langPath}
             onClick={onClick}
-            className="text-white text-sm font-medium tracking-[0.84px] uppercase hover:opacity-60 transition-opacity whitespace-nowrap"
+            className={`${isDark ? "text-white" : "text-darkDefault"}  text-sm font-medium tracking-[0.84px] uppercase hover:opacity-60 transition-opacity whitespace-nowrap`}
         >
             {oppLocale === "ar" ? "ع" : "EN"}
             {/* {oppLocale.toUpperCase()} */}
@@ -220,7 +223,7 @@ export default function Navbar({ activeSection, lang }: Props) {
                     style={{ zIndex: -1 }}
                 />
 
-                <div className="mx-auto flex max-w-7xl [@media(min-width:1600px)]:max-w-none items-center justify-between px-6 py-4">
+                <div className="mx-auto flex max-w-7xl [@media(min-width:1600px)]:max-w-none items-center justify-between px-6 py-[14px]">
                     <Link
                         href={`/${currentLocale}`}
                         className="relative"
@@ -228,7 +231,7 @@ export default function Navbar({ activeSection, lang }: Props) {
                     >
                         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                             <Image
-                                src={BritamFooter}
+                                src={isDark ? BritamFooter : BritamGrey}
                                 width={161}
                                 height={58}
                                 alt="Britam Arabia"
@@ -254,7 +257,8 @@ export default function Navbar({ activeSection, lang }: Props) {
                                     href={withLocale(pathname, '/contact-us')}
                                     whileHover={{ scale: 1.04 }}
                                     whileTap={{ scale: 0.97 }}
-                                    className="hidden sm:flex px-6 py-4 items-center justify-center border border-white text-white hover:text-[#22285C] hover:bg-white text-sm uppercase tracking-[0.84px] font-medium transition-colors whitespace-nowrap"
+                                    className={`${isDark ? "border-white text-white hover:text-darkDefault hover:bg-white" : "border-darkDefault text-darkDefault hover:text-white hover:bg-darkDefault"} hidden sm:flex px-6 py-4 items-center justify-center border
+                                      text-sm uppercase tracking-[0.84px] font-medium transition-colors whitespace-nowrap`}
                                 >
                                     {t('inquireNow')}
                                 </MotionLink>
@@ -263,15 +267,15 @@ export default function Navbar({ activeSection, lang }: Props) {
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
                                     onClick={() => setMenuOpen(true)}
-                                    className="flex items-center gap-3 text-white text-sm tracking-[0.84px] uppercase font-medium cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white rounded"
+                                    className={`${isDark ? "text-white" : "text-darkDefault"} flex items-center gap-3 text-sm tracking-[0.84px] uppercase font-medium cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white`}
                                     aria-label={t('openMenu')}
                                     aria-expanded={isMobileMenuOpen}
                                     aria-controls="mobile-nav-panel"
                                 >
                                     <span className="hidden sm:inline">{t('menu')}</span>
                                     <span className="flex flex-col gap-[5px] w-5" aria-hidden="true">
-                                        <span className="block h-px bg-white w-full" />
-                                        <span className="block h-px bg-white w-full" />
+                                        <span className={` ${isDark ? "bg-white" : "bg-darkDefault"} block h-px w-full`} />
+                                        <span className={`${isDark ? "bg-white" : "bg-darkDefault"} block h-px w-full`} />
                                     </span>
                                 </motion.button>
                             </motion.div>

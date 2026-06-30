@@ -191,7 +191,7 @@ function ResumeUpload({ file, onFileSelect, error, isArabic, t }: ResumeUploadPr
                         <button
                             type="button"
                             onClick={handleRemove}
-                            className="pb-2 inline-flex text-base text-darkLight pointer items-center gap-1 hover:text-[#ED0000] transition-colors"
+                            className="pb-2 inline-flex text-base text-darkLight cursor-pointer items-center gap-1 hover:text-[#ED0000] transition-colors"
                         >
                             <X size={12} />
                             {t.removeFile}
