@@ -125,7 +125,7 @@ export default function ImpactSection({
                 aria-label={isArabic ? "عرض التأثيرات" : "Impact cards carousel"}
             >
                 <div
-                    className={`embla__container flex flex-col sm:flex-row gap-4 ${isArabic ? "sm:flex-row-reverse" : ""}`}
+                    className={`embla__container flex flex-col sm:flex-row gap-4 `}
                 >
                     {measurable_impacts.map((item) => (
                         <ImpactCard
