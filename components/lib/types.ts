@@ -284,3 +284,9 @@ export interface LifeAtBritamAttributes extends StrapiAttributes {
     section4_heading: string;
     why_join_us: TitleComponent[]
 }
+
+export interface ContactusAttributes extends StrapiAttributes{
+    heading: string;
+    subheading: string;
+    form_title: string;
+}
