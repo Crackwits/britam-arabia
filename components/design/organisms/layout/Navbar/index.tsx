@@ -325,8 +325,7 @@ export default function Navbar({ activeSection, lang }: Props) {
                                         <Link
                                             href={withLocale(pathname, '/contact-us')}
                                             onClick={() => setMenuOpen(false)}
-                                            className="md:hidden block px-4 py-3 border border-white text-white text-sm tracking-[0.84px] uppercase font-medium hover:text-[#22285C] hover:bg-white transition-colors"
-                                        >
+                                            className="md:hidden inline-flex items-center justify-center px-4 py-3 leading-none border border-white text-white text-sm tracking-[0.84px] uppercase font-medium hover:text-[#22285C] hover:bg-white transition-colors"                                        >
                                             {t('inquireNow')}
                                         </Link>
 
