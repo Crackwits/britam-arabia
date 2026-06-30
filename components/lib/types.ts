@@ -1,3 +1,5 @@
+import { SrvRecord } from "dns";
+
 // Reusable SEO component type (matches Strapi SEO plugin)
 export interface StrapiSEO {
     metaTitle: string;
@@ -103,6 +105,12 @@ export interface CriticalProjects {
     name: string;
     image: CoverType;
 }
+
+export interface TitleComponent {
+    id: number;
+    title: string;
+}
+
 export interface GlobalSettingAttributes {
     phone: string;
     email: string;
@@ -229,18 +237,18 @@ export interface OurApproachAttributes extends StrapiAttributes {
     section4_subheading: string;
     section4_heading: string;
     measurable_impacts: IconText[];
-    section5_heading:string;
+    section5_heading: string;
     section5_subheading: string;
 }
 
-export interface InsightHeroAttributes extends StrapiAttributes{
+export interface InsightHeroAttributes extends StrapiAttributes {
     hero_headline: string;
     image: CoverType;
     intro_title: string;
     intro_desc: string;
 }
 
-export interface InsightsAttributes extends StrapiAttributes{
+export interface InsightsAttributes extends StrapiAttributes {
     id: number;
     slug: string;
     title: string;
@@ -248,4 +256,30 @@ export interface InsightsAttributes extends StrapiAttributes{
     thumbnail: CoverType;
     cover: CoverType;
     content: string;
+}
+
+export interface CareersAttributes extends StrapiAttributes {
+    id: number;
+    slug: string;
+    position: string;
+    brief: string;
+    employment_type: string;
+    location: string;
+    content: string;
+}
+
+export interface LifeAtBritamAttributes extends StrapiAttributes {
+    hero_headline: string;
+    image: CoverType;
+    section1_title: string;
+    section1_desc: string;
+    section1_image: CoverType;
+    section2_image: CoverType;
+    section2_title: string;
+    section2_desc: string;
+    section3_subheading: string;
+    section3_heading: string;
+    section4_subheading: string;
+    section4_heading: string;
+    why_join_us: TitleComponent[]
 }
