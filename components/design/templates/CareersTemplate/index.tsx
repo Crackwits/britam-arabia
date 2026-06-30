@@ -23,7 +23,6 @@ export default function CareersTemplate({ data, lang }: CareersTemplateProps) {
     const [scrollProgress, setScrollProgress] = useState(0);
 
     // Refs for sections
-    const herobannerRef = useRef<HTMLElement | null>(null);
     const pagecontentRef = useRef<HTMLElement | null>(null);
 
 
@@ -50,7 +49,7 @@ export default function CareersTemplate({ data, lang }: CareersTemplateProps) {
         const observer = new IntersectionObserver(observerCallback, observerOptions);
 
         // Observe all sections
-        const sections = [herobannerRef, pagecontentRef];
+        const sections = [pagecontentRef];
         sections.forEach(ref => {
             if (ref.current) {
                 observer.observe(ref.current);
@@ -81,7 +80,6 @@ export default function CareersTemplate({ data, lang }: CareersTemplateProps) {
 
             // Check if specific section is in view
             const sections = [
-                { ref: herobannerRef, id: 'herobanner' },
                 { ref: pagecontentRef, id: 'pagecontent' },
             ];
 
@@ -119,7 +117,9 @@ export default function CareersTemplate({ data, lang }: CareersTemplateProps) {
     return (
         <>
             <Navbar activeSection={activeSection} lang={lang} />
-            <CareerDetailsSection career={data} lang={locale} isArabic={isArabic} />
+            <section className='pt-21' id="pagecontent" ref={pagecontentRef}>
+                <CareerDetailsSection career={data} lang={locale} isArabic={isArabic} />
+            </section>
 
         </>
     );

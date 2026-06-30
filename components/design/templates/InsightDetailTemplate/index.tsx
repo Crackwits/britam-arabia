@@ -17,10 +17,12 @@ export default function InsightDetailTemplate({ data, relatedinsights, lang }: I
 
     return (
         <>
-            <Navbar activeSection="homehero" lang={lang} />
-            <DetailHero subheading={data.date} heading={data.title} cover={data.cover} />
-            <DetailContent content={data.content} />
-            <RelatedInsights insights={relatedinsights} lang={lang} isArabic={isArabic} />
+            <Navbar activeSection="" lang={lang} />
+            <section className="relative pt-21">
+                <DetailHero subheading={data.date} heading={data.title} cover={data.cover} />
+                <DetailContent content={data.content} />
+                <RelatedInsights insights={relatedinsights} lang={lang} isArabic={isArabic} />
+            </section>
         </>
     );
 }

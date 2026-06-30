@@ -8,10 +8,12 @@ import { CoverType } from '@/components/lib/types';
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface MediaBlockProps {
+    lang: string;
     isArabic: boolean;
     title: string;
     desc: string;       // CKEditor 5 HTML
     cta: string;
+    cta_link: string;
     cta2_label: string;
     cta2_link: string;
     image: CoverType | null;
@@ -23,10 +25,12 @@ const getMediaUrl = (url?: string) =>
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function MediaBlock({
+    lang,
     isArabic,
     title,
     desc,
     cta,
+    cta_link,
     cta2_label,
     cta2_link,
     image,
@@ -72,9 +76,9 @@ export default function MediaBlock({
                     />
                     <div className="flex flex-wrap items-center gap-6">
                         {/* Primary CTA */}
-                        {cta && (
+                        {cta && cta_link && (
                             <Link
-                                href={'/our-journey'}
+                                href={`/${lang}/${cta_link}`}
                                 className="inline-flex uppercase items-center gap-2 text-white bg-primaryDefault px-6 py-4 font-medium tracking-[0.84px] text-sm
     border-2 border-primaryDefault hover:bg-white hover:text-primaryDefault transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primaryDefault"
                             >

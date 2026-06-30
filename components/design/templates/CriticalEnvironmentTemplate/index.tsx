@@ -13,10 +13,11 @@ export default function CriticalEnvironmentTemplate({ data, lang }: CriticalEnvi
 
     return (
         <>
-            <Navbar activeSection="homehero" lang={lang} />
-            <DetailHero subheading={data.industry} heading={data.name} cover={data.cover} />
-            <DetailContent content={data.content} />
-
+            <Navbar activeSection="" lang={lang} />
+            <section className="pt-21">
+                <DetailHero subheading={data.industry} heading={data.name} cover={data.cover} />
+                <DetailContent content={data.content} />
+            </section>
         </>
     );
 }

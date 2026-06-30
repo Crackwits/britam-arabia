@@ -140,9 +140,10 @@ export default function HomeTemplate({ homedata, capabilities, globalSettings, l
 
             </section>
             <section ref={resiliencesystemRef} id="resiliencesystem">
-                <MediaBlock isArabic={isArabic} title={homedata.section1_title}
+                <MediaBlock lang={lang} isArabic={isArabic} title={homedata.section1_title}
                     desc={homedata.section1_desc}
                     cta={homedata.section1_cta}
+                    cta_link="our-journey"
                     cta2_label=""
                     cta2_link=""
                     image={homedata.section1_image} />
@@ -151,9 +152,10 @@ export default function HomeTemplate({ homedata, capabilities, globalSettings, l
 
             <WhatYouGetSection section2_title={homedata.section2_title} intro_what_you_get={homedata.intro_what_you_get} titleclass="" />
             <WhyChooseUsSection section3_title={homedata.section3_title} intro_why_choose_us={homedata.intro_why_choose_us} />
-            <MediaBlock isArabic={isArabic} title={homedata.section4_title}
+            <MediaBlock lang={lang} isArabic={isArabic} title={homedata.section4_title}
                 desc={homedata.section4_desc}
                 cta={homedata.section4_cta}
+                cta_link="contact-us"
                 cta2_label={homedata.section4_checklist_label}
                 cta2_link={homedata.section4_checklist_link}
                 image={homedata.section4_image} />

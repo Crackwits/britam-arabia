@@ -127,9 +127,10 @@ export default function LifeAtBritamTemplate({ data, careers, lang }: LifeAtBrit
             </section>
 
             <section ref={pagecontentRef} id="pagecontent">
-                <MediaBlock isArabic={isArabic} title={data.section1_title}
+                <MediaBlock lang={lang} isArabic={isArabic} title={data.section1_title}
                     desc={data.section1_desc}
                     cta=""
+                    cta_link=""
                     cta2_label=""
                     cta2_link=""
                     image={data.section1_image} />

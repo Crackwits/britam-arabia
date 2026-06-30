@@ -320,7 +320,7 @@ export default function CareerDetailsSection({
             dir={isArabic ? "rtl" : "ltr"}
             className={`w-full bg-white ${isArabic ? "rtl text-right" : "ltr text-left"}`}
         >
-            <div className="max-w-5xl mx-auto px-4 pt-36">
+            <div className="max-w-5xl mx-auto px-4 pt-15">
                 {/* ── Section 1: Job Details ── */}
                 <motion.div
                     variants={headerVariants}

@@ -117,7 +117,7 @@ export default function ContactUsTemplate({ data, globalsettings, lang }: Contac
     return (
         <>
             <Navbar activeSection={activeSection} lang={lang} />
-            <section id="pagecontent" ref={pagecontentRef} className='pt-22'>
+            <section id="pagecontent" ref={pagecontentRef} className='pt-21'>
                 <ContactSection data={data} globalsettings={globalsettings} lang={locale} isArabic={isArabic}/>
             </section>
 
