@@ -277,12 +277,14 @@ export default function CareerDetailsSection({
     };
 
     const handleFileSelect = (file: File | null) => {
+        // console.log("Selected file type:", file?.type); // ADD THIS
         setCvFile(file);
         if (file) validateFile(file);
         else setCvError(undefined);
     };
 
     const onSubmit = async (data: Omit<ApplicationFormValues, "cv">) => {
+        // console.log("cvFile at submit:", cvFile); // ADD THIS
         if (!validateFile(cvFile)) return;
 
         setSubmitState("idle");

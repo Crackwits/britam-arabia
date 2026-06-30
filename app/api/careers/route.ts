@@ -86,17 +86,15 @@ export async function POST(req: NextRequest) {
             from: process.env.SMTP_USER,
             to: process.env.HR_EMAIL,
             // replyTo: email,
-            subject: `New Job Application - ${positionLabel}`,
+            subject: `BRITAM ARABIA - New Job Application - ${positionLabel}`,
             text: `
 New job application received.
 
 Position: ${positionLabel}
-Slug: ${slugLabel}
       `.trim(),
             html: `
         <h2>New Job Application</h2>
         <p><strong>Position:</strong> ${positionLabel}</p>
-        <p><strong>Slug:</strong> ${slugLabel}</p>
         <hr />
       `,
             attachments: [

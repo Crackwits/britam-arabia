@@ -39,13 +39,6 @@ export function buildApplicationSchema(locale: "en" | "ar" = "en") {
     const t = messages[locale];
 
     return z.object({
-        name: z.string().trim().min(2, t.name),
-        email: z.string().trim().email(t.email),
-        phone: z
-            .string()
-            .trim()
-            .min(6, t.phone)
-            .regex(/^[+0-9()\s-]+$/, t.phone),
         cv: z
             .custom<File>((file) => file instanceof File, t.cvRequired)
             .refine((file) => file.size <= MAX_FILE_SIZE, t.cvSize)
