@@ -36,7 +36,7 @@ export async function strapiGet<T>(
     if (params) {
         Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
     }
-    console.log(url.toString());
+    // console.log(url.toString());
     const res = await fetch(url.toString(), {
         headers: strapiHeaders,
         next: { revalidate: 60 }, // ISR - adjust per content type
@@ -214,7 +214,7 @@ export async function getBySlug<T>(
         });
     }
 
-    console.log(params);
+    // console.log(params);
     const data = await strapiGet<{ data: T[] }>(contentType, params);
     return data.data?.[0] ?? null;
 }

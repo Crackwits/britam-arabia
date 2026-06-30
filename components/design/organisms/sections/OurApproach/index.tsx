@@ -121,7 +121,7 @@ export default function OurApproach({ isArabic, subheading, heading, desc, steps
                                             <span className="w-[6px] h-[6px] rounded-full bg-[#0034A5]" />
                                             <span className="text-primaryDefault text-sm font-bold uppercase tracking-[4px]">
                                                
-                                                {isArabic ? `خطوة${stepNum}` : `STEP${stepNum}`}
+                                                {isArabic ? `خطوة ${stepNum}` : `STEP ${stepNum}`}
                                             </span>
                                         </div>
                                         <div className="flex-1 h-[2px] bg-[#EAEAEA]" />

@@ -7,6 +7,7 @@ import { CareersAttributes } from '@/components/lib/types';
 import Navbar from '../../organisms/layout/Navbar';
 import PageHero from '../../organisms/heros/PageHero';
 import MediaBlock from '@/components/core/molecules/MediaBlock';
+import CareerDetailsSection from '../../organisms/sections/CareerDetailsSection';
 
 interface CareersTemplateProps {
     data: CareersAttributes;
@@ -89,9 +90,9 @@ export default function CareersTemplate({ data, lang }: CareersTemplateProps) {
                     const rect = ref.current.getBoundingClientRect();
                     const isInView = rect.top < windowHeight / 2 && rect.bottom > windowHeight / 2;
 
-                    if (isInView) {
-                        console.log(`User reached: ${id}`);
-                    }
+                    // if (isInView) {
+                    //     console.log(`User reached: ${id}`);
+                    // }
                 }
             });
         };
@@ -118,7 +119,8 @@ export default function CareersTemplate({ data, lang }: CareersTemplateProps) {
     return (
         <>
             <Navbar activeSection={activeSection} lang={lang} />
-            
+            <CareerDetailsSection career={data} lang={locale} isArabic={isArabic} />
+
         </>
     );
 }

@@ -93,9 +93,9 @@ export default function LifeAtBritamTemplate({ data, careers, lang }: LifeAtBrit
                     const rect = ref.current.getBoundingClientRect();
                     const isInView = rect.top < windowHeight / 2 && rect.bottom > windowHeight / 2;
 
-                    if (isInView) {
-                        console.log(`User reached: ${id}`);
-                    }
+                    // if (isInView) {
+                    //     console.log(`User reached: ${id}`);
+                    // }
                 }
             });
         };
