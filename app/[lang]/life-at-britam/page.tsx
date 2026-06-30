@@ -20,7 +20,7 @@ export async function generateMetadata({
     return buildMetadata(page.seo, lang, "/life-at-britam");
 }
 
-export default async function OurJourney({ params }: { params: Params }) {
+export default async function LifeAtBritam({ params }: { params: Params }) {
     const { lang } = await params;
     const careers = await getCollection<CareersAttributes>("careers", lang);
     const page = await getSingleType<LifeAtBritamAttributes>("life-at-britam", lang,

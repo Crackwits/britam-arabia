@@ -279,6 +279,7 @@ export interface LifeAtBritamAttributes extends StrapiAttributes {
     section2_desc: string;
     section3_subheading: string;
     section3_heading: string;
+    section3_desc: string;
     section4_subheading: string;
     section4_heading: string;
     why_join_us: TitleComponent[]
