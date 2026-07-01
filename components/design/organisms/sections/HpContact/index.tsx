@@ -238,7 +238,7 @@ export default function HpContactSection({ locale, globalSettings, heading, body
           <div className="relative max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 pb-10 md:pt-10 pt-27 lg:gap-16">
             <div
               className='flex flex-col justify-top transition-all duration-700 ease-out pt-8'>
-              <p className="text-5xl font-bold uppercase leading-[1.05] text-white md:text-6xl">
+              <p className="px-4 text-5xl font-bold uppercase leading-[1.05] text-white md:text-6xl">
                 {t.inquiryLine}
               </p>
             </div>
@@ -246,11 +246,11 @@ export default function HpContactSection({ locale, globalSettings, heading, body
               {/* ── Form card ── */}
               <motion.div
                 variants={getCardVariants(isArabic)}
-                className='relative bg-white w-full p-6'>
+                className='relative w-full px-4'>
                 <form
                   onSubmit={handleSubmit(onSubmit)}
                   noValidate
-                  className="space-y-4"
+                  className="space-y-4 relative bg-white w-full p-6"
                 >
                   <FieldWrapper index={0} error={errors.fullName?.message}>
                     <label htmlFor="fullName" className="sr-only">
@@ -372,7 +372,7 @@ export default function HpContactSection({ locale, globalSettings, heading, body
               {/* ── Contact information ── */}
               <div
                 className="flex flex-col gap-4 text-white
-              sm:flex-row sm:gap-10 pt-6">
+              sm:flex-row sm:gap-10 pt-6 px-4">
                 <div>
                   <p className="text-sm sm:mb-2 mb-6">{t.phoneLabel}</p>
                   <a href={`tel:${globalSettings?.phone}`} target="_blank" className="hover:underline text-sm font-medium">{globalSettings?.phone}</a>
@@ -383,7 +383,7 @@ export default function HpContactSection({ locale, globalSettings, heading, body
                 </div>
 
               </div>
-              <div className="pt-6 text-white">
+              <div className="pt-6 text-white px-4">
                 <p className="text-sm mb-2">{t.addressLabel}</p>
                 <a href={globalSettings?.address_link} target="_blank" className="hover:underline text-sm font-medium">
                   
