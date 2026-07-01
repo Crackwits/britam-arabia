@@ -6,6 +6,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import BritamFooter from '@/public/britam-footer.png';
 import BritamGrey from '@/public/britam-grey.png';
+import BritamLogoDark from '@/public/Britam-logo-dark.svg';
+import BritamLogoLight from '@/public/Britam-logo-light.svg';
 import { usePathname } from 'next/navigation';
 import { FACEBOOK_URL, INSTAGRAM_URL, TWITTER_URL, LINKEDIN_URL, YOUTUBE_URL, WHATSAPP_URL } from "@/utils/consts";
 
@@ -231,12 +233,10 @@ export default function Navbar({ activeSection, lang }: Props) {
                     >
                         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                             <Image
-                                src={isDark ? BritamFooter : BritamGrey}
-                                width={161}
-                                height={58}
+                                src={isDark ? BritamLogoLight : BritamLogoDark}
                                 alt="Britam Arabia"
                                 quality={100}
-                                className="w-auto object-contain h-14"
+                                className="w-auto object-contain h-[58px]"
                                 priority
                             />
                         </motion.div>

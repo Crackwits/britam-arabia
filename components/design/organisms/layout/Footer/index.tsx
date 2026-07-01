@@ -8,6 +8,7 @@ import ISO from "@/public/clients/iso.png";
 import IOSH from "@/public/clients/iosh.png";
 import Nebosh from "@/public/clients/nebosh.png";
 import FireService from "@/public/clients/fireservicecollege.png";
+import BritamLogoLight from '@/public/Britam-logo-light.svg';
 
 import { FACEBOOK_URL, INSTAGRAM_URL, TWITTER_URL, LINKEDIN_URL, YOUTUBE_URL, WHATSAPP_URL } from "@/utils/consts";
 
@@ -106,7 +107,7 @@ export default function FooterSection({ lang, isArabic }: FooterSectionProps) {
           `}
                 >
                     <Link href={withLocale(lang, "/")} className="shrink-0">
-                        <Image src={BritamFooter} alt="Britam" className="h-15 w-auto" />
+                        <Image src={BritamLogoLight} alt="Britam" className="h-[58px] w-auto" />
                     </Link>
 
                 </div>
