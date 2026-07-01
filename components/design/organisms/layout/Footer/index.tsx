@@ -63,7 +63,7 @@ const FOOTER_LINKS_COL_1: FooterLink[] = [
 ];
 
 const FOOTER_LINKS_COL_2: FooterLink[] = [
-    { label: { en: "Life at britam", ar: "الحياة في بريتام" }, href: "/life-at-britam" },
+    { label: { en: "Life at Britam", ar: "الحياة في بريتام" }, href: "/life-at-britam" },
     { label: { en: "FAQ", ar: "الأسئلة الشائعة" }, href: "/faq" },
     { label: { en: "General Inquiry", ar: "استعلام عام" }, href: "/contact-us" },
 ];
