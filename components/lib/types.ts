@@ -290,3 +290,28 @@ export interface ContactusAttributes extends StrapiAttributes{
     subheading: string;
     form_title: string;
 }
+
+export interface PrivacyPolicyAttributes extends StrapiAttributes{
+    title: string;
+    subtitle: string;
+    content: string;
+}
+
+export interface TermsAndConditionsAttributes extends StrapiAttributes{
+    title: string;
+    subtitle: string;
+    content: string;
+}
+
+export interface CookiePolicyAttributes extends StrapiAttributes{
+    title: string;
+    subtitle: string;
+    content: string;
+}
+
+
+export interface FAQAttributes extends StrapiAttributes{
+    title: string;
+    subtitle: string;
+    faqs: WhatYouGetItem[];
+}

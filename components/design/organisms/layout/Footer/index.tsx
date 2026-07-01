@@ -71,8 +71,8 @@ const FOOTER_LINKS_COL_2: FooterLink[] = [
 
 const LEGAL_LINKS: FooterLink[] = [
     { label: { en: "Privacy Policy", ar: "سياسة الخصوصية" }, href: "/privacy-policy" },
-    { label: { en: "Terms of Service", ar: "شروط الخدمة" }, href: "/terms-of-service" },
-    { label: { en: "Cookie Settings", ar: "إعدادات ملفات تعريف الارتباط" }, href: "/cookie-settings" },
+    { label: { en: "Terms of Service", ar: "شروط الخدمة" }, href: "/terms-conditions" },
+    { label: { en: "Cookie Settings", ar: "إعدادات ملفات تعريف الارتباط" }, href: "/cookies-policy" },
 ];
 
 // ─── Helper ───────────────────────────────────────────────────────────────────

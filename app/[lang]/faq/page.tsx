@@ -1,0 +1,34 @@
+import type { Metadata } from "next";
+import { getSingleType, getCollection } from "@/components/lib/api";
+import { buildMetadata } from "@/components/lib/seo";
+import type { FAQAttributes } from "@/components/lib/types";
+
+type Params = Promise<{ lang: string }>; // ← add this
+
+export async function generateMetadata({
+    params,
+}: {
+    params: Params;
+}): Promise<Metadata> {
+    const { lang } = await params;
+    const page = await getSingleType<FAQAttributes>("faq", lang, {
+        seo: { populate: "*", }
+    });
+    if (!page?.seo) return { title: "Britam Arabia" };
+    return buildMetadata(page.seo, lang, "/faq");
+}
+
+export default async function FAQ({ params }: { params: Params }) {
+    const { lang } = await params;
+    const page = await getSingleType<FAQAttributes>("faq", lang);
+
+    if (!page) {
+        return <main><p>Content not available.</p></main>;
+    }
+
+    return (
+        <>
+            {/* <TermsConditionsTemplate data={page} lang={lang} /> */}
+        </>
+    );
+}
