@@ -1,17 +1,20 @@
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════════════════════════════════
+   1. THEME VARIABLES
+   ═══════════════════════════════════════════════════════════════════════ */
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
-
 @theme {
-  /* ── Fonts ───────────────────────────────────────────── */
+  /* ── Fonts ───────────────────────────────────────────────────────── */
   --font-en: var(--font-en);
   --font-ar: var(--font-ar);
 
-  /* ── Colors ──────────────────────────────────────────── */
+  /* ── Colors ──────────────────────────────────────────────────────── */
   --color-blue950: #22285C;
   --color-blue900: #38429A;
   --color-blue800: #0025E3;
@@ -23,107 +26,123 @@
   --color-blue200: #A9CEFF;
   --color-blue100: #CFE6FF;
   --color-blue50: #E5F1FF;
-  --color-neutral200: #D8D9DF;
-  --color-neurtal900: #34343F;
-  --color-neutral500: #6E6F89;
-  --color-neutral50: #F8F8F8;
 
+  --color-neutral900: #34343F;
+  --color-neutral500: #6E6F89;
+  --color-neutral200: #D8D9DF;
+  --color-neutral50: #F8F8F8;
   --color-neutralLighter: #EEEDF1;
   --color-neutralLight: #B5B6C4;
+
   --color-navy900: #001239;
+  --color-richNavy: #001239;
+  --color-darkDefault: #34343F;
   --color-darkLight: #6E6F89;
   --color-primaryDefault: #0034A5;
-  --color-darkDefault: #34343F;
-  --color-richNavy: #001239;
+
   --color-f7f7f7: #F7F7F7;
   --color-fcfcff: #FCFCFF;
   --color-footerbg: #00031E;
-  --color-lightLighter: #B5B6C4;
   --color-e2e2e2: #E2E2E2;
 
-  /* ── Font sizes ──────────────────────────────────────── */
-  --font-size-xs: 12px;
-  --line-height-xs: 20px;
-  --font-size-sm: 14px;
-  --line-height-sm: 22px;
-  --font-size-base: 16px;
-  --line-height-base: 24px;
-  --font-size-lg: 18px;
-  --line-height-lg: 26px;
-  --font-size-xl: 20px;
-  --line-height-xl: 28px;
-  --font-size-2xl: 24px;
-  --line-height-2xl: 32px;
-  --font-size-3xl: 32px;
-  --line-height-3xl: 40px;
-  --font-size-4xl: 40px;
-  --line-height-4xl: 48px;
-  --font-size-5xl: 48px;
-  --line-height-5xl: 56px;
-  --font-size-6xl: 56px;
-  --line-height-6xl: 64px;
-  --font-size-7xl: 64px;
-  --line-height-7xl: 72px;
-  --font-size-h1: 64px;
-  --line-height-h1: 72px;
-  --font-size-h2: 56px;
-  --line-height-h2: 64px;
-  --font-size-h3: 48px;
-  --line-height-h3: 56px;
-  --font-size-h4: 40px;
-  --line-height-h4: 48px;
-  --font-size-h5: 32px;
-  --line-height-h5: 40px;
-  --font-size-h6: 24px;
-  --line-height-h6: 32px;
+  /* ── Font sizes + paired line-heights ─────────────────────────────
+     Tailwind v4 pairs `--text-{name}` with `--text-{name}--line-height`
+     so a single `text-{name}` utility sets both font-size and line-height.
+     Each line-height points at a `--leading-{name}-base` token below,
+     rather than a literal px value, so the Arabic override block can
+     redefine just the base tokens without touching font-size at all. ── */
+  --text-xs: 12px;
+  --text-xs--line-height: var(--leading-xs-base);
+  --text-sm: 14px;
+  --text-sm--line-height: var(--leading-sm-base);
+  --text-base: 16px;
+  --text-base--line-height: var(--leading-base-base);
+  --text-lg: 18px;
+  --text-lg--line-height: var(--leading-lg-base);
+  --text-xl: 20px;
+  --text-xl--line-height: var(--leading-xl-base);
+  --text-2xl: 24px;
+  --text-2xl--line-height: var(--leading-2xl-base);
+  --text-3xl: 32px;
+  --text-3xl--line-height: var(--leading-3xl-base);
+  --text-4xl: 40px;
+  --text-4xl--line-height: var(--leading-4xl-base);
+  --text-5xl: 48px;
+  --text-5xl--line-height: var(--leading-5xl-base);
+  --text-6xl: 56px;
+  --text-6xl--line-height: var(--leading-6xl-base);
+  --text-7xl: 64px;
+  --text-7xl--line-height: var(--leading-7xl-base);
 
-  /* ── Screens ─────────────────────────────────────────── */
+  --text-h1: 64px;
+  --text-h1--line-height: var(--leading-h1-base);
+  --text-h2: 56px;
+  --text-h2--line-height: var(--leading-h2-base);
+  --text-h3: 48px;
+  --text-h3--line-height: var(--leading-h3-base);
+  --text-h4: 40px;
+  --text-h4--line-height: var(--leading-h4-base);
+  --text-h5: 32px;
+  --text-h5--line-height: var(--leading-h5-base);
+  --text-h6: 24px;
+  --text-h6--line-height: var(--leading-h6-base);
+
+  /* ── Screens ──────────────────────────────────────────────────────── */
   --breakpoint-xxl: 1600px;
 
-  /* ── Animations ──────────────────────────────────────── */
+  /* ── Animations ───────────────────────────────────────────────────── */
   --animate-marquee: marquee 25s linear infinite;
   --animate-scroll-rtl: scroll-rtl 20s linear infinite;
   --animate-slideIn: slideIn 0.2s ease forwards;
 
-
   @keyframes marquee {
-    from {
-      transform: translateX(0);
-    }
-
-    to {
-      transform: translateX(-50%);
-    }
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
   }
 
-
-
   @keyframes scroll-rtl {
-    0% {
-      transform: translateX(0);
-    }
-
-    100% {
-      transform: translateX(-100%);
-    }
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
   }
 
   @keyframes slideIn {
-    0% {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
+    0% { opacity: 0; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
   }
 }
 
+/* ═══════════════════════════════════════════════════════════════════════
+   2. LINE-HEIGHT BASE TOKENS (English defaults)
+   These are the actual source-of-truth values. --text-*--line-height
+   above just points at these, and the Arabic block in §6 overrides
+   these same variable names so every text-* utility updates automatically.
+   ═══════════════════════════════════════════════════════════════════════ */
 
+:root {
+  --leading-xs-base: 20px;
+  --leading-sm-base: 22px;
+  --leading-base-base: 24px;
+  --leading-lg-base: 26px;
+  --leading-xl-base: 28px;
+  --leading-2xl-base: 32px;
+  --leading-3xl-base: 40px;
+  --leading-4xl-base: 48px;
+  --leading-5xl-base: 56px;
+  --leading-6xl-base: 64px;
+  --leading-7xl-base: 72px;
 
-/* ── Base styles ─────────────────────────────────────────── */
+  --leading-h1-base: 72px;
+  --leading-h2-base: 64px;
+  --leading-h3-base: 56px;
+  --leading-h4-base: 48px;
+  --leading-h5-base: 40px;
+  --leading-h6-base: 32px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   3. BASE STYLES
+   ═══════════════════════════════════════════════════════════════════════ */
+
 @layer base {
   html[lang="en"] {
     font-family: var(--font-en);
@@ -133,7 +152,6 @@
     font-family: var(--font-ar);
   }
 
-  /* Scrollbar hide utility */
   .scrollbar-none {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -143,44 +161,6 @@
     display: none;
   }
 }
-
-@layer utilities {
-  [dir="rtl"] {
-    .footer-clip {
-      clip-path: polygon(0 0,
-          calc(100% - 20px) 0,
-          100% 20px,
-          100% 100%,
-          0 100%);
-    }
-
-    @media (min-width: 991px) {
-      .footer-clip {
-        clip-path: polygon(0 0,
-            calc(100% - 60px) 0,
-            100% 60px,
-            100% 100%,
-            0 100%);
-      }
-    }
-  }
-
-  [dir="ltr"] {
-    .footer-clip {
-      clip-path: polygon(20px 0, 100% 0, 100% 100%, 0 100%, 0 20px);
-    }
-
-    @media (min-width: 991px) {
-      .footer-clip {
-        clip-path: polygon(60px 0, 100% 0, 100% 100%, 0 100%, 0 60px);
-      }
-    }
-  }
-}
-
-/* Add this block into your existing globals.css */
-
-
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -194,76 +174,104 @@ body {
   color: var(--foreground);
 }
 
+/* ═══════════════════════════════════════════════════════════════════════
+   4. UTILITIES
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@layer utilities {
+  [dir="rtl"] .footer-clip {
+    clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);
+  }
+
+  [dir="ltr"] .footer-clip {
+    clip-path: polygon(20px 0, 100% 0, 100% 100%, 0 100%, 0 20px);
+  }
+
+  @media (min-width: 991px) {
+    [dir="rtl"] .footer-clip {
+      clip-path: polygon(0 0, calc(100% - 60px) 0, 100% 60px, 100% 100%, 0 100%);
+    }
+
+    [dir="ltr"] .footer-clip {
+      clip-path: polygon(60px 0, 100% 0, 100% 100%, 0 100%, 0 60px);
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   5. COMPONENTS
+   font-size + line-height reference the --text-* token pairs so they
+   automatically pick up the Arabic line-height override in §6 —
+   no extra classes, no !important, no JS conditionals needed.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── project-content ─────────────────────────────────────────────────── */
+
 .project-content h1 {
-  color: #34343F;
-  font-size: 48px;
+  color: var(--color-neutral900);
+  font-size: var(--text-h3);
+  line-height: var(--text-h3--line-height);
   font-style: normal;
   font-weight: 500;
-  line-height: 56px;
   letter-spacing: -0.48px;
   padding-bottom: 18px;
 }
 
 .project-content h2 {
-  color: #34343F;
-  font-size: 40px;
+  color: var(--color-neutral900);
+  font-size: var(--text-h4);
+  line-height: var(--text-h4--line-height);
   font-style: normal;
   font-weight: 500;
-  line-height: 48px;
   letter-spacing: -0.48px;
   padding-bottom: 18px;
 }
 
 .project-content h3 {
-  color: #34343F;
-  font-size: 24px;
+  color: var(--color-neutral900);
+  font-size: var(--text-2xl);
+  line-height: var(--text-2xl--line-height);
   font-style: normal;
   font-weight: 500;
-  line-height: 32px;
   letter-spacing: -0.48px;
   padding-bottom: 18px;
 }
 
 .project-content p {
-  color: #6E6F89;
-  padding-bottom: 36px;
-  font-size: 18px;
+  color: var(--color-neutral500);
+  font-size: var(--text-lg);
+  line-height: var(--text-lg--line-height);
   font-style: normal;
   font-weight: 400;
-  line-height: 26px;
   letter-spacing: -0.48px;
+  padding-bottom: 36px;
 }
 
 .project-content li {
-  color: #6E6F89;
-  font-size: 18px;
+  color: var(--color-neutral500);
+  font-size: var(--text-lg);
+  line-height: var(--text-lg--line-height);
   font-style: normal;
   font-weight: 400;
-  line-height: 26px;
   letter-spacing: -0.48px;
   padding-bottom: 5px;
 }
 
-
-
 .project-content p strong,
 .project-content li strong {
-  font-weight: 500;
-  color: #34343F;
-  font-size: 20px;
+  color: var(--color-neutral900);
+  font-size: var(--text-xl);
+  line-height: var(--text-xl--line-height);
   font-style: normal;
-  line-height: 28px;
+  font-weight: 500;
   letter-spacing: -0.48px;
-
 }
 
-/* Unordered Lists */
 .project-content ul:not(.todo-list) {
   list-style-type: disc;
   margin-bottom: 36px;
 }
 
-/* Ordered Lists */
 .project-content ol {
   list-style-type: decimal;
   margin-bottom: 36px;
@@ -273,112 +281,72 @@ body {
   margin-bottom: 0.5rem;
 }
 
-
-
-[dir="rtl"] {
-
-  /* Unordered Lists */
-  .project-content ul:not(.todo-list) {
-    padding-right: 1rem;
-  }
-
-  /* Ordered Lists */
-  .project-content ol {
-    padding-right: 1rem;
-  }
-
-  /* .ck-prose ul,
-  .ck-prose ol {
-    padding-right: 1.25rem;
-  } */
-
-  .ck-prose li {
-    border-right: 2px solid #ED0000;
-    padding-right: 8px;
-  }
-
-  .ck-prose blockquote {
-    border-right: 3px solid #ED0000;
-    padding-right: 1rem;
-  }
+/* Directional padding — shared amount, side depends on dir */
+[dir="rtl"] .project-content ul:not(.todo-list),
+[dir="rtl"] .project-content ol {
+  padding-right: 1rem;
 }
 
-[dir="ltr"] {
-
-  .project-content ul:not(.todo-list) {
-    padding-left: 1rem;
-  }
-
-  /* Ordered Lists */
-  .project-content ol {
-    padding-left: 1rem;
-  }
-
-  /* .ck-prose ul,
-  .ck-prose ol {
-    padding-left: 1.25rem;
-  } */
-
-  .ck-prose li {
-    border-left: 2px solid #ED0000;
-    padding-left: 8px;
-  }
-
-  .ck-prose blockquote {
-    border-left: 3px solid #ED0000;
-    padding-left: 1rem;
-  }
+[dir="ltr"] .project-content ul:not(.todo-list),
+[dir="ltr"] .project-content ol {
+  padding-left: 1rem;
 }
 
-/* ─── CKEditor 5 HTML output styles ─────────────────────────────────────────
-   Add these inside your globals.css under @layer base or directly at root.
-   Scoped to .ck-prose so they never bleed into other components.
-────────────────────────────────────────────────────────────────────────────── */
+/* ── ck-prose (CKEditor 5 HTML output) ───────────────────────────────── */
+
 .ck-prose hr {
   height: 1px;
   margin-top: 36px;
   margin-bottom: 36px;
-  color: #B5B6C4;
-}
-
-.ck-prose p.darkDefault {
-  color: #34343f;
-  margin-bottom: 0px;
+  color: var(--color-neutralLight);
 }
 
 .ck-prose p {
-  color: #6E6F89;
-  font-size: 18px;
+  color: var(--color-neutral500);
+  font-size: var(--text-lg);
+  line-height: var(--text-lg--line-height);
   font-style: normal;
   font-weight: 400;
-  line-height: 26px;
   letter-spacing: -0.48px;
   margin-bottom: 1rem;
-}
-
-.ck-prose p strong {
-  color: #001239;
-}
-
-.ck-prose h4 {
-  color: #001239;
-  font-size: 24px;
-  font-weight: 500;
-  line-height: 32px;
-  letter-spacing: -0.48px;
 }
 
 .ck-prose p:last-child {
   margin-bottom: 0;
 }
 
+.ck-prose p.darkDefault {
+  color: var(--color-navy900);
+  margin-bottom: 0;
+}
+
+.ck-prose p strong {
+  color: var(--color-navy900);
+}
+
 .ck-prose strong {
-  font-weight: 600;
   color: inherit;
+  font-weight: 600;
 }
 
 .ck-prose em {
   font-style: italic;
+}
+
+.ck-prose h2,
+.ck-prose h3 {
+  color: #0D1B5E;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.ck-prose h4 {
+  color: var(--color-navy900);
+  font-size: var(--text-2xl);
+  line-height: var(--text-2xl--line-height);
+  font-weight: 500;
+  letter-spacing: -0.48px;
 }
 
 .ck-prose ul {
@@ -391,32 +359,13 @@ body {
   list-style-type: decimal;
 }
 
-
-.ck-prose a {
-  color: #0034A5;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.ck-prose a:hover {
-  opacity: 0.75;
-}
-
-.ck-prose h2,
-.ck-prose h3 {
-  font-weight: 700;
-  color: #0D1B5E;
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-}
-
 .ck-prose ul,
 .ck-prose ol {
   margin-bottom: 1rem;
 }
 
 .ck-prose li {
-  color: #001239;
+  color: var(--color-navy900);
   margin-bottom: 8px;
 }
 
@@ -426,6 +375,45 @@ body {
   margin: 1rem 0;
 }
 
+.ck-prose a {
+  color: var(--color-primaryDefault);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.ck-prose a:hover {
+  opacity: 0.75;
+}
+
+/* Directional borders — shared width/color, side depends on dir */
+.ck-prose li,
+.ck-prose blockquote {
+  border-color: #ED0000;
+  border-style: solid;
+}
+
+[dir="rtl"] .ck-prose li {
+  border-right-width: 2px;
+  padding-right: 8px;
+}
+
+[dir="ltr"] .ck-prose li {
+  border-left-width: 2px;
+  padding-left: 8px;
+}
+
+[dir="rtl"] .ck-prose blockquote {
+  border-right-width: 3px;
+  padding-right: 1rem;
+}
+
+[dir="ltr"] .ck-prose blockquote {
+  border-left-width: 3px;
+  padding-left: 1rem;
+}
+
+/* ── Lenis smooth-scroll support ─────────────────────────────────────── */
+
 html.lenis,
 html.lenis body {
   height: auto;
@@ -433,14 +421,41 @@ html.lenis body {
 
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;
-  /* let Lenis control scroll, not CSS */
 }
 
 .lenis.lenis-smooth [data-lenis-prevent] {
   overscroll-behavior: contain;
-  /* opt-out specific elements like modals */
 }
 
 .lenis.lenis-stopped {
   overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   6. ARABIC LINE-HEIGHT OVERRIDE (dynamic — no extra classes needed)
+   Redefining these base tokens under html[lang="ar"] automatically
+   updates every text-* utility AND every component above that
+   references var(--text-*--line-height), since CSS variables cascade.
+   Each value = English base + 20px, per spec.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+html[lang="ar"] {
+  --leading-xs-base: 22px;   /* 20px + 20px */
+  --leading-sm-base: 24px;   /* 22px + 20px */
+  --leading-base-base: 26px; /* 24px + 20px */
+  --leading-lg-base: 28px;   /* 26px + 20px */
+  --leading-xl-base: 30px;   /* 28px + 20px */
+  --leading-2xl-base: 34px;  /* 32px + 20px */
+  --leading-3xl-base: 42px;  /* 40px + 20px */
+  --leading-4xl-base: 50px;  /* 48px + 20px */
+  --leading-5xl-base: 58px;  /* 56px + 20px */
+  --leading-6xl-base: 66px;  /* 64px + 20px */
+  --leading-7xl-base: 74px;  /* 72px + 20px */
+
+  --leading-h1-base: 74px;  /* 72px + 20px */
+  --leading-h2-base: 66px;  /* 64px + 20px */
+  --leading-h3-base: 58px;  /* 56px + 20px */
+  --leading-h4-base: 50px;  /* 48px + 20px */
+  --leading-h5-base: 42px;  /* 40px + 20px */
+  --leading-h6-base: 34px;  /* 32px + 20px */
 }

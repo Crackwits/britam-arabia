@@ -69,7 +69,7 @@ function CareerRow({ career, index, isArabic, lang }: CareerRowProps) {
                             {isArabic ? "وظيفة شاغرة" : "Open Position"}
                         </p>
                         <div
-                            className={`flex items-center gap-1.5 text-lg text-darkLight pb-7 md:pb-0 ${isArabic ? "flex-row-reverse justify-end" : "flex-row"}`}
+                            className="flex items-center gap-1.5 text-lg text-darkLight pb-7 md:pb-0 flex-row"
                         >
                             <MapPin size={14} className="flex-shrink-0 text-lg text-darkLight" />
                             <span>
@@ -92,7 +92,7 @@ function CareerRow({ career, index, isArabic, lang }: CareerRowProps) {
 
                     {/* ── Right column: CTA ── */}
                     <div
-                        className={`md:col-span-3 flex ${isArabic ? "justify-start md:justify-start" : "justify-end md:justify-end"}`}
+                        className="md:col-span-3 flex justify-end md:justify-end"
                     >
                         <span
                             className={`
@@ -105,11 +105,11 @@ function CareerRow({ career, index, isArabic, lang }: CareerRowProps) {
                         >
                             {isArabic ? (
                                 <>
+                                    قدم الآن
                                     <ArrowLeft
                                         size={14}
                                         className="transition-transform duration-300 group-hover:-translate-x-1"
                                     />
-                                    قدم الآن
                                 </>
                             ) : (
                                 <>

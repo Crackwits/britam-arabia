@@ -332,7 +332,7 @@ export default function CareerDetailsSection({
                     </h1>
 
                     <div
-                        className={`flex items-center gap-2 text-gray-500 text-sm mt-3 ${isArabic ? "flex-row-reverse justify-end" : "flex-row"}`}
+                        className="flex items-center gap-2 text-gray-500 text-sm mt-3 flex-row"
                     >
                         <MapPin size={16} className="flex-shrink-0 text-gray-400" />
                         <span>

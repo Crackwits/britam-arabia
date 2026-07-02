@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { motion, Variants } from "framer-motion";
 import { useForm } from "react-hook-form";
@@ -33,6 +33,8 @@ const translations = {
     phoneLabel: "Phone",
     emailLabel: "Email",
     addressLabel: "Address",
+    successMessage: "Your inquiry has been sent successfully",
+    errorMessage: "Something went wrong. Please try again.",
     errors: {
       fullName: "Please enter your full name",
       email: "Please enter a valid email address",
@@ -51,6 +53,8 @@ const translations = {
     phoneLabel: "الهاتف",
     emailLabel: "البريد الإلكتروني",
     addressLabel: "العنوان",
+    successMessage: "تم إرسال استفساركم بنجاح",
+    errorMessage: "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
     errors: {
       fullName: "يرجى إدخال الاسم الكامل",
       email: "يرجى إدخال بريد إلكتروني صحيح",
@@ -155,28 +159,35 @@ export default function HpContactSection({ locale, globalSettings, heading, body
   const t = translations[locale];
   const schema = buildContactSchema(locale);
 
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { errors, isSubmitting },
   } = useForm<ContactFormValues>({
     resolver: zodResolver(schema),
     mode: "onBlur",
   });
-//missing api/contact to send email
+
   const onSubmit = async (data: ContactFormValues) => {
+    setSubmitStatus("idle");
+
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch("/api/inquiry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data }),
       });
+
       if (!response.ok) throw new Error("Submission failed");
+
       reset();
+      setSubmitStatus("success");
     } catch (err) {
-      // Surface a generic failure; swap for toast/snackbar integration as needed
       console.error("Contact form submission error:", err);
+      setSubmitStatus("error");
     }
   };
 
@@ -357,14 +368,21 @@ export default function HpContactSection({ locale, globalSettings, heading, body
                     </motion.button>
                   </div>
 
-                  {isSubmitSuccessful && (
+                  {submitStatus === "success" && (
                     <p
                       role="status"
                       className="text-center text-xs font-medium text-darkDefault"
                     >
-                      {isArabic
-                        ? "تم إرسال استفساركم بنجاح"
-                        : "Your inquiry has been sent successfully"}
+                      {t.successMessage}
+                    </p>
+                  )}
+
+                  {submitStatus === "error" && (
+                    <p
+                      role="alert"
+                      className="text-center text-xs font-medium text-[#ED0000]"
+                    >
+                      {t.errorMessage}
                     </p>
                   )}
                 </form>
@@ -386,21 +404,15 @@ export default function HpContactSection({ locale, globalSettings, heading, body
               <div className="pt-6 text-white px-4">
                 <p className="text-sm mb-2">{t.addressLabel}</p>
                 <a href={globalSettings?.address_link} target="_blank" className="hover:underline text-sm font-medium">
-                  
+
                   {isArabic
-                        ? globalSettings?.address_ar
-                        : globalSettings?.address_en
+                    ? globalSettings?.address_ar
+                    : globalSettings?.address_en
                   }
                 </a>
               </div>
             </div>
           </div>
-
-
-
-
-
-
         </motion.div>
       </div>
     </motion.section>
