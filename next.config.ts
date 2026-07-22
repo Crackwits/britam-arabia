@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "britamcms.crackwits.com",
+        hostname: "staging.britamarabia.com",
         pathname: "/uploads/**",
       },
       {
