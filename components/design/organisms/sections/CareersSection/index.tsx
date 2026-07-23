@@ -57,7 +57,7 @@ function CareerRow({ career, index, isArabic, lang }: CareerRowProps) {
         >
             <Link
                 href={`/${lang}/careers/${career.slug}`}
-                className="group block py-8 border-b border-neutralLighter transition-all duration-200 hover:bg-f7f7f7"
+                className="group block py-8 px-2 border-b border-neutralLighter transition-all duration-200 hover:bg-f7f7f7"
                 aria-label={`${career.position} — ${career.location}, ${career.employment_type}`}
             >
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-6 items-center">
@@ -145,7 +145,7 @@ export default function CareersSection({
             className="w-full bg-white py-16 md:py-24"
             aria-labelledby="careers-heading"
         >
-            <div className="max-w-[1280px] mx-auto px-4 md:px-8 lg:px-12">
+            <div className="max-w-7xl mx-auto px-4">
                 {/* ── Header ── */}
                 <motion.div
                     variants={headerVariants}

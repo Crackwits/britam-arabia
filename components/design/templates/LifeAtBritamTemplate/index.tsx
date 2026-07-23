@@ -136,13 +136,16 @@ export default function LifeAtBritamTemplate({ data, careers, lang }: LifeAtBrit
                     image={data.section1_image} />
                 <VisionCard title={data.section2_title} description={data.section2_desc}
                     image={data.section2_image} lang={lang} isArabic={isArabic} />
-                <CareersSection
-                    subheading={data.section3_subheading}
-                    heading={data.section3_heading}
-                    desc={data.section3_desc}
-                    openpositions={careers}
-                    lang={lang} isArabic={isArabic}
-                />
+                    {careers.length > 0 && (
+                        <CareersSection
+                        subheading={data.section3_subheading}
+                        heading={data.section3_heading}
+                        desc={data.section3_desc}
+                        openpositions={careers}
+                        lang={lang} isArabic={isArabic}
+                    />
+                    )}
+                
                 <WhyJoinUsSection lang={lang} heading={data.section4_heading} subheading={data.section4_subheading}
                     titles={data.why_join_us} />
             </section>
