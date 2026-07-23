@@ -6,7 +6,7 @@ import { motion, Variants } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import HpContactBg from "@/public/hpcontactbg.png";
+import HpContactBg from "@/public/homecontactbg.png";
 import WhiteTriangle from "@/public/svg/whitetriangle";
 import OrangeTriangle from "@/public/svg/orangetriangle";
 import { GlobalSettingAttributes } from "@/components/lib/types";
