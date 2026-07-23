@@ -34,12 +34,10 @@ const translations = {
         success: "Your message has been sent successfully. We'll be in touch shortly.",
         genericError: "Something went wrong. Please try again.",
         inquiryOptions: [
-            "General Inquiry",
-            "Fire & Life Safety",
-            "Emergency Preparedness",
-            "Infrastructure Verification",
-            "Partnership",
-            "Other",
+            "Government",
+            "Corporate",
+            "Projects",
+            "Careers",
         ],
         errors: {
             inquiryType: "Please select an inquiry type",
@@ -63,12 +61,10 @@ const translations = {
         success: "تم إرسال رسالتك بنجاح. سنتواصل معك قريباً.",
         genericError: "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
         inquiryOptions: [
-            "استفسار عام",
-            "السلامة من الحرائق",
-            "التأهب للطوارئ",
-            "التحقق من البنية التحتية",
-            "شراكة",
-            "أخرى",
+            "الحكومة",
+            "الشركات",
+            "المشاريع",
+            "الوظائف",
         ],
         errors: {
             inquiryType: "يرجى اختيار نوع الاستفسار",
@@ -125,7 +121,7 @@ function getColVariants(side: "left" | "right", isArabic: boolean): Variants {
 
 // ─── Shared Input Class ───────────────────────────────────────────────────────
 
-const inputClass ="w-full border border-e2e2e2 p-4 text-base text-darkDefault placeholder:text-darkLight transition-colors duration-200 focus:border-darkDefault focus:outline-none";
+const inputClass = "w-full border border-e2e2e2 p-4 text-base text-darkDefault placeholder:text-darkLight transition-colors duration-200 focus:border-darkDefault focus:outline-none";
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
