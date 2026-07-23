@@ -40,7 +40,7 @@ function ServiceCard({ item, index, isArabic, lang, visible }: CardProps) {
         <motion.article
             transition={{ type: "spring", stiffness: 280, damping: 22 }}
             className={[
-                "group flex flex-col flex-shrink-0 h-full min-h-0 overflow-hidden justify-center transition-all duration-700 ease-out",
+                "group flex flex-col flex-shrink-0 transition-all duration-700 ease-out",
                 // fixed/responsive card width for the horizontal track
                 "w-[88vw] sm:w-[70vw] lg:w-[520px]",
                 index === 0
@@ -59,14 +59,14 @@ function ServiceCard({ item, index, isArabic, lang, visible }: CardProps) {
         >
             <Link
                 href={`/${lang}/capabilities/${item.slug}`}
-                className="relative w-full overflow-hidden flex-1 min-h-0 basis-0"
+                className="relative w-full overflow-hidden flex-shrink-0 h-[38vh] sm:h-[42vh] lg:h-[46vh]"
                 style={{ clipPath: "polygon(80px 0, 100% 0, 100% 100%, 0 100%, 0 80px)" }}
             >
-                {/* No fixed aspect-ratio here on purpose — flex-1/min-h-0 lets
-                    this block shrink to whatever vertical space the sticky
-                    viewport actually has left, so short screens never force
-                    an overflow. object-cover keeps the crop looking intentional
-                    at any resulting height. */}
+                {/* Fixed, viewport-relative height (not flex-1) — this is what
+                    keeps every card's image the exact same size no matter how
+                    long that particular card's title/description is. Sized in
+                    vh so it still scales sensibly across screen heights without
+                    depending on sibling content. */}
                 <img
                     src={imageUrl}
                     alt={item.image?.alternativeText ?? item.title}
@@ -82,7 +82,7 @@ function ServiceCard({ item, index, isArabic, lang, visible }: CardProps) {
                     <h3 className="text-2xl font-medium tracking-[-0.48px] text-richNavy mb-1">
                         {item.title}
                     </h3>
-                    <p className="text-base text-darkLight mb-4 line-clamp-2">{item.description}</p>
+                    <p className="text-base text-darkLight mb-4">{item.description}</p>
                 </Link>
                 <Link
                     href={`/${lang}/capabilities/${item.slug}`}
@@ -310,7 +310,7 @@ export default function ServicesEntry({
                                 // can be measured correctly. Tailwind's `flex` is
                                 // nowrap by default, but we set it explicitly so a
                                 // stray `flex-wrap` never sneaks back in here.
-                                "flex flex-nowrap items-stretch gap-8 h-full",
+                                "flex flex-nowrap items-start gap-8 h-full",
                                 isArabic ? "flex-row-reverse" : "flex-row",
                             ].join(" ")}
                         >
@@ -330,7 +330,7 @@ export default function ServicesEntry({
                                 flex-row-reverse for RTL). Counted automatically
                                 in trackRef's scrollWidth, so scrollDistance
                                 already accounts for it — no extra math needed. */}
-                            <div className="flex-shrink-0 w-3" aria-hidden="true" />
+                            <div className="flex-shrink-0 w-4 sm:w-6 lg:w-8" aria-hidden="true" />
                         </motion.div>
                     </div>
                 </div>

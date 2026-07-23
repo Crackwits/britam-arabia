@@ -128,7 +128,7 @@ export default function FooterSection({ lang, isArabic }: FooterSectionProps) {
                                     href={withLocale(lang, link.href)}
                                     className="
                     text-white text-sm transition-colors duration-200
-                    hover:text-lightLighter focus-visible:outline-none
+                    hover:text-neutralLighter focus-visible:outline-none
                     focus-visible:underline focus-visible:text-white
                   "
                                 >
@@ -144,7 +144,7 @@ export default function FooterSection({ lang, isArabic }: FooterSectionProps) {
                                     href={withLocale(lang, link.href)}
                                     className="
                     text-white text-sm transition-colors duration-200
-                    hover:text-lightLighter focus-visible:outline-none
+                    hover:text-neutralLighter focus-visible:outline-none
                     focus-visible:underline focus-visible:text-white
                   "
                                 >
@@ -204,7 +204,7 @@ export default function FooterSection({ lang, isArabic }: FooterSectionProps) {
             {/* ── Bottom row: copyright + legal links ── */}
             <div
                 className="mx-auto flex flex-col max-w-7xl items-center gap-4
-                            py-7 text-xs text-lightLighter
+                            py-7 text-xs text-neutralLight
                             md:flex-row md:justify-between">
                 <p>
                     {isArabic ? (
@@ -222,7 +222,7 @@ export default function FooterSection({ lang, isArabic }: FooterSectionProps) {
                         <li key={link.href}>
                             <Link
                                 href={withLocale(lang, link.href)}
-                                className="text-xs text-lightLight cursor-pointer
+                                className="text-xs text-neutralLight cursor-pointer
                   transition-colors duration-200 hover:text-white"
                             >
                                 {isArabic ? link.label.ar : link.label.en}
