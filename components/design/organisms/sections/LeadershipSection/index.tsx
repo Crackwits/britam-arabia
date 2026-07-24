@@ -80,7 +80,7 @@ function MemberCard({ member, inView, index }: MemberCardProps) {
         >
             {/* Portrait image */}
             <div
-                className="relative w-full overflow-hidden transition-all duration-300 ease-out group-hover:shadow-xl"
+                className="relative w-full overflow-hidden transition-all duration-300 ease-out group-hover:shadow-sm"
                 style={{ aspectRatio: "12 / 13" }}
             >
 
@@ -89,7 +89,7 @@ function MemberCard({ member, inView, index }: MemberCardProps) {
                     alt={member.name}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover grayscale transition-transform duration-700 ease-out group-hover:scale-110"
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                 />
 
             </div>

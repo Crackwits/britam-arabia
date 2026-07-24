@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getSingleType, getCollection } from "@/components/lib/api";
 import { buildMetadata } from "@/components/lib/seo";
 import type { FAQAttributes } from "@/components/lib/types";
+import FAQTemplate from "@/components/design/templates/FaqTemplate";
 
 type Params = Promise<{ lang: string }>; // ← add this
 
@@ -27,8 +28,6 @@ export default async function FAQ({ params }: { params: Params }) {
     }
 
     return (
-        <>
-            {/* <TermsConditionsTemplate data={page} lang={lang} /> */}
-        </>
+        <FAQTemplate data={page} lang={lang} />
     );
 }
