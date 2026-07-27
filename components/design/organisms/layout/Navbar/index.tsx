@@ -55,7 +55,7 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
         ourApproach: 'Our Approach',
         insights: 'Insights',
         lifeAtBritam: 'Life at Britam',
-        inquireNow: 'Schedule Assessment',
+        inquireNow: 'Fill Out The Assessment',
         menu: 'Menu',
         openMenu: 'Open navigation menu',
         close: 'Close',
@@ -86,7 +86,7 @@ type Locale = (typeof LOCALES)[number];
 const NAV_LINK_KEYS = [
     { key: 'ourJourney', href: '/our-journey' },
     { key: 'ourApproach', href: '/our-approach' },
-    { key: 'insights', href: '/insights' },
+    // { key: 'insights', href: '/insights' },
     { key: 'lifeAtBritam', href: '/life-at-britam' },
 ] as const;
 
