@@ -86,15 +86,22 @@ export default function MediaBlock({
                             </Link>
                         )}
 
-                        {/* Secondary CTA — only renders if both label and url are provided */}
                         {cta2_label && cta2_link && (
+                            <Link
+                                href={cta2_link} target='_blank'
+                                className="inline-flex uppercase items-center gap-2 text-white bg-primaryDefault px-6 py-4 font-medium tracking-[0.84px] text-sm
+    border-2 border-primaryDefault hover:bg-white hover:text-primaryDefault transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primaryDefault"
+                            >
+                               {cta2_label}
+                            </Link>
+                        )}
+                        {/* {cta2_label && cta2_link && (
                             <Link
                                 href={cta2_link} target='_blank'
                                 className="uppercase group inline-flex uppercase items-center gap-2 text-darkDefault font-medium tracking-[0.84px] text-sm transition-transform duration-200 focus:outline-none focus-visible:underline"
                             >
                                 {cta2_label}
 
-                                {/* Arrow flips direction based on RTL, slides on hover */}
                                 <span
                                     className={[
                                         'transition-transform duration-300 ease-out',
@@ -119,7 +126,7 @@ export default function MediaBlock({
                                     )}
                                 </span>
                             </Link>
-                        )}
+                        )} */}
                     </div>
                 </div>
 

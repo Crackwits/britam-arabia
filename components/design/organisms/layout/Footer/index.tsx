@@ -60,7 +60,7 @@ interface FooterLink {
 const FOOTER_LINKS_COL_1: FooterLink[] = [
     { label: { en: "Our Journey", ar: "مسيرتنا" }, href: "/our-journey" },
     { label: { en: "Our Approach", ar: "منهجنا" }, href: "/our-approach" },
-    { label: { en: "Insights", ar: "رؤى" }, href: "/insights" },
+    // { label: { en: "Insights", ar: "رؤى" }, href: "/insights" },
 ];
 
 const FOOTER_LINKS_COL_2: FooterLink[] = [
