@@ -210,7 +210,7 @@ export default function WhereWeOperate({
                         <p className="tracking-[-0.48px] text-darkLight text-lg md:text-2xl font-medium max-w-7xl w-full pb-8">
                             {subheading}
                         </p>
-                        <p className="text-darkLight text-base md:text-lg max-w-6xl mb-6">
+                        <p className="text-darkLight text-base md:text-lg max-w-[1170px] mb-6">
                             {body}
                         </p>
                     </header>
