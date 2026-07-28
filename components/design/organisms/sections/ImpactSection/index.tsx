@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import useEmblaCarousel from "embla-carousel-react";
 import { IconText } from "@/components/lib/types";
 import { STRAPI_URL } from "@/components/lib/settings";
 import HeadingTriangle from "@/public/svg/headingtriangle";
-// ─── Types ────────────────────────────────────────────────────────────────────
 
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface ImpactSectionProps {
     subheading: string;
@@ -15,14 +14,37 @@ interface ImpactSectionProps {
     measurable_impacts: IconText[];
     isArabic: boolean;
 }
+
 // ─── Impact Card ──────────────────────────────────────────────────────────────
 
 interface ImpactCardProps {
     item: IconText;
     isArabic: boolean;
+    index: number;
 }
 
-function ImpactCard({ item, isArabic }: ImpactCardProps) {
+function ImpactCard({ item, isArabic, index }: ImpactCardProps) {
+    const ref = useRef<HTMLElement>(null);
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+        const node = ref.current;
+        if (!node) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                    observer.disconnect();
+                }
+            },
+            { threshold: 0.15 }
+        );
+
+        observer.observe(node);
+        return () => observer.disconnect();
+    }, []);
+
     const iconUrl = item.icon?.url
         ? item.icon.url.startsWith("http")
             ? item.icon.url
@@ -31,19 +53,21 @@ function ImpactCard({ item, isArabic }: ImpactCardProps) {
 
     return (
         <article
-            className="
-        embla__slide
+            ref={ref}
+            className={`
         flex-shrink-0
-        w-full sm:w-[360px]
+        w-full
         min-h-[200px]
         bg-white
         border border-neutralLighter
         p-7
         flex flex-col gap-3
         select-none
-        transition-shadow duration-300
+        transition-all duration-700 ease-out
         hover:shadow-md
-      "
+        ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}
+      `}
+            style={{ transitionDelay: isVisible ? `${index * 100}ms` : "0ms" }}
             aria-label={item.title}
         >
             {/* Icon */}
@@ -61,9 +85,7 @@ function ImpactCard({ item, isArabic }: ImpactCardProps) {
             </div>
 
             {/* Title */}
-            <h3
-                className="text-xl font-medium tracking-[-0.48px] text-richNavy pt-4"
-            >
+            <h3 className="text-xl font-medium tracking-[-0.48px] text-richNavy pt-4">
                 {item.title}
             </h3>
 
@@ -83,13 +105,6 @@ export default function ImpactSection({
     measurable_impacts,
     isArabic
 }: ImpactSectionProps) {
-    const [emblaRef] = useEmblaCarousel({
-        align: "start",
-        dragFree: true,
-        direction: isArabic ? "rtl" : "ltr",
-        containScroll: "trimSnaps",
-    });
-
     return (
         <section
             dir={isArabic ? "rtl" : "ltr"}
@@ -117,24 +132,20 @@ export default function ImpactSection({
                 </h2>
             </div>
 
-            {/* ── Draggable Carousel ── */}
+            {/* ── Grid of Cards ── */}
             <div
-                ref={emblaRef}
-                className="overflow-hidden cursor-grab active:cursor-grabbing max-w-7xl mx-auto"
+                className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
                 role="region"
-                aria-label={isArabic ? "عرض التأثيرات" : "Impact cards carousel"}
+                aria-label={isArabic ? "التأثيرات القابلة للقياس" : "Measurable impacts"}
             >
-                <div
-                    className={`embla__container flex flex-col sm:flex-row gap-4 `}
-                >
-                    {measurable_impacts.map((item) => (
-                        <ImpactCard
-                            key={item.id}
-                            item={item}
-                            isArabic={isArabic}
-                        />
-                    ))}
-                </div>
+                {measurable_impacts.map((item, index) => (
+                    <ImpactCard
+                        key={item.id}
+                        item={item}
+                        isArabic={isArabic}
+                        index={index}
+                    />
+                ))}
             </div>
         </section>
     );
