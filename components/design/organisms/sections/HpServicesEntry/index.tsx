@@ -40,7 +40,7 @@ function ServiceCard({ item, index, isArabic, lang, visible }: CardProps) {
         <motion.article
             transition={{ type: "spring", stiffness: 280, damping: 22 }}
             className={[
-                "group flex flex-col flex-shrink-0 transition-all duration-700 ease-out",
+                "group flex flex-col flex-shrink-0 transition-all duration-700 ease-out h-full",
                 // fixed/responsive card width for the horizontal track
                 "w-[88vw] sm:w-[70vw] lg:w-[520px]",
                 index === 0
@@ -59,14 +59,14 @@ function ServiceCard({ item, index, isArabic, lang, visible }: CardProps) {
         >
             <Link
                 href={`/${lang}/capabilities/${item.slug}`}
-                className="relative w-full overflow-hidden flex-shrink-0 h-[38vh] sm:h-[42vh] lg:h-[46vh]"
+                className="relative w-full overflow-hidden flex-shrink-0 flex-1 min-h-0"
                 style={{ clipPath: "polygon(80px 0, 100% 0, 100% 100%, 0 100%, 0 80px)" }}
             >
-                {/* Fixed, viewport-relative height (not flex-1) — this is what
-                    keeps every card's image the exact same size no matter how
-                    long that particular card's title/description is. Sized in
-                    vh so it still scales sensibly across screen heights without
-                    depending on sibling content. */}
+                {/* Was a fixed vh height before; now flex-1/min-h-0 so it
+                    fills whatever space the parent card has available,
+                    since card height is now driven by the remaining
+                    viewport space under the sticky heading rather than a
+                    hard-coded vh value. */}
                 <img
                     src={imageUrl}
                     alt={item.image?.alternativeText ?? item.title}
@@ -113,11 +113,12 @@ function ServiceCard({ item, index, isArabic, lang, visible }: CardProps) {
     );
 }
 
-// Height of the fixed/sticky site navbar in px. The carousel pins at
-// `top: NAVBAR_HEIGHT` (not `top: 0`) so it sits directly below the navbar
-// instead of underneath it. Adjust this to match your actual navbar height
-// (check it in devtools — it may also differ between mobile/desktop navbar
-// layouts, in which case swap this for a small resize-aware measurement).
+// Height of the fixed/sticky site navbar in px. The whole pinned block
+// (heading + carousel) sticks at `top: NAVBAR_HEIGHT` so it sits directly
+// below the navbar instead of underneath it. Adjust this to match your
+// actual navbar height (check it in devtools — it may also differ between
+// mobile/desktop navbar layouts, in which case swap this for a small
+// resize-aware measurement).
 const NAVBAR_HEIGHT = 100;
 
 export default function ServicesEntry({
@@ -127,14 +128,9 @@ export default function ServicesEntry({
     services_entry_subheading,
     services_entry_items,
 }: Props) {
-    // Outer <section> — now just a normal flow wrapper; its height is
-    // no longer artificially expanded, since the heading lives here too
-    // and should scroll past normally, not get pinned.
-    const sectionRef = useRef<HTMLElement>(null);
-
-    // The spacer/pin element — ONLY this gets the expanded height and the
-    // sticky child. useScroll below targets this, not the whole section,
-    // so scrollYProgress covers just the carousel portion.
+    // The spacer/pin element — gets the expanded height and the sticky
+    // child. useScroll below targets this, not the whole section, so
+    // scrollYProgress covers just the pinned portion.
     const pinRef = useRef<HTMLDivElement>(null);
 
     // The flex row that holds all the cards. We measure its natural
@@ -154,7 +150,7 @@ export default function ServicesEntry({
     // Small sentinel used purely for the heading/stagger reveal,
     // fired once as the section first enters the viewport — kept
     // separate from the scroll-linked horizontal transform.
-    const revealRef = useRef<HTMLElement>(null);
+    const revealRef = useRef<HTMLDivElement>(null);
     const [visible, setVisible] = useState(false);
 
     const [trackWidth, setTrackWidth] = useState(0);
@@ -236,42 +232,45 @@ export default function ServicesEntry({
     // just with inertia instead of 1:1 snapping).
     const x = useSpring(rawX, { stiffness: 300, damping: 40, mass: 0.2 });
 
-    return (
-        <section ref={sectionRef} className="relative w-full bg-white">
-            {/* ── Heading — normal document flow, scrolls past like any
-                other content. It is intentionally NOT inside the pinned
-                block below, so it never overlaps or gets clipped by the
-                pinned carousel viewport. ── */}
-            <div
-                className="px-4 pt-15 md:pt-25 mx-auto max-w-7xl w-full"
-                ref={revealRef as React.RefObject<HTMLDivElement>}
+    // ── Heading block, reused both inside and outside the pinned view ──
+    const heading = (
+        <div ref={revealRef} className="px-4 mx-auto max-w-7xl w-full">
+            {services_entry_subheading && (
+                <div className="inline-flex gap-2 mb-4" aria-hidden="false">
+                    <HeadingTriangle />
+                    <span className="text-primaryDefault text-xl md:text-lg font-medium uppercase">
+                        {services_entry_subheading}
+                    </span>
+                </div>
+            )}
+
+            <h2
+                id="services-entry-heading"
+                className={[
+                    "text-navy900 font-medium tracking-[-1.92px] pb-4 text-4xl lg:text-5xl",
+                    "transition-all duration-700 ease-out",
+                    visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8",
+                ].join(" ")}
             >
-                {services_entry_subheading && (
-                    <div className="inline-flex gap-2 mb-4" aria-hidden="false">
-                        <HeadingTriangle />
-                        <span className="text-primaryDefault text-xl md:text-lg font-medium uppercase">
-                            {services_entry_subheading}
-                        </span>
-                    </div>
-                )}
+                {services_entry_heading}
+            </h2>
+        </div>
+    );
 
-                <h2
-                    id="services-entry-heading"
-                    className={[
-                        "text-navy900 font-medium tracking-[-1.92px] pb-4 md:pb-6 text-4xl sm:text-4xl lg:text-5xl max-w-5xl w-full",
-                        "transition-all duration-700 ease-out",
-                        visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8",
-                    ].join(" ")}
-                >
-                    {services_entry_heading}
-                </h2>
-            </div>
-
+    return (
+        <section className="relative w-full bg-white">
             {/* ── Pin spacer ──
                 Its height is expanded by scrollDistance so scrolling
                 through it drives the horizontal translate below. Once
                 scrollYProgress hits 1, the sticky child releases and
-                normal scrolling resumes for whatever comes after. */}
+                normal scrolling resumes for whatever comes after.
+
+                The heading now lives INSIDE this pinned block (when it's
+                actually pinned) so it sticks in place together with the
+                carousel instead of scrolling past it. The card track is
+                a flex-1/min-h-0 child underneath it, so it automatically
+                fills whatever height is left in the viewport once the
+                heading has taken its share — no manual height math needed. */}
             <div
                 ref={pinRef}
                 className="relative w-full"
@@ -283,16 +282,25 @@ export default function ServicesEntry({
             >
                 <div
                     className={[
-                        "px-4 py-6 md:py-10",
-                        isCarousel ? "sticky overflow-hidden flex items-stretch" : "",
+                        "flex flex-col py-4 md:py-8",
+                        isCarousel ? "sticky overflow-hidden" : "",
                     ].join(" ")}
+                    // pt-15 md:pt-25 pb-6 md:pb-10
                     style={
                         isCarousel
                             ? { top: `${NAVBAR_HEIGHT}px`, height: `calc(100vh - ${NAVBAR_HEIGHT}px)` }
                             : undefined
                     }
                 >
+                    {/* Sticky heading — shrink-0 so it keeps its natural
+                        height and never gets squashed by the flex-1 track
+                        below it. */}
+                    <div className="shrink-0">{heading}</div>
+
                     {/* ── Horizontal track ──
+                        flex-1/min-h-0 makes this fill exactly whatever
+                        vertical space remains under the heading, inside
+                        the fixed `100vh - NAVBAR_HEIGHT` sticky box.
                         trackOffsetRef is the static reference box (same
                         mx-auto/max-w-7xl/px-4 inset as the heading) used only
                         to measure edgeOffset — it never receives a transform,
@@ -300,38 +308,43 @@ export default function ServicesEntry({
                         The inner motion.div is what actually translates; its
                         content is free to overflow past the box on both sides,
                         which is what lets cards travel edge-to-edge. */}
-                    <div ref={trackOffsetRef} className="mx-auto max-w-7xl w-full">
-                        <motion.div
-                            ref={trackRef}
-                            style={isCarousel ? { x } : undefined}
-                            className={[
-                                // Always non-wrapping: scrollWidth must reflect the
-                                // true, unwrapped width of every card so scrollDistance
-                                // can be measured correctly. Tailwind's `flex` is
-                                // nowrap by default, but we set it explicitly so a
-                                // stray `flex-wrap` never sneaks back in here.
-                                "flex flex-nowrap items-start gap-8 h-full",
-                                isArabic ? "flex-row-reverse" : "flex-row",
-                            ].join(" ")}
+                    <div className="flex-1 min-h-0 px-4 mt-6">
+                        <div
+                            ref={trackOffsetRef}
+                            className="mx-auto max-w-7xl w-full h-full flex items-stretch"
                         >
-                            {services_entry_items.map((item, index) => (
-                                <ServiceCard
-                                    key={item.id}
-                                    item={item}
-                                    index={index}
-                                    isArabic={isArabic}
-                                    lang={lang}
-                                    visible={visible}
-                                />
-                            ))}
-                            {/* Trailing spacer — appended last so it always ends
-                                up as the outer bookend in the scroll direction
-                                (right-most for LTR, left-most under
-                                flex-row-reverse for RTL). Counted automatically
-                                in trackRef's scrollWidth, so scrollDistance
-                                already accounts for it — no extra math needed. */}
-                            <div className="flex-shrink-0 w-4 sm:w-6 lg:w-8" aria-hidden="true" />
-                        </motion.div>
+                            <motion.div
+                                ref={trackRef}
+                                style={isCarousel ? { x } : undefined}
+                                className={[
+                                    // Always non-wrapping: scrollWidth must reflect the
+                                    // true, unwrapped width of every card so scrollDistance
+                                    // can be measured correctly. Tailwind's `flex` is
+                                    // nowrap by default, but we set it explicitly so a
+                                    // stray `flex-wrap` never sneaks back in here.
+                                    "flex flex-nowrap items-stretch gap-8 h-full",
+                                    isArabic ? "flex-row-reverse" : "flex-row",
+                                ].join(" ")}
+                            >
+                                {services_entry_items.map((item, index) => (
+                                    <ServiceCard
+                                        key={item.id}
+                                        item={item}
+                                        index={index}
+                                        isArabic={isArabic}
+                                        lang={lang}
+                                        visible={visible}
+                                    />
+                                ))}
+                                {/* Trailing spacer — appended last so it always ends
+                                    up as the outer bookend in the scroll direction
+                                    (right-most for LTR, left-most under
+                                    flex-row-reverse for RTL). Counted automatically
+                                    in trackRef's scrollWidth, so scrollDistance
+                                    already accounts for it — no extra math needed. */}
+                                <div className="flex-shrink-0 w-4 sm:w-6 lg:w-8" aria-hidden="true" />
+                            </motion.div>
+                        </div>
                     </div>
                 </div>
             </div>

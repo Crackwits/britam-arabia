@@ -83,7 +83,7 @@ export default function OurApproach({ isArabic, subheading, heading, desc, steps
                     </h2>
 
                     {/* Description */}
-                    <p className="tracking-[-0.48px] text-darkLight text-lg  md:text-2xl font-medium max-w-5xl w-full mx-auto">
+                    <p className="tracking-[-0.48px] text-darkLight text-base md:text-lg font-normal max-w-5xl w-full mx-auto">
                         {desc}
                     </p>
                 </header>
