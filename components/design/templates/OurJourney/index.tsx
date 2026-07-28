@@ -151,6 +151,7 @@ export default function OurJourneyTemplate({ ourJourneydata, critical_environmen
                     section5_subheading={ourJourneydata.section5_subheading}
                     section5_body={ourJourneydata.section5_body}
                     team_members={ourJourneydata.team_members}
+                    isArabic={isArabic}
                 />
             </section>
         </>

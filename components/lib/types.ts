@@ -197,6 +197,8 @@ export interface TeamMember {
     name: string;
     position: string;
     profile: CoverType;
+    coloredprofile: CoverType;
+    bio: string;
 }
 export interface OurJourneyAttributes extends StrapiAttributes {
     hero_headline: string;

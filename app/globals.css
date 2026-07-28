@@ -224,6 +224,14 @@ body {
    ═══════════════════════════════════════════════════════════════════════ */
 
 /* ── project-content ─────────────────────────────────────────────────── */
+.memberbio p{
+  color: var(--color-darkLight);
+  font-size: var(--text-base);
+  line-height: var(--text-base--line-height);
+  font-style: normal;
+  font-weight: 400;
+  padding-bottom: 10px;
+}
 
 .project-content h1 {
   color: var(--color-neutral900);
