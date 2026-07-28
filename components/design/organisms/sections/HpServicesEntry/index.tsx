@@ -414,7 +414,7 @@ export default function ServicesEntry({
             >
                 <div
                     className={[
-                        "flex flex-col py-4 md:py-8",
+                        "flex flex-col pb-4",
                         isCarousel ? "sticky overflow-hidden" : "",
                     ].join(" ")}
                     // pt-15 md:pt-25 pb-6 md:pb-10
