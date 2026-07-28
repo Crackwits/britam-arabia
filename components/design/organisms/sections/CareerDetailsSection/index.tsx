@@ -374,7 +374,7 @@ export default function CareerDetailsSection({
                     {/* Main heading */}
                     <h2
                         id="our-approach-heading"
-                        className="text-navy900 uppercase font-medium tracking-[-1.92px] text-4xl sm:text-5xl lg:text-6xl max-w-5xl w-full pb-14"
+                        className="text-navy900 font-medium tracking-[-1.92px] text-4xl sm:text-4xl lg:text-5xl max-w-5xl w-full pb-14"
                     >
                         {t.joinHeading}
                     </h2>

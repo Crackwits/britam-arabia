@@ -41,7 +41,7 @@ export default function WhyJoinUsSection({
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: 0.08 }}
-                            className="text-navy900 uppercase font-medium tracking-[-1.92px] pb-4 text-4xl sm:text-5xl lg:text-6xl max-w-6xl w-full"                            >
+                            className="text-navy900 font-medium tracking-[-1.92px] pb-4 text-4xl sm:text-4xl lg:text-5xl max-w-6xl w-full"                            >
                             {heading}
                         </motion.h2>
                     </div>

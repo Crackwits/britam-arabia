@@ -133,7 +133,7 @@ export default function LeadershipSection({
                 <h2
                     style={fadeUpStyle(inView, 80)}
                     id="Leadership-heading"
-                    className="text-navy900 uppercase font-medium tracking-[-1.92px] text-4xl sm:text-5xl lg:text-6xl max-w-7xl w-full pb-2"
+                    className="text-navy900 font-medium tracking-[-1.92px] text-4xl sm:text-4xl lg:text-5xl max-w-7xl w-full pb-2"
                 >
                     {section5_heading}
                 </h2>
@@ -150,9 +150,9 @@ export default function LeadershipSection({
                 <p
                     style={{
                         ...fadeUpStyle(inView, 220),
-                        maxWidth: "600px",
+                        maxWidth: "880px",
                     }}
-                    className="text-darkLight text-base md:text-lg max-w-6xl mb-6">
+                    className="text-darkLight text-base md:text-lg w-full max-w-6xl mb-6">
 
                     {section5_body}
                 </p>

@@ -205,7 +205,7 @@ export default function HpContactSection({ locale, globalSettings, heading, body
         <motion.div variants={headingVariants}>
           <h2
             id="contact-section-heading"
-            className='text-navy900 uppercase font-medium tracking-[-1.92px] pb-4 text-4xl sm:text-5xl lg:text-6xl mx-auto w-full mb-1'
+            className='text-navy900 font-medium tracking-[-1.92px] pb-4 text-4xl sm:text-4xl lg:text-5xl mx-auto w-full mb-1'
           >
             {heading}
           </h2>

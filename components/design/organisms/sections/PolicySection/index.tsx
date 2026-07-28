@@ -58,7 +58,7 @@ export default function PolicySection({ data, lang }: PolicySectionProps) {
                         </p>
                     )}
                     {data.title && (
-                        <h1 className="font-medium text-darkDefault max-w-4xl pb-12 tracking-[-0.96px] text-4xl sm:text-5xl lg:text-6xl">
+                        <h1 className="font-medium text-darkDefault max-w-4xl pb-12 tracking-[-0.96px] text-4xl sm:text-4xl lg:text-5xl">
                             {data.title}
                         </h1>
                     )}

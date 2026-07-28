@@ -54,7 +54,7 @@ export default function OurJourneySection2({
                         visible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8',
                     ].join(' ')}
                 >
-                    <h2 className="text-navy900 uppercase font-medium tracking-[-1.92px] pb-4 text-4xl sm:text-5xl lg:text-6xl max-w-6xl w-full">
+                    <h2 className="text-navy900 font-medium tracking-[-1.92px] pb-4 text-4xl sm:text-4xl lg:text-5xl max-w-6xl w-full">
                         {title}
                     </h2>
 

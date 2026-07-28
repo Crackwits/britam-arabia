@@ -44,7 +44,7 @@ export default function WhatYouGetSection({
                 <div ref={headingRef}>
                     <h2
                         className={[
-                            'text-navy900 uppercase font-medium tracking-[-1.92px] pb-4 text-4xl sm:text-5xl lg:text-6xl max-w-[740px] text-center mx-auto w-full mb-16',
+                            'text-navy900 font-medium tracking-[-1.92px] pb-4 text-4xl sm:text-4xl lg:text-5xl max-w-[740px] text-center mx-auto w-full mb-16',
                             'transition-all duration-700 ease-out',
                             headingVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
                         ].join(' ')}

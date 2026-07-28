@@ -65,7 +65,7 @@ export default function MediaBlock({
                     ].join(' ')}
                 >
                     {title && (
-                        <h2 className="text-navy900 capitalize font-medium tracking-[-1.92px] pb-4 text-4xl sm:text-5xl lg:text-6xl max-w-[485px] w-full">
+                        <h2 className="text-navy900 font-medium tracking-[-1.92px] pb-4 text-4xl sm:text-4xl lg:text-5xl max-w-[550px] w-full">
                             {title}
                         </h2>
                     )}
@@ -80,7 +80,7 @@ export default function MediaBlock({
                             <Link
                                 href={`/${lang}/${cta_link}`}
                                 className="inline-flex uppercase items-center gap-2 text-white bg-primaryDefault px-6 py-4 font-medium tracking-[0.84px] text-sm
-    border-2 border-primaryDefault hover:bg-white hover:text-primaryDefault transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primaryDefault"
+    border-2 border-primaryDefault hover:bg-brandDark hover:border-brandDark transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primaryDefault"
                             >
                                 {cta}
                             </Link>
@@ -90,7 +90,7 @@ export default function MediaBlock({
                             <Link
                                 href={cta2_link} target='_blank'
                                 className="inline-flex uppercase items-center gap-2 text-white bg-primaryDefault px-6 py-4 font-medium tracking-[0.84px] text-sm
-    border-2 border-primaryDefault hover:bg-white hover:text-primaryDefault transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primaryDefault"
+    border-2 border-primaryDefault hover:bg-brandDark hover:border-brandDark transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primaryDefault"
                             >
                                {cta2_label}
                             </Link>

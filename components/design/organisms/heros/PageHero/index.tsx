@@ -30,7 +30,7 @@ export default function PageHero({ image, title, subtitle }: PageHeroProps) {
     }, []);
 
     return (
-        <section className="relative h-screen w-full overflow-hidden flex items-end" aria-label="Hero">
+        <section className="relative h-[80vh] w-full overflow-hidden flex items-end" aria-label="Hero">
 
             {/* z-0 — background media: parent must be relative/absolute for fill to work */}
             <div className="absolute inset-0 z-0">
@@ -58,7 +58,7 @@ export default function PageHero({ image, title, subtitle }: PageHeroProps) {
             </div>
 
             {/* z-10 — dark overlay */}
-            <div className="absolute inset-0 z-10 bg-black/50" aria-hidden="true" />
+            <div className="absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(0,0,0,0.40)_17.79%,rgba(0,0,0,0)_100%),linear-gradient(0deg,rgba(32,58,114,0.28)_0%,rgba(32,58,114,0.28)_100%),linear-gradient(0deg,rgba(0,0,0,0.50)_0%,rgba(0,0,0,0)_100%)]" aria-hidden="true" />
             <div className="relative z-10 py-9 md:py-16 px-4 max-w-7xl mx-auto w-full">
                 {/* <div className="max-w-[730px] w-full"> */}
                     {subtitle && (

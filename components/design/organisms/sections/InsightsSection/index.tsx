@@ -157,7 +157,7 @@ export default function InsightsSection({
                         variants={fadeUp}
                         initial="hidden"
                         animate={headerInView ? "visible" : "hidden"}
-                        className="text-navy900 capitalize font-medium tracking-[-1.92px] pb-4 text-4xl sm:text-5xl lg:text-6xl">
+                        className="text-navy900 font-medium tracking-[-1.92px] pb-4 text-4xl sm:text-4xl lg:text-5xl">
                         {intro_title}
                     </motion.h2>
 

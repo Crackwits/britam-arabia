@@ -152,7 +152,7 @@ const itemVariants: Variants = {
 
 const overlayVariants: Variants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.3 } },
+    visible: { opacity: 1, transition: { duration: 0.6 } },
 };
 
 // ─── Main component ───────────────────────────────────────────────────────────

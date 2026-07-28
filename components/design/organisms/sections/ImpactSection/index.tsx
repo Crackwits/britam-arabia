@@ -111,7 +111,7 @@ export default function ImpactSection({
                 {/* Main heading */}
                 <h2
                     id="impact-heading"
-                    className="text-navy900 uppercase font-medium tracking-[-1.92px] text-4xl sm:text-5xl lg:text-6xl max-w-5xl w-full pb-16"
+                    className="text-navy900 font-medium tracking-[-1.92px] text-4xl sm:text-4xl lg:text-5xl max-w-5xl w-full pb-16"
                 >
                     {heading}
                 </h2>

@@ -40,7 +40,7 @@
   --color-darkDefault: #34343F;
   --color-darkLight: #6E6F89;
   --color-primaryDefault: #0034A5;
-
+  --color-brandDark: #001F63;
   --color-f7f7f7: #F7F7F7;
   --color-fcfcff: #FCFCFF;
   --color-footerbg: #00031E;
@@ -97,18 +97,35 @@
   --animate-slideIn: slideIn 0.2s ease forwards;
 
   @keyframes marquee {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform: translateX(-50%);
+    }
   }
 
   @keyframes scroll-rtl {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100%); }
+    0% {
+      transform: translateX(0);
+    }
+
+    100% {
+      transform: translateX(-100%);
+    }
   }
 
   @keyframes slideIn {
-    0% { opacity: 0; transform: scale(0.95); }
-    100% { opacity: 1; transform: scale(1); }
+    0% {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 }
 
@@ -441,22 +458,39 @@ html.lenis body {
    ═══════════════════════════════════════════════════════════════════════ */
 
 html[lang="ar"] {
-  --leading-xs-base: 22px;   /* 20px + 20px */
-  --leading-sm-base: 24px;   /* 22px + 20px */
-  --leading-base-base: 26px; /* 24px + 20px */
-  --leading-lg-base: 28px;   /* 26px + 20px */
-  --leading-xl-base: 30px;   /* 28px + 20px */
-  --leading-2xl-base: 34px;  /* 32px + 20px */
-  --leading-3xl-base: 42px;  /* 40px + 20px */
-  --leading-4xl-base: 50px;  /* 48px + 20px */
-  --leading-5xl-base: 58px;  /* 56px + 20px */
-  --leading-6xl-base: 66px;  /* 64px + 20px */
-  --leading-7xl-base: 74px;  /* 72px + 20px */
+  --leading-xs-base: 22px;
+  /* 20px + 20px */
+  --leading-sm-base: 24px;
+  /* 22px + 20px */
+  --leading-base-base: 26px;
+  /* 24px + 20px */
+  --leading-lg-base: 28px;
+  /* 26px + 20px */
+  --leading-xl-base: 30px;
+  /* 28px + 20px */
+  --leading-2xl-base: 34px;
+  /* 32px + 20px */
+  --leading-3xl-base: 42px;
+  /* 40px + 20px */
+  --leading-4xl-base: 50px;
+  /* 48px + 20px */
+  --leading-5xl-base: 58px;
+  /* 56px + 20px */
+  --leading-6xl-base: 66px;
+  /* 64px + 20px */
+  --leading-7xl-base: 74px;
+  /* 72px + 20px */
 
-  --leading-h1-base: 74px;  /* 72px + 20px */
-  --leading-h2-base: 66px;  /* 64px + 20px */
-  --leading-h3-base: 58px;  /* 56px + 20px */
-  --leading-h4-base: 50px;  /* 48px + 20px */
-  --leading-h5-base: 42px;  /* 40px + 20px */
-  --leading-h6-base: 34px;  /* 32px + 20px */
+  --leading-h1-base: 74px;
+  /* 72px + 20px */
+  --leading-h2-base: 66px;
+  /* 64px + 20px */
+  --leading-h3-base: 58px;
+  /* 56px + 20px */
+  --leading-h4-base: 50px;
+  /* 48px + 20px */
+  --leading-h5-base: 42px;
+  /* 40px + 20px */
+  --leading-h6-base: 34px;
+  /* 32px + 20px */
 }

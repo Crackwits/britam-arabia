@@ -44,7 +44,7 @@ export default function DetailHero({ subheading, heading, cover }: DetailHeroPro
                 <p className="font-base text-darkLight pb-3">
                     {subheading}
                 </p>
-                <h1 className="font-medium text-darkDefault max-w-4xl pb-12 tracking-[-0.96px] text-4xl sm:text-5xl lg:text-6xl">
+                <h1 className="font-medium text-darkDefault max-w-4xl pb-12 tracking-[-0.96px] text-4xl sm:text-4xl lg:text-5xl">
                     {heading}
                 </h1>
             </div>
