@@ -23,21 +23,51 @@ interface CardProps {
     isArabic: boolean;
     lang: string;
     visible: boolean;
+
+    // ── New: uniform image-height synchronization ──
+    // Shared height (px) computed by the parent from the smallest
+    // available image area across all cards. `null` until the first
+    // measurement completes, in which case the card falls back to its
+    // original flex-1/min-h-0 sizing — no hardcoded height is ever used.
+    imageHeight: number | null;
+    // Callback refs so the parent can measure this card's root element
+    // and its text block without the card owning any measurement logic.
+    cardRef: (el: HTMLElement | null) => void;
+    textBlockRef: (el: HTMLDivElement | null) => void;
+    // Fired on image load/error so the parent knows when every card's
+    // image has a real, rendered box worth measuring.
+    onImageLoad: () => void;
 }
 
 /* ──────────────────────────────────────────────────────────
-   Card — unchanged from the original implementation.
+   Card — same visual structure/animations as the original.
    Its own fade/slide-in stagger transform lives on this element,
    completely independent from the horizontal scroll transform
-   that will later be applied to its parent track. The two
-   transforms never collide because they sit on different nodes.
+   that is applied to its parent track. The two transforms never
+   collide because they sit on different nodes.
+
+   The only functional additions are: a ref on the card root and on
+   the text block (purely for the parent's height measurement), and
+   an explicit height applied to the image container once the parent
+   has computed a shared value.
 ────────────────────────────────────────────────────────── */
-function ServiceCard({ item, index, isArabic, lang, visible }: CardProps) {
+function ServiceCard({
+    item,
+    index,
+    isArabic,
+    lang,
+    visible,
+    imageHeight,
+    cardRef,
+    textBlockRef,
+    onImageLoad,
+}: CardProps) {
     const imageUrl = getMediaUrl(item.image?.url);
     const isEven = index % 2 === 0;
 
     return (
         <motion.article
+            ref={cardRef}
             transition={{ type: "spring", stiffness: 280, damping: 22 }}
             className={[
                 "group flex flex-col flex-shrink-0 transition-all duration-700 ease-out h-full",
@@ -59,25 +89,33 @@ function ServiceCard({ item, index, isArabic, lang, visible }: CardProps) {
         >
             <Link
                 href={`/${lang}/capabilities/${item.slug}`}
-                className="relative w-full overflow-hidden flex-shrink-0 flex-1 min-h-0"
-                style={{ clipPath: "polygon(80px 0, 100% 0, 100% 100%, 0 100%, 0 80px)" }}
+                className={[
+                    "relative w-full overflow-hidden flex-shrink-0",
+                    // Pre-measurement fallback: same flex-1/min-h-0 behavior
+                    // as the original, so nothing shifts before the shared
+                    // height is known. Once imageHeight is set we switch to
+                    // an explicit px height and stop stretching to fill the
+                    // remaining card space.
+                    imageHeight === null ? "flex-1 min-h-0" : "",
+                ].join(" ")}
+                style={{
+                    clipPath: "polygon(80px 0, 100% 0, 100% 100%, 0 100%, 0 80px)",
+                    ...(imageHeight !== null ? { height: `${imageHeight}px` } : {}),
+                }}
             >
-                {/* Was a fixed vh height before; now flex-1/min-h-0 so it
-                    fills whatever space the parent card has available,
-                    since card height is now driven by the remaining
-                    viewport space under the sticky heading rather than a
-                    hard-coded vh value. */}
                 <img
                     src={imageUrl}
                     alt={item.image?.alternativeText ?? item.title}
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                     loading="lazy"
                     decoding="async"
+                    onLoad={onImageLoad}
+                    onError={onImageLoad}
                 />
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/20 to-transparent" />
             </Link>
 
-            <div className="mt-4 flex flex-col flex-shrink-0">
+            <div ref={textBlockRef} className="mt-4 flex flex-col flex-shrink-0">
                 <Link href={`/${lang}/capabilities/${item.slug}`}>
                     <h3 className="text-2xl font-medium tracking-[-0.48px] text-richNavy mb-1">
                         {item.title}
@@ -156,6 +194,100 @@ export default function ServicesEntry({
     const [trackWidth, setTrackWidth] = useState(0);
     const [viewportWidth, setViewportWidth] = useState(0);
     const [edgeOffset, setEdgeOffset] = useState(0);
+
+    // ── Uniform image-height synchronization ──
+    // Per-card refs to the card root and the text block beneath its
+    // image. Plain mutable arrays (not state) since they're just DOM
+    // handles — only the derived height value below goes into state.
+    const cardRefs = useRef<(HTMLElement | null)[]>([]);
+    const textBlockRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+    // The single shared height (px) applied to every card's image
+    // container. Stays `null` (→ original flex-1/min-h-0 behavior) until
+    // the first successful measurement, so no hardcoded fallback height
+    // is ever introduced.
+    const [imageHeight, setImageHeight] = useState<number | null>(null);
+
+    // How many of the current items' images have finished loading (or
+    // errored). We only measure once every image has a real, rendered
+    // box — measuring earlier would just capture placeholder/empty state.
+    const loadedCountRef = useRef(0);
+
+    // Computes, for every card, the space left for its image once its own
+    // text block is accounted for (card height − text height − the text
+    // block's top margin), then takes the smallest of those values and
+    // applies it to every card. Cards whose text is shorter simply end up
+    // with a bit of breathing room below the text — the card itself stays
+    // the same total height either way, since that height is already fixed
+    // by the track's `items-stretch` layout, independent of this image
+    // height. Cards with the longest text are what set the ceiling.
+    const recalcImageHeight = useCallback(() => {
+        const cards = cardRefs.current;
+        const texts = textBlockRefs.current;
+        const count = services_entry_items.length;
+
+        let min = Infinity;
+        for (let i = 0; i < count; i++) {
+            const cardEl = cards[i];
+            const textEl = texts[i];
+            if (!cardEl || !textEl) continue;
+
+            const cardHeight = cardEl.getBoundingClientRect().height;
+            const textHeight = textEl.getBoundingClientRect().height;
+            const textMarginTop = parseFloat(getComputedStyle(textEl).marginTop) || 0;
+
+            const available = cardHeight - textHeight - textMarginTop;
+            if (available > 0 && available < min) {
+                min = available;
+            }
+        }
+
+        if (Number.isFinite(min)) {
+            setImageHeight(Math.floor(min));
+        }
+    }, [services_entry_items.length]);
+
+    const handleImageLoad = useCallback(() => {
+        loadedCountRef.current += 1;
+        if (loadedCountRef.current >= services_entry_items.length) {
+            // Wait two frames so layout (reveal transitions, font swap
+            // reflow, etc.) has fully settled before we measure — measuring
+            // mid-transition would capture a transient height.
+            requestAnimationFrame(() => requestAnimationFrame(recalcImageHeight));
+        }
+    }, [services_entry_items.length, recalcImageHeight]);
+
+    // Reset load tracking and the computed height whenever the set of
+    // items changes, so a new content set is measured from scratch instead
+    // of inheriting a stale height from the previous items. Also covers
+    // the case where images are served from cache (onLoad still fires on
+    // a freshly-mounted <img>, but this guards against any edge case where
+    // it doesn't) by scheduling a fallback measurement.
+    useEffect(() => {
+        loadedCountRef.current = 0;
+        setImageHeight(null);
+        const fallback = requestAnimationFrame(() =>
+            requestAnimationFrame(recalcImageHeight),
+        );
+        return () => cancelAnimationFrame(fallback);
+    }, [services_entry_items, recalcImageHeight]);
+
+    // Re-measure on window resize and whenever the track's own box size
+    // changes (breakpoint shifts change card width, which changes text
+    // wrapping, which changes text height, which changes available image
+    // height).
+    useEffect(() => {
+        const onResize = () => recalcImageHeight();
+        window.addEventListener("resize", onResize);
+
+        const resizeObserver = new ResizeObserver(() => recalcImageHeight());
+        if (trackRef.current) resizeObserver.observe(trackRef.current);
+
+        return () => {
+            window.removeEventListener("resize", onResize);
+            resizeObserver.disconnect();
+        };
+    }, [recalcImageHeight]);
 
     // ── Reveal animation (heading + card stagger), same as original ──
     useEffect(() => {
@@ -334,6 +466,14 @@ export default function ServicesEntry({
                                         isArabic={isArabic}
                                         lang={lang}
                                         visible={visible}
+                                        imageHeight={imageHeight}
+                                        cardRef={(el) => {
+                                            cardRefs.current[index] = el;
+                                        }}
+                                        textBlockRef={(el) => {
+                                            textBlockRefs.current[index] = el;
+                                        }}
+                                        onImageLoad={handleImageLoad}
                                     />
                                 ))}
                                 {/* Trailing spacer — appended last so it always ends
