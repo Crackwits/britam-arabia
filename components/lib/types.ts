@@ -221,7 +221,8 @@ export interface OurJourneyAttributes extends StrapiAttributes {
     section5_heading: string;
     section5_subheading: string;
     section5_body: string;
-    team_members: TeamMember[]
+    team_members: TeamMember[];
+    operations_team: TeamMember[];
 }
 
 export interface OurApproachAttributes extends StrapiAttributes {

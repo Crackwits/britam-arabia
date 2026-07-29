@@ -13,6 +13,7 @@ interface LeadershipSectionProps {
     section5_subheading: string;
     section5_body: string;
     team_members: TeamMember[];
+    operations_team: TeamMember[];
     isArabic: boolean;
 }
 
@@ -228,6 +229,7 @@ export default function LeadershipSection({
     section5_subheading,
     section5_body,
     team_members,
+    operations_team,
     isArabic
 }: LeadershipSectionProps) {
     const { ref, inView } = useInView(0.15);
@@ -273,7 +275,14 @@ export default function LeadershipSection({
                 </p>
 
                 {/* ── Team grid ─────────────────────────────────────────────────── */}
-                <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+                <p
+                    style={fadeUpStyle(inView, 140)}
+                    className="tracking-[-0.48px] text-navy900 text-xl md:text-3xl font-medium max-w-7xl w-full pt-8 pb-4">
+
+                    {isArabic ? "الفريق التنفيذي" : "Executive Team"}
+
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
                     {team_members.map((member, index) => (
                         <MemberCard
                             key={member.id}
@@ -284,7 +293,23 @@ export default function LeadershipSection({
                         />
                     ))}
                 </div>
+                <p
+                    style={fadeUpStyle(inView, 140)}
+                    className="tracking-[-0.48px] text-navy900 text-xl md:text-3xl font-medium max-w-7xl w-full pt-8 pb-4">
 
+                    {isArabic ? "فريق العمليات" : "Operations Team"}
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+                    {operations_team.map((member, index) => (
+                        <MemberCard
+                            key={member.id}
+                            member={member}
+                            inView={inView}
+                            index={index}
+                            onSelect={setSelectedMember}
+                        />
+                    ))}
+                </div>
             </div>
 
             <MemberModal isArabic={isArabic} member={selectedMember} onClose={() => setSelectedMember(null)} />

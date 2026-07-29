@@ -33,6 +33,7 @@ export default async function OurJourney({ params }: { params: Params }) {
             section2_image: true,
             section4_image: true,
             team_members: { populate: "*" },
+            operations_team: { populate: "*" },
         });
 
     if (!page) {
