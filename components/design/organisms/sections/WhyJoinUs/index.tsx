@@ -20,15 +20,15 @@ export default function WhyJoinUsSection({
 }: WhyJoinUsSectionProps) {
     return (
         <section aria-labelledby="critical-environments"
-            className="w-full bg-white px-4 py-15 md:py-25 overflow-hidden">
+            className="w-full bg-white px-4 py-15 md:py-20 overflow-hidden">
             <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-20">
 
                     {/* ── Left column: heading + description ── */}
-                    <div className="flex flex-col justify-start lg:sticky lg:top-28 lg:self-start">
+                    <div className="flex flex-col justify-start self-start">
                         {/* Heading */}
                         <motion.div
-                            className="inline-flex items-center gap-2 mb-4"
+                            className="inline-flex items-start gap-2 mb-4"
                             aria-hidden="false"
                         >
                             <HeadingTriangle />

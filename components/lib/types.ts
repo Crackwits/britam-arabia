@@ -78,6 +78,7 @@ export interface WhatYouGetItem {
     id: number;
     title: string;
     description: string;
+    icon: CoverType;
 }
 
 export interface MediaItem {
@@ -276,6 +277,8 @@ export interface LifeAtBritamAttributes extends StrapiAttributes {
     image: CoverType;
     section1_title: string;
     section1_desc: string;
+    section1_cta: string;
+    section1_link: string;
     section1_image: CoverType;
     section2_image: CoverType;
     section2_title: string;

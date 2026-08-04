@@ -55,7 +55,7 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
         ourApproach: 'Our Approach',
         insights: 'Insights',
         lifeAtBritam: 'Life at Britam',
-        inquireNow: 'Fill Out The Assessment',
+        inquireNow: 'Assess Your Risk',
         menu: 'Menu',
         openMenu: 'Open navigation menu',
         close: 'Close',

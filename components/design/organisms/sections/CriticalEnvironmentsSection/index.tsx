@@ -19,7 +19,7 @@ export default function CriticalEnvironmentsSection({
     return (
         <section
             aria-labelledby="critical-environments"
-            className="w-full bg-white px-4 py-15 md:py-25"
+            className="w-full bg-white px-4 py-15 md:py-20"
         >
             <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-20 lg:items-start">

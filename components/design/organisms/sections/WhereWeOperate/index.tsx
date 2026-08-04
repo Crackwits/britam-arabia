@@ -181,7 +181,7 @@ export default function WhereWeOperate({
             `}</style>
 
             <section
-                className="w-full bg-white px-4 py-15 md:py-25 overflow-hidden"
+                className="w-full bg-white px-4 py-15 md:py-20 overflow-hidden"
                 aria-labelledby="where-we-operate-heading"
             >
                 <div className="max-w-7xl mx-auto">

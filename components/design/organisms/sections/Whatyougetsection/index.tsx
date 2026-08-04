@@ -1,5 +1,5 @@
 'use client';
-
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { WhatYouGetItem } from '@/components/lib/types';
 
@@ -37,7 +37,7 @@ export default function WhatYouGetSection({
     const { ref: gridRef, visible: gridVisible } = useInView(0.1);
 
     return (
-        <section  className="w-full bg-white px-4 py-15 md:py-25 overflow-hidden">
+        <section className="w-full bg-white px-4 py-15 md:py-20 overflow-hidden">
             <div className="max-w-7xl mx-auto">
 
                 {/* ── Heading ─────────────────────────────────────────────────── */}
@@ -70,10 +70,15 @@ export default function WhatYouGetSection({
                                 transitionDelay: gridVisible ? `${index * 80}ms` : '0ms',
                             }}
                         >
-                            {/* Number */}
-                            <span className="text-primaryDefault text-sm tracking-[4.2px] uppercase font-bold pb-2">
-                                {String(index + 1).padStart(2, '0')}
-                            </span>
+
+                            {item.icon ? (
+                                <Image src={item.icon?.url || ''} alt={item.icon.alternativeText || ''} width={item.icon.width} height={item.icon.height} />
+                            ) : (
+
+                                <span className="text-primaryDefault text-sm tracking-[4.2px] uppercase font-bold pb-2">
+                                    {String(index + 1).padStart(2, '0')}
+                                </span>
+                            )}
 
                             {/* Title */}
                             <h3 className={`text-2xl font-medium tracking-[-0.48px] text-richNavy mb-2 ${titleclass}`}>

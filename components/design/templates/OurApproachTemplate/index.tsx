@@ -135,9 +135,10 @@ export default function OurApproachTemplate({ data, capabilities, lang }: OurApp
                     cta2_label=""
                     cta2_link=""
                     image={data.section1_image} />
-                <WhatYouGetSection section2_title={data.section2_title}
-                    intro_what_you_get={data.section2_content} titleclass="" />
-
+                {data.section2_content.length > 0 && (
+                    <WhatYouGetSection section2_title={data.section2_title}
+                        intro_what_you_get={data.section2_content} titleclass="" />
+                )}
                 <OurApproach isArabic={isArabic} subheading={data.section3_subheading}
                     heading={data.section3_heading}
                     desc={data.section3_desc}
