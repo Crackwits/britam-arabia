@@ -26,6 +26,60 @@ function useInView(threshold = 0.15) {
     return { ref, visible };
 }
 
+// ─── Single animated item ───────────────────────────────────────────────────
+
+function WhatYouGetCard({
+    item,
+    index,
+    titleclass,
+    getMediaUrl,
+}: {
+    item: WhatYouGetItem;
+    index: number;
+    titleclass: string;
+    getMediaUrl: (url?: string) => string;
+}) {
+    const { ref, visible } = useInView(0.2);
+
+    return (
+        <div
+            ref={ref}
+            className={[
+                'flex flex-col transition-all ease-out duration-700',
+                visible
+                    ? 'opacity-100 translate-y-0 scale-100'
+                    : 'opacity-0 translate-y-10 scale-95',
+            ].join(' ')}
+            style={{
+                transitionDelay: visible ? `${index * 120}ms` : '0ms',
+            }}
+        >
+            {item.icon?.url && (
+                <Image
+                    src={getMediaUrl(item.icon?.url)}
+                    alt={item.icon?.alternativeText || item.title}
+                    width="42"
+                    height="38"
+                    className="mb-5"
+                />
+            )}
+
+            {/* Title */}
+            <h3 className={`text-2xl font-medium tracking-[-0.48px] text-richNavy mb-2 ${titleclass}`}>
+                {item.title}
+            </h3>
+
+            {/* Description */}
+            <p className="text-base text-darkLight mb-8">
+                {item.description}
+            </p>
+
+            {/* Red underline */}
+            <span className="w-12 h-[1px] bg-[#ED0000] block" aria-hidden="true" />
+        </div>
+    );
+}
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function WhatYouGetSection({
@@ -34,7 +88,6 @@ export default function WhatYouGetSection({
     titleclass,
 }: WhatYouGetSectionProps) {
     const { ref: headingRef, visible: headingVisible } = useInView(0.2);
-    const { ref: gridRef, visible: gridVisible } = useInView(0.1);
     const getMediaUrl = (url?: string) => (url ? `${STRAPI_URL}${url}` : "");
 
     return (
@@ -55,47 +108,15 @@ export default function WhatYouGetSection({
                 </div>
 
                 {/* ── Grid ────────────────────────────────────────────────────── */}
-                <div
-                    ref={gridRef}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"
-                >
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
                     {intro_what_you_get.map((item, index) => (
-                        <div
+                        <WhatYouGetCard
                             key={item.id}
-                            className={[
-                                'flex flex-col transition-all ease-out',
-                                'duration-500',
-                                gridVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8',
-                            ].join(' ')}
-                            style={{
-                                transitionDelay: gridVisible ? `${index * 80}ms` : '0ms',
-                            }}
-                        >
-
-                            {item.icon?.url &&(
-                                <Image src={getMediaUrl(item.icon?.url)} alt={item.icon?.alternativeText || item.title} width="42" height="38" className='mb-5'/>
-                            ) 
-                            // : (
-
-                            //     <span className="text-primaryDefault text-sm tracking-[4.2px] uppercase font-bold pb-2">
-                            //         {String(index + 1).padStart(2, '0')}
-                            //     </span>
-                            // )
-                            }
-
-                            {/* Title */}
-                            <h3 className={`text-2xl font-medium tracking-[-0.48px] text-richNavy mb-2 ${titleclass}`}>
-                                {item.title}
-                            </h3>
-
-                            {/* Description */}
-                            <p className="text-base text-darkLight mb-8">
-                                {item.description}
-                            </p>
-
-                            {/* Red underline */}
-                            <span className="w-12 h-[1px] bg-[#ED0000] block" aria-hidden="true" />
-                        </div>
+                            item={item}
+                            index={index % 3}
+                            titleclass={titleclass}
+                            getMediaUrl={getMediaUrl}
+                        />
                     ))}
                 </div>
 

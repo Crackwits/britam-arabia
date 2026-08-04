@@ -30,25 +30,25 @@ function useInView(threshold = 0.1) {
 function Card({
     item,
     index,
-    visible,
 }: {
     item: WhatYouGetItem;
     index: number;
-    visible: boolean;
 }) {
+    const { ref, visible } = useInView(0.2);
     const getMediaUrl = (url?: string) => (url ? `${STRAPI_URL}${url}` : "");
 
     return (
         <div
+            ref={ref}
             className={[
                 // h-full makes the card fill its grid row so all cards are equal height
-                'bg-[#F5F8FF] p-6 h-full transition-all ease-out duration-500',
-                visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
+                'bg-[#F5F8FF] p-6 h-full transition-all ease-out duration-700',
+                visible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95',
             ].join(' ')}
-            style={{ transitionDelay: visible ? `${index * 90}ms` : '0ms' }}
+            style={{ transitionDelay: visible ? `${index * 110}ms` : '0ms' }}
         >
-            { item.icon?.url && (
-                <Image src={getMediaUrl(item.icon?.url)} alt={item.icon?.alternativeText || item.title} width="42" height="38" className='mb-5'/>
+            {item.icon?.url && (
+                <Image src={getMediaUrl(item.icon?.url)} alt={item.icon?.alternativeText || item.title} width="42" height="38" className='mb-5' />
             )}
 
             <h3 className="text-xl font-medium tracking-[-0.48px] text-richNavy mb-2">
@@ -85,7 +85,7 @@ export default function WhyChooseUsSection({ section3_title, intro_why_choose_us
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 auto-rows-fr">
                         {intro_why_choose_us.map((item, index) => (
-                            <Card key={item.id} item={item} index={index} visible={visible} />
+                            <Card key={item.id} item={item} index={index} />
                         ))}
                     </div>
                 </div>
@@ -127,7 +127,7 @@ export default function WhyChooseUsSection({ section3_title, intro_why_choose_us
                                 className="col-start-1 h-full"
                                 style={{ gridRow: i + 1 }}
                             >
-                                <Card item={item} index={i * 2} visible={visible} />
+                                <Card item={item} index={i * 2} />
                             </div>
                         ))}
                         {colC.map((item, i) => (
@@ -136,7 +136,7 @@ export default function WhyChooseUsSection({ section3_title, intro_why_choose_us
                                 className="col-start-2 h-full"
                                 style={{ gridRow: i + 2 }} // offset by 1 row for stagger
                             >
-                                <Card item={item} index={i * 2 + 1} visible={visible} />
+                                <Card item={item} index={i * 2 + 1} />
                             </div>
                         ))}
                     </div>
