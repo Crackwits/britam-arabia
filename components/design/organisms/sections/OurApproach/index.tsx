@@ -1,8 +1,9 @@
 'use client';
-
+import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 import { WhatYouGetItem } from '@/components/lib/types';
 import HeadingTriangle from '@/public/svg/headingtriangle';
+import { STRAPI_URL } from '@/components/lib/settings';
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface OurApproachProps {
@@ -20,6 +21,7 @@ export default function OurApproach({ isArabic, subheading, heading, desc, steps
     const sectionRef = useRef<HTMLElement>(null);
     const headerRef = useRef<HTMLElement>(null);
     const cardsRef = useRef<(HTMLElement | null)[]>([]);
+    const getMediaUrl = (url?: string) => (url ? `${STRAPI_URL}${url}` : "");
 
     // ── Intersection Observer for entrance animations ──────────────────────
     useEffect(() => {
@@ -126,6 +128,9 @@ export default function OurApproach({ isArabic, subheading, heading, desc, steps
                                         </div>
                                         <div className="flex-1 h-[2px] bg-[#EAEAEA]" />
                                     </div>
+                                    {step.icon?.url && (
+                                        <Image src={getMediaUrl(step.icon?.url)} alt={step.icon?.alternativeText || step.title} width="42" height="38" className='mb-5'/>
+                                     )}
 
                                     {/* Title */}
                                     <h3 className="tracking-[-0.48px] text-richNavy pb-2 text-2xl font-medium">

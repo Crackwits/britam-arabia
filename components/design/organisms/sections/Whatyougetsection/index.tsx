@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { WhatYouGetItem } from '@/components/lib/types';
-
+import { STRAPI_URL } from '@/components/lib/settings';
 
 interface WhatYouGetSectionProps {
     section2_title: string;
@@ -35,6 +35,7 @@ export default function WhatYouGetSection({
 }: WhatYouGetSectionProps) {
     const { ref: headingRef, visible: headingVisible } = useInView(0.2);
     const { ref: gridRef, visible: gridVisible } = useInView(0.1);
+    const getMediaUrl = (url?: string) => (url ? `${STRAPI_URL}${url}` : "");
 
     return (
         <section className="w-full bg-white px-4 py-15 md:py-20 overflow-hidden">
@@ -71,14 +72,16 @@ export default function WhatYouGetSection({
                             }}
                         >
 
-                            {item.icon ? (
-                                <Image src={item.icon?.url || ''} alt={item.icon.alternativeText || ''} width={item.icon.width} height={item.icon.height} />
-                            ) : (
+                            {item.icon?.url &&(
+                                <Image src={getMediaUrl(item.icon?.url)} alt={item.icon?.alternativeText || item.title} width="42" height="38" className='mb-5'/>
+                            ) 
+                            // : (
 
-                                <span className="text-primaryDefault text-sm tracking-[4.2px] uppercase font-bold pb-2">
-                                    {String(index + 1).padStart(2, '0')}
-                                </span>
-                            )}
+                            //     <span className="text-primaryDefault text-sm tracking-[4.2px] uppercase font-bold pb-2">
+                            //         {String(index + 1).padStart(2, '0')}
+                            //     </span>
+                            // )
+                            }
 
                             {/* Title */}
                             <h3 className={`text-2xl font-medium tracking-[-0.48px] text-richNavy mb-2 ${titleclass}`}>

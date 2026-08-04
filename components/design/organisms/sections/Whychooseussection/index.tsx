@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { WhatYouGetItem } from '@/components/lib/types';
-
+import Image from 'next/image';
+import { STRAPI_URL } from '@/components/lib/settings';
 interface WhyChooseUsSectionProps {
     section3_title: string;
     intro_why_choose_us: WhatYouGetItem[];
@@ -35,6 +36,8 @@ function Card({
     index: number;
     visible: boolean;
 }) {
+    const getMediaUrl = (url?: string) => (url ? `${STRAPI_URL}${url}` : "");
+
     return (
         <div
             className={[
@@ -44,6 +47,10 @@ function Card({
             ].join(' ')}
             style={{ transitionDelay: visible ? `${index * 90}ms` : '0ms' }}
         >
+            { item.icon?.url && (
+                <Image src={getMediaUrl(item.icon?.url)} alt={item.icon?.alternativeText || item.title} width="42" height="38" className='mb-5'/>
+            )}
+
             <h3 className="text-xl font-medium tracking-[-0.48px] text-richNavy mb-2">
                 {item.title}
             </h3>
@@ -56,7 +63,6 @@ function Card({
 
 export default function WhyChooseUsSection({ section3_title, intro_why_choose_us }: WhyChooseUsSectionProps) {
     const { ref: sectionRef, visible } = useInView(0.1);
-
     const colB = intro_why_choose_us.filter((_, i) => i % 2 === 0); // 0,2,4
     const colC = intro_why_choose_us.filter((_, i) => i % 2 === 1); // 1,3,5
 
