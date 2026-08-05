@@ -9,7 +9,7 @@ interface WhyChooseUsSectionProps {
     intro_why_choose_us: WhatYouGetItem[];
 }
 
-function useInView(threshold = 0.1) {
+function useInView(threshold = 0.15) {
     const ref = useRef<HTMLDivElement>(null);
     const [visible, setVisible] = useState(false);
     useEffect(() => {
@@ -17,7 +17,7 @@ function useInView(threshold = 0.1) {
         if (!el) return;
         const observer = new IntersectionObserver(
             ([entry]) => {
-                if (entry.isIntersecting) { setVisible(true); observer.disconnect(); }
+                setVisible(entry.isIntersecting); // toggle on every enter/leave
             },
             { threshold },
         );

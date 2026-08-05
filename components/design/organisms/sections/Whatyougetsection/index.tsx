@@ -17,7 +17,9 @@ function useInView(threshold = 0.15) {
         const el = ref.current;
         if (!el) return;
         const observer = new IntersectionObserver(
-            ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
+            ([entry]) => {
+                setVisible(entry.isIntersecting); // toggle on every enter/leave
+            },
             { threshold },
         );
         observer.observe(el);
@@ -25,7 +27,6 @@ function useInView(threshold = 0.15) {
     }, [threshold]);
     return { ref, visible };
 }
-
 // ─── Single animated item ───────────────────────────────────────────────────
 
 function WhatYouGetCard({

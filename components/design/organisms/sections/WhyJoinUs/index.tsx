@@ -39,7 +39,7 @@ export default function WhyJoinUsSection({
                         <motion.h2
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
+                            viewport={{ once: false }}
                             transition={{ duration: 0.6, delay: 0.08 }}
                             className="text-navy900 font-medium tracking-[-1.92px] pb-4 text-4xl sm:text-4xl lg:text-5xl max-w-6xl w-full"                            >
                             {heading}
@@ -53,23 +53,20 @@ export default function WhyJoinUsSection({
                                 key={item.id}
                                 initial={{ opacity: 0, y: 24 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.5, delay: index * 0.08, ease: "easeOut" }}
+                                viewport={{ once: false }}
+                                transition={{ duration: 0.5, delay: index * 0.15, ease: "easeOut" }}
                             >
-                                <div className="group flex items-center gap-4 border-b border-lightLighter py-5 transition-colors duration-200 hover:bg-f7f7f7 -mx-2">
+                                <div className="group flex items-center gap-4 border-b border-lightLighter py-5 transition-colors duration-200 -mx-2">
                                     {/* Index */}
                                     <span className="w-8 shrink-0 text-sm tracking-[0.84px] font-medium text-primaryDefault tabular-nums transition-colors duration-200">
                                         {formatIndex(index)}
                                     </span>
 
                                     {/* Project name — shifts right on hover */}
-                                    <span className="flex-1 text-base font-medium text-darkDefault tracking-[-0.48px] uppercase transition-all duration-200 group-hover:translate-x-1">
+                                    <span className="flex-1 text-base font-medium text-darkDefault tracking-[-0.48px] uppercase transition-all duration-200">
                                         {item.title}
                                     </span>
                                 </div>
-
-
-
                             </motion.div>
                         ))}
                     </div>

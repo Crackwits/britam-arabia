@@ -20,7 +20,7 @@ const sectionVariants: Variants = {
     visible: {
         opacity: 1,
         y: 0,
-        transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+        transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
     },
 };
 
@@ -29,7 +29,7 @@ const headingVariants: Variants = {
     visible: {
         opacity: 1,
         y: 0,
-        transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.2 },
+        transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 },
     },
 };
 
@@ -39,9 +39,9 @@ const cardVariants: Variants = {
         opacity: 1,
         y: 0,
         transition: {
-            duration: 0.5,
+            duration: 0.8,
             ease: [0.22, 1, 0.36, 1],
-            delay: i * 0.12,
+            delay: i * 0.35,
         },
     }),
 };
@@ -97,7 +97,7 @@ export default function TestimonialsSection({
     const params = useParams();
 
     const ref = useRef<HTMLElement>(null);
-    const isInView = useInView(ref, { once: true, margin: "-80px 0px" });
+    const isInView = useInView(ref, { margin: "-80px 0px" });
 
     const label = isArabic ? "آراء العملاء" : "TESTIMONIALS";
 
