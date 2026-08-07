@@ -224,7 +224,7 @@ body {
    ═══════════════════════════════════════════════════════════════════════ */
 
 /* ── project-content ─────────────────────────────────────────────────── */
-.memberbio p{
+.memberbio p {
   color: var(--color-darkLight);
   font-size: var(--text-base);
   line-height: var(--text-base--line-height);
@@ -233,6 +233,7 @@ body {
   padding-bottom: 10px;
 }
 
+.legal-content h1,
 .project-content h1 {
   color: var(--color-neutral900);
   font-size: var(--text-h3);
@@ -243,6 +244,7 @@ body {
   padding-bottom: 18px;
 }
 
+.legal-content h2,
 .project-content h2 {
   color: var(--color-neutral900);
   font-size: var(--text-h4);
@@ -253,6 +255,7 @@ body {
   padding-bottom: 18px;
 }
 
+.legal-content h3,
 .project-content h3 {
   color: var(--color-neutral900);
   font-size: var(--text-2xl);
@@ -263,6 +266,7 @@ body {
   padding-bottom: 18px;
 }
 
+.legal-content p,
 .project-content p {
   color: var(--color-neutral500);
   font-size: var(--text-lg);
@@ -273,6 +277,7 @@ body {
   padding-bottom: 36px;
 }
 
+.legal-content li,
 .project-content li {
   color: var(--color-neutral500);
   font-size: var(--text-lg);
@@ -283,6 +288,8 @@ body {
   padding-bottom: 5px;
 }
 
+.legal-content p strong,
+.legal-content li strong,
 .project-content p strong,
 .project-content li strong {
   color: var(--color-neutral900);
@@ -293,27 +300,34 @@ body {
   letter-spacing: -0.48px;
 }
 
+.legal-content ul:not(.todo-list),
 .project-content ul:not(.todo-list) {
   list-style-type: disc;
   margin-bottom: 36px;
 }
 
+.legal-content ol,
 .project-content ol {
   list-style-type: decimal;
   margin-bottom: 36px;
 }
 
+.legal-content ol li:not(:last-child),
 .project-content ol li:not(:last-child) {
   margin-bottom: 0.5rem;
 }
 
 /* Directional padding — shared amount, side depends on dir */
 [dir="rtl"] .project-content ul:not(.todo-list),
+[dir="rtl"] .legal-content ul:not(.todo-list),
+[dir="rtl"] .legal-content ol,
 [dir="rtl"] .project-content ol {
   padding-right: 1rem;
 }
 
 [dir="ltr"] .project-content ul:not(.todo-list),
+[dir="ltr"] .legal-content ul:not(.todo-list),
+[dir="ltr"] .legal-content ol,
 [dir="ltr"] .project-content ol {
   padding-left: 1rem;
 }
@@ -395,24 +409,28 @@ body {
   margin-bottom: 8px;
 }
 
+.legal-content blockquote,
 .ck-prose blockquote {
   color: #6b7280;
   font-style: italic;
   margin: 1rem 0;
 }
 
+.legal-content a,
 .ck-prose a {
   color: var(--color-primaryDefault);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
+.legal-content a:hover,
 .ck-prose a:hover {
   opacity: 0.75;
 }
 
 /* Directional borders — shared width/color, side depends on dir */
 .ck-prose li,
+.legal-content blockquote,
 .ck-prose blockquote {
   border-color: #ED0000;
   border-style: solid;
@@ -428,12 +446,15 @@ body {
   padding-left: 8px;
 }
 
-[dir="rtl"] .ck-prose blockquote {
+[dir="rtl"] .ck-prose blockquote,
+[dir="rtl"] .legal-content blockquote {
   border-right-width: 3px;
   padding-right: 1rem;
 }
 
-[dir="ltr"] .ck-prose blockquote {
+[dir="ltr"] .ck-prose blockquote,
+[dir="ltr"] .legal-content blockquote {
+
   border-left-width: 3px;
   padding-left: 1rem;
 }
@@ -455,6 +476,66 @@ html.lenis body {
 
 .lenis.lenis-stopped {
   overflow: hidden;
+}
+
+.legal-content table {
+  width: 100%;
+  /* border: 1px solid var(--color-neutralLight); */
+  padding-top: 24px;
+  padding-bottom: 24px;
+  border-collapse: collapse;
+  margin-bottom: 36px;
+}
+
+
+.legal-content th {
+  border: 1px solid var(--color-neutralLight);
+  padding: 10px 15px;
+  color: var(--color-neutral500);
+  font-size: var(--text-sm);
+  line-height: var(--text-sm--line-height);
+  font-weight: 500;
+}
+
+.legal-content td {
+  padding: 10px 15px;
+  border: 1px solid var(--color-neutralLight);
+  color: var(--color-neutral500);
+  font-size: var(--text-sm);
+  line-height: var(--text-sm--line-height);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: -0.48px;
+
+}
+
+/* Mobile responsive */
+@media (max-width: 640px) {
+  .legal-content thead {
+    display: none;
+  }
+
+  .legal-content table,
+  .legal-content tbody,
+  .legal-content tr,
+  .legal-content td {
+    display: block;
+    width: 100%;
+  }
+
+  .legal-content tr {
+    margin-bottom: 15px;
+    border: 1px solid var(--color-neutralLight);
+  }
+
+  .legal-content td {
+    border: 0px;
+    padding: 10px 15px;
+  }
+
+  .legal-content td:first-child {
+    font-weight: 500;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
