@@ -3,7 +3,7 @@
 import { title } from "process";
 import { useEffect, useRef } from "react";
 import { PrivacyPolicyAttributes, TermsAndConditionsAttributes, CookiePolicyAttributes } from "@/components/lib/types";
-
+import { formatDate } from "@/components/providers/FormatDate";
 type PolicySectionProps = {
     data: PrivacyPolicyAttributes | TermsAndConditionsAttributes | CookiePolicyAttributes;
     lang: string;
@@ -58,14 +58,17 @@ export default function PolicySection({ data, lang }: PolicySectionProps) {
                         </p>
                     )}
                     {data.title && (
-                        <h1 className="font-medium text-darkDefault max-w-4xl pb-12 tracking-[-0.96px] text-4xl sm:text-4xl lg:text-5xl">
+                        <h1 className="font-medium text-darkDefault max-w-4xl pb-3 tracking-[-0.96px] text-4xl sm:text-4xl lg:text-5xl">
                             {data.title}
                         </h1>
                     )}
+                    <p className="font-sm text-darkLight pb-12">
+                        Last updated: {formatDate(data.updatedAt)}
+                    </p>
                 </div>
                 <div
                     ref={contentRef}
-                    className="project-content"
+                    className="legal-content"
                     dangerouslySetInnerHTML={{ __html: data.content }}
                 />
             </div>

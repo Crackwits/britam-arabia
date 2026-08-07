@@ -76,19 +76,20 @@ function ServiceCard({
                 index === 0
                     ? "delay-[0ms]"
                     : index === 1
-                    ? "delay-[150ms]"
-                    : index === 2
-                    ? "delay-[300ms]"
-                    : "delay-[450ms]",
+                        ? "delay-[150ms]"
+                        : index === 2
+                            ? "delay-[300ms]"
+                            : "delay-[450ms]",
                 visible
                     ? "opacity-100 translate-x-0"
                     : isEven
-                    ? "opacity-0 -translate-x-8"
-                    : "opacity-0 translate-x-8",
+                        ? "opacity-0 -translate-x-8"
+                        : "opacity-0 translate-x-8",
             ].join(" ")}
         >
-            <Link
-                href={`/${lang}/capabilities/${item.slug}`}
+            {/* <Link
+                href={`/${lang}/capabilities/${item.slug}`} */}
+            <div
                 className={[
                     "relative w-full overflow-hidden flex-shrink-0",
                     // Pre-measurement fallback: same flex-1/min-h-0 behavior
@@ -113,16 +114,17 @@ function ServiceCard({
                     onError={onImageLoad}
                 />
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/20 to-transparent" />
-            </Link>
+                {/* </Link> */}
+            </div>
 
             <div ref={textBlockRef} className="mt-4 flex flex-col flex-shrink-0">
-                <Link href={`/${lang}/capabilities/${item.slug}`}>
-                    <h3 className="text-2xl font-medium tracking-[-0.48px] text-richNavy mb-1">
-                        {item.title}
-                    </h3>
-                    <p className="text-base text-darkLight mb-4">{item.description}</p>
-                </Link>
-                <Link
+                {/* <Link href={`/${lang}/capabilities/${item.slug}`}> */}
+                <h3 className="text-2xl font-medium tracking-[-0.48px] text-richNavy mb-1">
+                    {item.title}
+                </h3>
+                <p className="text-base text-darkLight mb-4">{item.description}</p>
+                {/* </Link> */}
+                {/* <Link
                     href={`/${lang}/capabilities/${item.slug}`}
                     className="pb-2 uppercase group inline-flex items-center gap-2 text-darkDefault font-medium tracking-[0.84px] text-sm transition-transform duration-200 focus:outline-none focus-visible:underline"
                 >
@@ -144,7 +146,7 @@ function ServiceCard({
                             </svg>
                         )}
                     </span>
-                </Link>
+                </Link> */}
                 <span className="w-12 h-[1px] bg-[#ED0000] block" aria-hidden="true" />
             </div>
         </motion.article>

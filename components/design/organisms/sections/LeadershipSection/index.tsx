@@ -297,7 +297,7 @@ export default function LeadershipSection({
                     style={fadeUpStyle(inView, 140)}
                     className="tracking-[-0.48px] text-navy900 text-xl md:text-3xl font-medium max-w-7xl w-full pt-8 pb-4">
 
-                    {isArabic ? "فريق العمليات" : "Operations Team"}
+                    {isArabic ? "مديرية العمليات" : "Operations Directorate"}
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
                     {operations_team.map((member, index) => (
