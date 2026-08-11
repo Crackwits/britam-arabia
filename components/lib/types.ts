@@ -297,6 +297,10 @@ export interface ContactusAttributes extends StrapiAttributes{
     form_title: string;
 }
 
+export interface AssessRiskAttributes extends StrapiAttributes{
+    heading: string;
+    subheading: string;
+}
 export interface PrivacyPolicyAttributes extends StrapiAttributes{
     title: string;
     subtitle: string;
