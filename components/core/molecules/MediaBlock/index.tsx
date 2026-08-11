@@ -86,7 +86,7 @@ export default function MediaBlock({
                             </Link>
                         )}
 
-                        {cta2_label && cta2_link && (
+                        {/* {cta2_label && cta2_link && (
                             <Link
                                 href={cta2_link} target='_blank'
                                 className="inline-flex uppercase items-center gap-2 text-white bg-primaryDefault px-6 py-4 font-medium tracking-[0.84px] text-sm
@@ -94,8 +94,8 @@ export default function MediaBlock({
                             >
                                {cta2_label}
                             </Link>
-                        )}
-                        {/* {cta2_label && cta2_link && (
+                        )} */}
+                        {cta2_label && cta2_link && (
                             <Link
                                 href={cta2_link} target='_blank'
                                 className="uppercase group inline-flex uppercase items-center gap-2 text-darkDefault font-medium tracking-[0.84px] text-sm transition-transform duration-200 focus:outline-none focus-visible:underline"
@@ -126,7 +126,7 @@ export default function MediaBlock({
                                     )}
                                 </span>
                             </Link>
-                        )} */}
+                        )}
                     </div>
                 </div>
 

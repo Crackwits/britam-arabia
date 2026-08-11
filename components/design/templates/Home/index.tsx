@@ -157,10 +157,10 @@ export default function HomeTemplate({ homedata, capabilities, globalSettings, l
             <WhyChooseUsSection section3_title={homedata.section3_title} intro_why_choose_us={homedata.intro_why_choose_us} />
             <MediaBlock lang={lang} isArabic={isArabic} title={homedata.section4_title}
                 desc={homedata.section4_desc}
-                cta=""
-                cta_link=""
-                cta2_label={homedata.section4_checklist_label}
-                cta2_link={homedata.section4_checklist_link}
+                cta={homedata.section4_cta}
+                cta_link="assess-risk"
+                cta2_label=""
+                cta2_link=""
                 image={homedata.section4_image} />
             <OurApproach isArabic={isArabic} subheading={homedata.section5_subheading}
                 heading={homedata.section5_heading}
