@@ -10,15 +10,15 @@ export async function POST(request: NextRequest) {
 
         // Create a transporter using environment variables
         const transporter = nodemailer.createTransport({
-            host: process.env.EMAIL_HOST,
-            port: parseInt(process.env.EMAIL_PORT || '587'),
-            secure: process.env.EMAIL_SECURE === 'true', // true for 465, false for other ports
+            host: process.env.SMTP_HOST,
+            port: Number(process.env.SMTP_PORT) || 587,
+            secure: false,
+            requireTLS: true,
             auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASSWORD,
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASS,
             },
         });
-
         // Email to the company
         const htmlContent = `
       <h2>New Risk Assessment Submission</h2>
@@ -88,13 +88,13 @@ Services & Support Required
 Submitted at: ${new Date().toLocaleString()}
     `;
 
-        // Send email to company
         await transporter.sendMail({
-            from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
-            to: process.env.EMAIL_TO_COMPANY,
+            from: process.env.SMTP_USER,
+            to: process.env.HR_EMAIL,
+            replyTo: formData.email,
             subject: `New Risk Assessment Submission from ${formData.contactName}`,
-            html: htmlContent,
             text: textContent,
+            html: htmlContent,
         });
 
         // Send confirmation email to the user
@@ -119,8 +119,9 @@ Submitted at: ${new Date().toLocaleString()}
     `;
 
         await transporter.sendMail({
-            from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+            from: process.env.SMTP_USER,
             to: formData.email,
+            replyTo: process.env.HR_EMAIL,
             subject: 'Risk Assessment Received - Thank You',
             html: confirmationEmailContent,
             text: confirmationEmailContent.replace(/<[^>]*>/g, ''),

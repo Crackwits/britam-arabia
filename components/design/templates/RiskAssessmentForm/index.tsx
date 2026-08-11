@@ -49,23 +49,23 @@ const translations = {
         facilitySizeLabel:
             "Approximately how many people are normally on site?",
         facilitySizeOptions: [
-            { value: "lt-100", label: "Less than 100" },
+            { value: "Less than 100", label: "Less than 100" },
             { value: "100-500", label: "100–500" },
             { value: "500-1000", label: "500–1,000" },
             { value: "1000-5000", label: "1,000–5,000" },
-            { value: "gt-5000", label: "More than 5,000" },
+            { value: "More than 5,000", label: "More than 5,000" },
         ],
 
         projectStageLabel: "What stage is your project?",
         projectStageOptions: [
-            { value: "operational", label: "Operational Facility" },
+            { value: "Operational Facility", label: "Operational Facility" },
             { value: "construction", label: "Construction" },
             {
-                value: "new-development",
+                value: "New Development (Finished but not Operational)",
                 label: "New Development (Finished but not Operational)",
             },
-            { value: "design", label: "Design Stage" },
-            { value: "tender", label: "Tender/Bid Stage" },
+            { value: "Design Stage", label: "Design Stage" },
+            { value: "Tender/Bid Stage", label: "Tender/Bid Stage" },
         ],
 
         sectionHazards: "Risk & Hazard Profile",
@@ -89,10 +89,10 @@ const translations = {
         emergencyServiceLabel:
             "Do you currently have an Emergency Fire & Rescue Service?",
         emergencyServiceOptions: [
-            { value: "in-house", label: "Yes – In-house" },
-            { value: "outsourced", label: "Yes – Outsourced" },
-            { value: "no", label: "No" },
-            { value: "under-review", label: "Currently under review" },
+            { value: "Yes – In-house", label: "Yes – In-house" },
+            { value: "Yes - Outsourced", label: "Yes – Outsourced" },
+            { value: "No", label: "No" },
+            { value: "Currently under review", label: "Currently under review" },
         ],
 
         preRiskAssessmentLabel:
@@ -119,10 +119,10 @@ const translations = {
 
         supportRequiredLabel: "What support do you require?",
         supportRequiredOptions: [
-            { value: "immediate", label: "Immediate support" },
-            { value: "within-3-months", label: "Within 3 months" },
-            { value: "within-6-months", label: "Within 6 months" },
-            { value: "future-planning", label: "Future planning" },
+            { value: "Immediate support", label: "Immediate support" },
+            { value: "Within 3 Months", label: "Within 3 months" },
+            { value: "Within 6 Months", label: "Within 6 months" },
+            { value: "Future planning", label: "Future planning" },
         ],
 
         submit: "SUBMIT",
@@ -282,7 +282,6 @@ const translations = {
 type Locale = keyof typeof translations;
 
 // ─── Zod Schema ───────────────────────────────────────────────────────────────
-
 function buildSchema(locale: Locale) {
     const e = translations[locale].errors;
 
