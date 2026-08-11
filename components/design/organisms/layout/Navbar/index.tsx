@@ -254,8 +254,7 @@ export default function Navbar({ activeSection, lang }: Props) {
                                 <LangToggle />
 
                                 <MotionLink
-                                    href="https://cms.britamarabia.com/uploads/BRITAM_ARABIA_Assessment_Form_4ad9fd0c1e.docx"
-                                    target='_blank'
+                                    href={withLocale(pathname, "/assess-risk")}
                                     whileHover={{ scale: 1.04 }}
                                     whileTap={{ scale: 0.97 }}
                                     className={`${isDark ? "border-white text-white hover:text-darkDefault hover:bg-white" : "border-darkDefault text-darkDefault hover:text-white hover:bg-darkDefault"} hidden sm:flex px-6 py-4 items-center justify-center border
@@ -328,8 +327,7 @@ export default function Navbar({ activeSection, lang }: Props) {
                                         {/* <LangToggle onClick={() => setMenuOpen(false)} /> */}
 
                                         <Link
-                                            href="https://cms.britamarabia.com/uploads/BRITAM_ARABIA_Assessment_Form_4ad9fd0c1e.docx"
-                                            target='_blank'
+                                            href={withLocale(pathname, "/assess-risk")}
                                             onClick={() => setMenuOpen(false)}
                                             className="md:hidden inline-flex items-center justify-center px-4 py-3 leading-none border border-white text-white text-sm tracking-[0.84px] uppercase font-medium hover:text-[#22285C] hover:bg-white transition-colors"                                        >
                                             {t('inquireNow')}
