@@ -35,6 +35,7 @@ export default async function HomePage({ params }: { params: Params }) {
       section4_image: true,
       intro_what_you_get: { populate: "*" },
       intro_why_choose_us: { populate: "*" },
+      why_choose_us: { populate: "*" },
       approach_steps: { populate: "*" },
       kpis: true,
       testimonials: true,

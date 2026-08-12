@@ -74,6 +74,13 @@ export interface StrapiAttributes {
     seo?: StrapiSEO;
 }
 
+export interface WhyChooseUs{
+    id: number;
+    title: string;
+    description: string;
+    icon: CoverType;
+    image: CoverType;
+}
 export interface WhatYouGetItem {
     id: number;
     title: string;
@@ -136,6 +143,8 @@ export interface HomePageAttributes extends StrapiAttributes {
     intro_what_you_get: WhatYouGetItem[];
     section3_title: string;
     intro_why_choose_us: WhatYouGetItem[];
+    why_choose_us: WhyChooseUs[];
+
     section4_title: string;
     section4_desc: string;
     section4_cta: string;
