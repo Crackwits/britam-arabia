@@ -4,7 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion, Variants } from "framer-motion";
 import { z } from "zod";
-import { Loader2 } from "lucide-react";
+import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { AssessRiskAttributes } from "@/components/lib/types";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -128,9 +128,10 @@ const translations = {
         submit: "SUBMIT",
         submitting: "SUBMITTING...",
         success:
-            "Thank you for completing the risk assessment. Our team will review your responses to assess your operational requirements and site risk profile.",
+            "Thank you for completing the risk assessment",
+        successDescription:
+            "Our team will review your responses to assess your operational requirements and site risk profile.",
         genericError: "Failed to submit form. Please try again.",
-
         errors: {
             organizationName: "Organisation name is required",
             contactName: "Contact name is required",
@@ -258,7 +259,9 @@ const translations = {
         submit: "إرسال",
         submitting: "جارٍ الإرسال...",
         success:
-            "شكراً لإكمالك تقييم المخاطر. سيقوم فريقنا بمراجعة إجاباتك لتقييم متطلباتك التشغيلية وملف المخاطر الخاص بموقعك.",
+            "شكراً لإكمالك تقييم المخاطر",
+        successDescription:
+            "سيقوم فريقنا بمراجعة إجاباتك لتقييم متطلباتك التشغيلية وملف المخاطر الخاص بموقعك.",
         genericError: "فشل إرسال النموذج. يرجى المحاولة مرة أخرى.",
 
         errors: {
@@ -383,6 +386,83 @@ function getSectionVariants(
     };
 }
 
+const modalVariants: Variants = {
+    hidden: {
+        opacity: 0,
+        scale: 0.95,
+    },
+    visible: {
+        opacity: 1,
+        scale: 1,
+        transition: {
+            duration: 0.3,
+            ease: "easeOut",
+        },
+    },
+    exit: {
+        opacity: 0,
+        scale: 0.95,
+        transition: {
+            duration: 0.2,
+        },
+    },
+};
+
+// ─── Modal Component ──────────────────────────────────────────────────────────
+
+interface ModalProps {
+    isOpen: boolean;
+    type: "success" | "error";
+    title: string;
+    description: string;
+    onClose: () => void;
+}
+
+function Modal({ isOpen, type, title, description, onClose }: ModalProps) {
+    if (!isOpen) return null;
+
+    return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+        >
+            <motion.div
+                variants={modalVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                onClick={(e) => e.stopPropagation()}
+                className="bg-white shadow-lg p-10 md:p-15 max-w-2xl  w-full mx-4"
+            >
+                {/* Icon */}
+                <div className="flex justify-center mb-6">
+                    {type === "success" ? (
+                        <div className="">
+                            <CheckCircle2 size={60} className="text-primaryDefault" />
+                        </div>
+                    ) : (
+                        <div className="">
+                            <AlertCircle size={60} className="text-[#ED0000]" />
+                        </div>
+                    )}
+                </div>
+
+                {/* Content */}
+                <h2 className="text-xl font-semibold text-center text-darkDefault mb-3">
+                    {title}
+                </h2>
+
+                <p className="text-center text-darkLight text-sm leading-relaxed">
+                    {description}
+                </p>
+            </motion.div>
+        </motion.div>
+    );
+}
+
 // ─── Shared Input Class ──────────────────────────────────────────────────────
 const labelClass = "text-darkDefault text-base font-normal"
 const inputClass =
@@ -404,6 +484,8 @@ export default function RiskAssessmentForm({
     const [submitState, setSubmitState] = useState<
         "idle" | "success" | "error"
     >("idle");
+
+    const [showModal, setShowModal] = useState(false);
 
     const {
         register,
@@ -444,6 +526,7 @@ export default function RiskAssessmentForm({
             }
 
             setSubmitState("success");
+            setShowModal(true);
             reset(defaultValues);
         } catch (error) {
             console.error(
@@ -452,6 +535,7 @@ export default function RiskAssessmentForm({
             );
 
             setSubmitState("error");
+            setShowModal(true);
         }
     };
 
@@ -463,6 +547,23 @@ export default function RiskAssessmentForm({
             className="w-full bg-white"
             aria-labelledby="risk-assessment-heading"
         >
+            {/* Modal */}
+            <Modal
+                isOpen={showModal}
+                type={submitState as "success" | "error"}
+                title={
+                    submitState === "success"
+                        ? t.success
+                        : "Error"
+                }
+                description={
+                    submitState === "success"
+                        ? t.successDescription
+                        : t.genericError
+                }
+                onClose={() => setShowModal(false)}
+            />
+
             <div className="max-w-7xl mx-auto px-4 pt-20 md:pt-14">
 
                 {/* ── Header ── */}
@@ -1276,26 +1377,6 @@ export default function RiskAssessmentForm({
                                 : t.submit}
                         </motion.button>
                     </div>
-
-                    {/* ── Status ── */}
-
-                    {submitState === "success" && (
-                        <p
-                            role="status"
-                            className="text-sm font-medium text-primaryDefault pt-1"
-                        >
-                            {t.success}
-                        </p>
-                    )}
-
-                    {submitState === "error" && (
-                        <p
-                            role="alert"
-                            className="text-sm font-medium text-[#ED0000] pt-1"
-                        >
-                            {t.genericError}
-                        </p>
-                    )}
                 </form>
             </div>
         </section>
