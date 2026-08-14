@@ -155,7 +155,7 @@ export default function HomeTemplate({ homedata, capabilities, globalSettings, l
                 services_entry_items={capabilities} />
             {/* <WhatYouGetSection section2_title={homedata.section2_title} intro_what_you_get={homedata.intro_what_you_get} titleclass="" /> */}
 
-            <WhyChooseUsSection section3_title={homedata.section3_title} intro_why_choose_us={homedata.intro_why_choose_us} />
+            {/* <WhyChooseUsSection section3_title={homedata.section3_title} intro_why_choose_us={homedata.intro_why_choose_us} /> */}
             <WhyChooseUsSection2 title={homedata.section3_title} why_choose_us={homedata.why_choose_us} />
             <MediaBlock lang={lang} isArabic={isArabic} title={homedata.section4_title}
                 desc={homedata.section4_desc}
