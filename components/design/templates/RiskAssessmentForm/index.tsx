@@ -1,11 +1,18 @@
 "use client";
-import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useState, useRef, useCallback } from "react";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion, Variants } from "framer-motion";
 import { z } from "zod";
-import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { Loader2, CheckCircle2, AlertCircle, MapPin, Upload, FileText, X } from "lucide-react";
 import { AssessRiskAttributes } from "@/components/lib/types";
+import UploadSvg from "@/public/svg/uploadsvg";
+import {
+    buildApplicationSchema,
+    ApplicationFormValues,
+    ACCEPTED_FILE_EXTENSIONS,
+    MAX_FILE_SIZE,
+} from "@/components/lib/applicationSchema";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -13,6 +20,11 @@ interface RiskAssessmentFormProps {
     data: AssessRiskAttributes;
     lang: "en" | "ar";
     isArabic: boolean;
+}
+
+interface ApiError {
+    field: string;
+    message: string;
 }
 
 // ─── Translations ─────────────────────────────────────────────────────────────
@@ -101,6 +113,10 @@ const translations = {
             { value: "yes", label: "Yes" },
             { value: "no", label: "No" },
         ],
+        uploadTitle: "Drag your current assessment here or click to upload",
+        uploadSubtitle: "Acceptable file types: PDF, DOC (5MB max)",
+        removeFile: "Remove file",
+        uploadNotAvailable: "Please select 'Yes' above to upload your assessment",
 
         sectionServices: "Services & Support Required",
         servicesLabel: "Which services are you interested in?",
@@ -232,7 +248,10 @@ const translations = {
             { value: "yes", label: "نعم" },
             { value: "no", label: "لا" },
         ],
-
+        uploadTitle: "اسحب تقييمك الحالي هنا أو انقر للتحميل",
+        uploadSubtitle: "أنواع الملفات المقبولة: PDF، DOC (بحد أقصى 5 ميجابايت)",
+        removeFile: "حذف الملف",
+        uploadNotAvailable: "يرجى اختيار 'نعم' أعلاه لتحميل تقييمك",
         sectionServices: "الخدمات والدعم المطلوب",
         servicesLabel: "ما هي الخدمات التي تهمك؟",
         servicesHint: "(اختر كل ما ينطبق)",
@@ -290,37 +309,25 @@ function buildSchema(locale: Locale) {
 
     return z.object({
         organizationName: z.string().trim().min(1, e.organizationName),
-
         contactName: z.string().trim().min(1, e.contactName),
-
         email: z
             .string()
             .trim()
             .min(1, e.email)
             .email(e.email),
-
         position: z.string().trim().min(1, e.position),
-
         telephone: z.string().trim().min(1, e.telephone),
-
         facilityType: z.string().min(1, e.facilityType),
-
         facilitySize: z.string().min(1, e.facilitySize),
-
         projectStage: z.string().min(1, e.projectStage),
-
         hazards: z.array(z.string()).min(1, e.hazards),
-
         emergencyService: z.string().min(1, e.emergencyService),
-
         preRiskAssessment: z
             .string()
             .min(1, e.preRiskAssessment),
-
         servicesInterested: z
             .array(z.string())
             .min(1, e.servicesInterested),
-
         supportRequired: z.string().min(1, e.supportRequired),
     });
 }
@@ -354,7 +361,6 @@ const headerVariants: Variants = {
         opacity: 0,
         y: 40,
     },
-
     visible: {
         opacity: 1,
         y: 0,
@@ -365,15 +371,12 @@ const headerVariants: Variants = {
     },
 };
 
-function getSectionVariants(
-    isArabic: boolean
-): Variants {
+function getSectionVariants(isArabic: boolean): Variants {
     return {
         hidden: {
             opacity: 0,
             x: isArabic ? 40 : -40,
         },
-
         visible: {
             opacity: 1,
             x: 0,
@@ -463,6 +466,140 @@ function Modal({ isOpen, type, title, description, onClose }: ModalProps) {
     );
 }
 
+interface ResumeUploadProps {
+    file: File | null;
+    onFileSelect: (file: File | null) => void;
+    error?: string;
+    isArabic: boolean;
+    t: (typeof translations)[keyof typeof translations];
+    isEnabled: boolean;
+}
+
+function ResumeUpload({ file, onFileSelect, error, isArabic, t, isEnabled }: ResumeUploadProps) {
+    const [isDragging, setIsDragging] = useState(false);
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    const handleDrop = useCallback(
+        (e: React.DragEvent<HTMLDivElement>) => {
+            e.preventDefault();
+            setIsDragging(false);
+            if (!isEnabled) return;
+            const droppedFile = e.dataTransfer.files?.[0];
+            if (droppedFile) onFileSelect(droppedFile);
+        },
+        [onFileSelect, isEnabled]
+    );
+
+    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        if (isEnabled) setIsDragging(true);
+    };
+
+    const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        setIsDragging(false);
+    };
+
+    const handleClick = () => {
+        if (isEnabled) inputRef.current?.click();
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const selected = e.target.files?.[0];
+        if (selected) onFileSelect(selected);
+    };
+
+    const handleRemove = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        onFileSelect(null);
+        if (inputRef.current) inputRef.current.value = "";
+    };
+
+    return (
+        <div>
+            <motion.div
+                role="button"
+                tabIndex={isEnabled ? 0 : -1}
+                onClick={handleClick}
+                onKeyDown={(e) => {
+                    if (isEnabled && (e.key === "Enter" || e.key === " ")) {
+                        e.preventDefault();
+                        handleClick();
+                    }
+                }}
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                transition={{ duration: 0.3 }}
+                className={`
+          border-1 border-dashed py-10 md:py-17
+          flex flex-col items-center justify-center
+          cursor-pointer
+          transition-colors
+          px-6 text-center bg-neutral50
+          ${isDragging ? "border-primaryDefault" : "border-neutralLight"}
+          ${error ? "border-[#ED0000]" : ""}
+          ${isEnabled ? "hover:border-primaryDefault" : "opacity-50 cursor-not-allowed"}
+        `}
+                aria-label={t.uploadTitle}
+                aria-describedby="cv-upload-subtext"
+                aria-disabled={!isEnabled}
+            >
+                <input
+                    ref={inputRef}
+                    type="file"
+                    accept={ACCEPTED_FILE_EXTENSIONS.join(",")}
+                    onChange={handleChange}
+                    className="sr-only"
+                    aria-hidden="true"
+                    tabIndex={-1}
+                    disabled={!isEnabled}
+                />
+
+                {file ? (
+                    <div className="flex flex-col items-center gap-2">
+                        <FileText size={58} className="text-[#323232]" />
+                        <p className="pt-5 pb-3 font-medium text-darkDefault text-lg break-all px-4">
+                            {file.name}
+                        </p>
+                        <p className="text-base text-darkLight pb-2">
+                            {(file.size / (1024 * 1024)).toFixed(2)} MB
+                        </p>
+                        {isEnabled && (
+                            <button
+                                type="button"
+                                onClick={handleRemove}
+                                className="pb-2 inline-flex text-base text-darkLight cursor-pointer items-center gap-1 hover:text-[#ED0000] transition-colors"
+                            >
+                                <X size={12} />
+                                {t.removeFile}
+                            </button>
+                        )}
+                    </div>
+                ) : (
+                    <>
+                        <UploadSvg />
+                        <p className="pt-8 pb-3 font-medium text-darkDefault text-lg break-all px-4">
+                            {isEnabled ? t.uploadTitle : t.uploadNotAvailable}
+                        </p>
+                        {isEnabled && (
+                            <p id="cv-upload-subtext" className="text-base text-darkLight pb-2">
+                                {t.uploadSubtitle}
+                            </p>
+                        )}
+                    </>
+                )}
+            </motion.div>
+
+            {error && (
+                <p role="alert" className="mt-2 text-xs text-red-600">
+                    {error}
+                </p>
+            )}
+        </div>
+    );
+}
+
 // ─── Shared Input Class ──────────────────────────────────────────────────────
 const labelClass = "text-darkDefault text-base font-normal"
 const inputClass =
@@ -480,7 +617,9 @@ export default function RiskAssessmentForm({
 }: RiskAssessmentFormProps) {
     const t = translations[lang];
     const schema = buildSchema(lang);
-
+    const [cvFile, setCvFile] = useState<File | null>(null);
+    const [cvError, setCvError] = useState<string | undefined>();
+    const [apiErrors, setApiErrors] = useState<ApiError[]>([]);
     const [submitState, setSubmitState] = useState<
         "idle" | "success" | "error"
     >("idle");
@@ -492,6 +631,7 @@ export default function RiskAssessmentForm({
         control,
         handleSubmit,
         reset,
+        watch,
         formState: { errors, isSubmitting },
     } = useForm<RiskAssessmentFormValues>({
         resolver: zodResolver(schema),
@@ -499,47 +639,120 @@ export default function RiskAssessmentForm({
         mode: "onBlur",
     });
 
-    const onSubmit = async (
-        formData: RiskAssessmentFormValues
-    ) => {
+    // Watch the preRiskAssessment field
+    const preRiskAssessmentValue = watch("preRiskAssessment");
+    const isUploadEnabled = preRiskAssessmentValue === "yes";
+
+    const validateFile = (file: File | null): boolean => {
+        if (!file) {
+            setCvError(
+                isArabic ? "يرجى إرفاق السيرة الذاتية" : "Please attach your resume"
+            );
+            return false;
+        }
+        if (file.size > MAX_FILE_SIZE) {
+            setCvError(
+                isArabic
+                    ? "يجب أن يكون حجم الملف أقل من 5 ميجابايت"
+                    : "File must be smaller than 5MB"
+            );
+            return false;
+        }
+        const acceptedTypes = [
+            "application/pdf",
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        ];
+        if (!acceptedTypes.includes(file.type)) {
+            setCvError(
+                isArabic
+                    ? "يُقبل فقط ملفات PDF أو DOC أو DOCX"
+                    : "Only PDF, DOC, and DOCX files are accepted"
+            );
+            return false;
+        }
+        setCvError(undefined);
+        return true;
+    };
+
+    const handleFileSelect = (file: File | null) => {
+        setCvFile(file);
+        if (file) validateFile(file);
+        else setCvError(undefined);
+    };
+
+    const onSubmit = async (formData: RiskAssessmentFormValues) => {
+        setApiErrors([]);
         setSubmitState("idle");
 
         try {
-            const response = await fetch("/api/assessrisk", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    ...formData,
-                    locale: lang,
-                    lang,
-                }),
+            // Create FormData for submission
+            const submitFormData = new FormData();
+
+            // Append form fields
+            submitFormData.append("organizationName", formData.organizationName);
+            submitFormData.append("contactName", formData.contactName);
+            submitFormData.append("email", formData.email);
+            submitFormData.append("position", formData.position);
+            submitFormData.append("telephone", formData.telephone);
+            submitFormData.append("facilityType", formData.facilityType);
+            submitFormData.append("facilitySize", formData.facilitySize);
+            submitFormData.append("projectStage", formData.projectStage);
+            submitFormData.append("emergencyService", formData.emergencyService);
+            submitFormData.append("preRiskAssessment", formData.preRiskAssessment);
+            submitFormData.append("supportRequired", formData.supportRequired);
+
+            // Append arrays
+            formData.hazards.forEach((hazard) => {
+                submitFormData.append("hazards", hazard);
             });
 
-            const result = await response.json().catch(() => null);
+            formData.servicesInterested.forEach((service) => {
+                submitFormData.append("servicesInterested", service);
+            });
+
+            // Append file if it exists
+            if (cvFile) {
+                submitFormData.append("file", cvFile);
+            }
+
+            const response = await fetch("/api/assessrisk", {
+                method: "POST",
+                body: submitFormData,
+            });
+
+            const result = await response.json();
 
             if (!response.ok) {
-                throw new Error(
-                    result?.error || "Failed to submit form"
-                );
+                // Handle validation errors from API
+                if (result.errors && Array.isArray(result.errors)) {
+                    setApiErrors(result.errors);
+                    setSubmitState("error");
+                    setShowModal(true);
+                    return;
+                }
+
+                throw new Error(result.message || "Failed to submit form");
             }
 
             setSubmitState("success");
             setShowModal(true);
             reset(defaultValues);
+            setCvFile(null);
+            setCvError(undefined);
         } catch (error) {
-            console.error(
-                "Risk assessment form error:",
-                error
-            );
-
+            console.error("Risk assessment form error:", error);
             setSubmitState("error");
             setShowModal(true);
         }
     };
 
     const sectionVariants = getSectionVariants(isArabic);
+
+    // Get error message for a specific field
+    const getFieldError = (fieldName: string): string | undefined => {
+        return apiErrors.find(err => err.field === fieldName)?.message;
+    };
 
     return (
         <section
@@ -554,12 +767,16 @@ export default function RiskAssessmentForm({
                 title={
                     submitState === "success"
                         ? t.success
-                        : "Error"
+                        : apiErrors.length > 0
+                            ? "Validation Error"
+                            : "Error"
                 }
                 description={
                     submitState === "success"
                         ? t.successDescription
-                        : t.genericError
+                        : apiErrors.length > 0
+                            ? apiErrors.map(err => err.message).join(", ")
+                            : t.genericError
                 }
                 onClose={() => setShowModal(false)}
             />
@@ -649,10 +866,6 @@ export default function RiskAssessmentForm({
                             )}
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                            {/* Organisation Name */}
-
-
 
                             {/* Contact Name */}
 
@@ -752,8 +965,6 @@ export default function RiskAssessmentForm({
                                     </p>
                                 )}
                             </div>
-
-
 
                             {/* Telephone */}
 
@@ -1174,6 +1385,20 @@ export default function RiskAssessmentForm({
                                 </p>
                             )}
                         </div>
+
+                        {/* File Upload - Only visible when "yes" is selected */}
+                        {isUploadEnabled && (
+                            <div>
+                                <ResumeUpload
+                                    file={cvFile}
+                                    onFileSelect={handleFileSelect}
+                                    error={cvError || getFieldError("file")}
+                                    isArabic={isArabic}
+                                    t={t}
+                                    isEnabled={isUploadEnabled}
+                                />
+                            </div>
+                        )}
                     </motion.section>
 
                     {/* ── Services & Support Required ── */}
