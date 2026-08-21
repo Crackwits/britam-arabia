@@ -55,6 +55,7 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
         ourApproach: 'Our Approach',
         insights: 'Insights',
         lifeAtBritam: 'Life at Britam',
+        contactus: 'Contact Us',
         inquireNow: 'Assess Your Risk',
         menu: 'Menu',
         openMenu: 'Open navigation menu',
@@ -66,6 +67,7 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
         ourApproach: 'نهجنا',
         insights: 'رؤى',
         lifeAtBritam: 'الحياة في بريتام',
+        contactus: 'اتصل بنا',
         inquireNow: 'جدول التقييم',
         menu: 'القائمة',
         openMenu: 'فتح قائمة التنقل',
@@ -88,6 +90,7 @@ const NAV_LINK_KEYS = [
     { key: 'ourApproach', href: '/our-approach' },
     // { key: 'insights', href: '/insights' },
     { key: 'lifeAtBritam', href: '/life-at-britam' },
+    { key: 'contactus', href: '/contact-us' },
 ] as const;
 
 
@@ -225,7 +228,7 @@ export default function Navbar({ activeSection, lang }: Props) {
                     style={{ zIndex: -1 }}
                 />
 
-                <div className="mx-auto flex max-w-7xl [@media(min-width:1600px)]:max-w-none items-center justify-between px-6 py-[14px]">
+                <div className="mx-auto flex max-w-7xl [@media(min-width:1600px)]:max-w-none items-center gap-6 px-6 py-[14px]">
                     <Link
                         href={`/${currentLocale}`}
                         className="relative"
@@ -245,12 +248,28 @@ export default function Navbar({ activeSection, lang }: Props) {
                     <AnimatePresence>
                         {!isMobileMenuOpen && (
                             <motion.div
-                                className="flex items-center gap-8"
+                                className="flex items-center gap-6 lg:gap-8 ml-auto"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 transition={{ duration: 0.15 }}
                             >
+                                {/* Desktop Navigation */}
+                                <nav aria-label="Main navigation" className="hidden lg:flex items-center gap-6">
+                                    <ul className="flex items-center gap-6 list-none p-0 m-0">
+                                        {NAV_LINK_KEYS.map((item) => (
+                                            <li key={item.key}>
+                                                <Link
+                                                    href={withLocale(pathname, item.href)}
+                                                    className={`${isDark ? "text-white hover:opacity-60" : "text-darkDefault hover:opacity-60"} text-sm uppercase tracking-[0.84px] font-medium transition-opacity`}
+                                                >
+                                                    {t(item.key)}
+                                                </Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </nav>
+
                                 <LangToggle />
 
                                 <MotionLink
@@ -267,7 +286,7 @@ export default function Navbar({ activeSection, lang }: Props) {
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
                                     onClick={() => setMenuOpen(true)}
-                                    className={`${isDark ? "text-white" : "text-darkDefault"} flex items-center gap-3 text-sm tracking-[0.84px] uppercase font-medium cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white`}
+                                    className={`${isDark ? "text-white" : "text-darkDefault"} lg:hidden flex items-center gap-3 text-sm tracking-[0.84px] uppercase font-medium cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white`}
                                     aria-label={t('openMenu')}
                                     aria-expanded={isMobileMenuOpen}
                                     aria-controls="mobile-nav-panel"

@@ -180,7 +180,7 @@ export default function WhyChooseUsSection2({
 
             <div className="mx-auto max-w-7xl">
                 {/* Title */}
-                <h2 className="text-navy900 uppercase font-medium tracking-[-1.92px] pb-4 text-4xl sm:text-5xl mb-10">
+                <h2 className="text-navy900 uppercase font-medium tracking-[-0.96px] pb-4 text-4xl sm:text-5xl mb-10">
                     {title}
                 </h2>
 

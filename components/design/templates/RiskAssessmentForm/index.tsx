@@ -117,6 +117,7 @@ const translations = {
         uploadSubtitle: "Acceptable file types: PDF, DOC (5MB max)",
         removeFile: "Remove file",
         uploadNotAvailable: "Please select 'Yes' above to upload your assessment",
+        fileRequired: "Please upload your current fire risk assessment",
 
         sectionServices: "Services & Support Required",
         servicesLabel: "Which services are you interested in?",
@@ -252,6 +253,8 @@ const translations = {
         uploadSubtitle: "أنواع الملفات المقبولة: PDF، DOC (بحد أقصى 5 ميجابايت)",
         removeFile: "حذف الملف",
         uploadNotAvailable: "يرجى اختيار 'نعم' أعلاه لتحميل تقييمك",
+        fileRequired: "يرجى تحميل تقييم مخاطر الحريق الحالي",
+
         sectionServices: "الخدمات والدعم المطلوب",
         servicesLabel: "ما هي الخدمات التي تهمك؟",
         servicesHint: "(اختر كل ما ينطبق)",
@@ -306,6 +309,7 @@ type Locale = keyof typeof translations;
 // ─── Zod Schema ───────────────────────────────────────────────────────────────
 function buildSchema(locale: Locale) {
     const e = translations[locale].errors;
+    const t = translations[locale];
 
     return z.object({
         organizationName: z.string().trim().min(1, e.organizationName),
@@ -329,7 +333,20 @@ function buildSchema(locale: Locale) {
             .array(z.string())
             .min(1, e.servicesInterested),
         supportRequired: z.string().min(1, e.supportRequired),
-    });
+        file: z.any().optional(),
+    }).refine(
+        (data) => {
+            // Only require file if preRiskAssessment is "yes"
+            if (data.preRiskAssessment === "yes") {
+                return data.file !== null && data.file !== undefined;
+            }
+            return true;
+        },
+        {
+            message: t.fileRequired,
+            path: ["file"],
+        }
+    );
 }
 
 type RiskAssessmentFormValues = z.infer<
@@ -352,6 +369,7 @@ const defaultValues: RiskAssessmentFormValues = {
     preRiskAssessment: "",
     servicesInterested: [],
     supportRequired: "",
+    file: null,
 };
 
 // ─── Animation Variants ───────────────────────────────────────────────────────
@@ -544,6 +562,7 @@ function ResumeUpload({ file, onFileSelect, error, isArabic, t, isEnabled }: Res
                 aria-label={t.uploadTitle}
                 aria-describedby="cv-upload-subtext"
                 aria-disabled={!isEnabled}
+                aria-invalid={!!error}
             >
                 <input
                     ref={inputRef}
@@ -632,6 +651,7 @@ export default function RiskAssessmentForm({
         handleSubmit,
         reset,
         watch,
+        setValue,
         formState: { errors, isSubmitting },
     } = useForm<RiskAssessmentFormValues>({
         resolver: zodResolver(schema),
@@ -645,9 +665,7 @@ export default function RiskAssessmentForm({
 
     const validateFile = (file: File | null): boolean => {
         if (!file) {
-            setCvError(
-                isArabic ? "يرجى إرفاق السيرة الذاتية" : "Please attach your resume"
-            );
+            setCvError(t.fileRequired);
             return false;
         }
         if (file.size > MAX_FILE_SIZE) {
@@ -677,6 +695,7 @@ export default function RiskAssessmentForm({
 
     const handleFileSelect = (file: File | null) => {
         setCvFile(file);
+        setValue("file", file);
         if (file) validateFile(file);
         else setCvError(undefined);
     };
@@ -1392,7 +1411,7 @@ export default function RiskAssessmentForm({
                                 <ResumeUpload
                                     file={cvFile}
                                     onFileSelect={handleFileSelect}
-                                    error={cvError || getFieldError("file")}
+                                    error={cvError || (errors.file?.message as string | undefined) || getFieldError("file")}
                                     isArabic={isArabic}
                                     t={t}
                                     isEnabled={isUploadEnabled}
