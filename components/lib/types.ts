@@ -15,6 +15,7 @@ export interface StrapiSEO {
             };
         };
     };
+    schema_markup?: Record<string, unknown>;
     structuredData?: Record<string, unknown>;
 }
 

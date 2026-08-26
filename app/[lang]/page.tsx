@@ -3,7 +3,7 @@ import { getSingleType, getCollection } from "@/components/lib/api";
 import { buildMetadata } from "@/components/lib/seo";
 import type { Capabilities, GlobalSettingAttributes, HomePageAttributes } from "@/components/lib/types";
 import HomeTemplate from "@/components/design/templates/Home";
-
+import JsonLd from "@/components/lib/jsonld";
 type Params = Promise<{ lang: string }>; // ← add this
 
 export async function generateMetadata({
@@ -40,6 +40,7 @@ export default async function HomePage({ params }: { params: Params }) {
       kpis: true,
       testimonials: true,
       critical_projects: { populate: "*" },
+      seo: { populate: "*" },
     });
 
   if (!page) {
@@ -48,6 +49,7 @@ export default async function HomePage({ params }: { params: Params }) {
 
   return (
     <>
+      <JsonLd data={page.seo?.schema_markup} />
       <HomeTemplate homedata={page} capabilities={capabilities} globalSettings={globalsettings} lang={lang} />
     </>
   );
