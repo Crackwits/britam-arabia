@@ -1,2 +1,4 @@
 export const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL ?? "https://cms.britamarabia.com";
+export const SITE_URL = process.env.NEXT_PUBLIC_STRAPI_URL ?? "https://staging.britamarabia.com";
+export const SITE_NAME = process.env.NEXT_PUBLIC_STRAPI_URL ?? "Britam Arabia";
 export const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN ?? "e4d591e7017f236558dbb8b4196b38af0b12e38da0223d7257fce57135d2f46f244294b621cf124af60b8c2340ec0dcc5341a653193e5e7a6b85e7efe53c8fd55f72e9ad442d77be27580207b7bbe6792e4b74864c7b336fc00d68e4baf540845cdfc4d8319079e9043fa49f0394ada352a0d7fb89361ce264f5bb1016d7f745";
