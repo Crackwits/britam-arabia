@@ -3,7 +3,7 @@ import { getSingleType, getCollection } from "@/components/lib/api";
 import { buildMetadata } from "@/components/lib/seo";
 import type { FAQAttributes } from "@/components/lib/types";
 import FAQTemplate from "@/components/design/templates/FaqTemplate";
-
+import JsonLd from "@/components/lib/jsonld";
 type Params = Promise<{ lang: string }>; // ← add this
 
 export async function generateMetadata({
@@ -21,13 +21,19 @@ export async function generateMetadata({
 
 export default async function FAQ({ params }: { params: Params }) {
     const { lang } = await params;
-    const page = await getSingleType<FAQAttributes>("faq", lang);
+    const page = await getSingleType<FAQAttributes>("faq", lang, {
+        faqs: { populate: "*" },
+        seo: { populate: "*" },
+    });
 
     if (!page) {
         return <main><p>Content not available.</p></main>;
     }
 
     return (
-        <FAQTemplate data={page} lang={lang} />
+        <>
+            <JsonLd data={page.seo?.schema_markup} />
+            <FAQTemplate data={page} lang={lang} />
+        </>
     );
 }

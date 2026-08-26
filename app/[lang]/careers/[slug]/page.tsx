@@ -5,7 +5,7 @@ import type { CareersAttributes } from "@/components/lib/types";
 import CapabilitiesTemplate from "@/components/design/templates/CapabilitiesTemplate";
 import { notFound } from "next/navigation";
 import CareersTemplate from "@/components/design/templates/CareersTemplate";
-
+import JsonLd from "@/components/lib/jsonld";
 // ── Both dynamic segments are in params ───────────────────────────────────────
 type Params = Promise<{ lang: string; slug: string }>;
 
@@ -48,7 +48,7 @@ export async function generateMetadata({
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
-export default async function CriticalEnvironmentPage({
+export default async function CareersDetail({
     params,
 }: {
     params: Params;
@@ -66,5 +66,8 @@ export default async function CriticalEnvironmentPage({
 
     if (!page) notFound(); // renders app/not-found.tsx
 
-    return <CareersTemplate data={page} lang={lang} />;
+    return <>
+        <JsonLd data={page.seo?.schema_markup} />
+        <CareersTemplate data={page} lang={lang} />
+    </>
 }

@@ -4,7 +4,7 @@ import { buildMetadata } from "@/components/lib/seo";
 import type { Capabilities } from "@/components/lib/types";
 import CapabilitiesTemplate from "@/components/design/templates/CapabilitiesTemplate";
 import { notFound } from "next/navigation";
-
+import JsonLd from "@/components/lib/jsonld";
 // ── Both dynamic segments are in params ───────────────────────────────────────
 type Params = Promise<{ lang: string; slug: string }>;
 
@@ -52,7 +52,7 @@ export async function generateMetadata({
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
-export default async function CriticalEnvironmentPage({
+export default async function CapabilitiesDetail({
     params,
 }: {
     params: Params;
@@ -75,5 +75,8 @@ export default async function CriticalEnvironmentPage({
 
     if (!page) notFound(); // renders app/not-found.tsx
 
-    return <CapabilitiesTemplate data={page} lang={lang} />;
+    return <>
+        <JsonLd data={page.seo?.schema_markup} />
+        <CapabilitiesTemplate data={page} lang={lang} />
+    </>
 }

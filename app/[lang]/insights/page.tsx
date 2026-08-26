@@ -3,7 +3,7 @@ import { getCollection, getSingleType } from "@/components/lib/api";
 import { buildMetadata } from "@/components/lib/seo";
 import type { InsightHeroAttributes, InsightsAttributes } from "@/components/lib/types";
 import InsightsTemplate from "@/components/design/templates/InsightsTemplate";
-
+import JsonLd from "@/components/lib/jsonld";
 type Params = Promise<{ lang: string }>; // ← add this
 
 export async function generateMetadata({
@@ -24,11 +24,12 @@ export default async function Insights({ params }: { params: Params }) {
     const data = await getCollection<InsightsAttributes>("insights", lang,
         {
             thumbnail: true,
-            cover:true,
+            cover: true,
         });
     const page = await getSingleType<InsightHeroAttributes>("insight-hero", lang,
         {
             image: true,
+            seo: { populate: "*" },
 
         });
 
@@ -38,6 +39,7 @@ export default async function Insights({ params }: { params: Params }) {
 
     return (
         <>
+            <JsonLd data={page.seo?.schema_markup} />
             <InsightsTemplate herodata={page} data={data} lang={lang} />
         </>
     );

@@ -3,7 +3,7 @@ import { getCollection, getSingleType } from "@/components/lib/api";
 import { buildMetadata } from "@/components/lib/seo";
 import type { CareersAttributes, LifeAtBritamAttributes } from "@/components/lib/types";
 import LifeAtBritamTemplate from "@/components/design/templates/LifeAtBritamTemplate";
-
+import JsonLd from "@/components/lib/jsonld";
 
 type Params = Promise<{ lang: string }>; // ← add this
 
@@ -29,6 +29,7 @@ export default async function LifeAtBritam({ params }: { params: Params }) {
             section1_image: true,
             section2_image: true,
             why_join_us: { populate: "*" },
+            seo: { populate: "*" },
         });
 
     if (!page) {
@@ -37,6 +38,7 @@ export default async function LifeAtBritam({ params }: { params: Params }) {
 
     return (
         <>
+            <JsonLd data={page.seo?.schema_markup} />
             <LifeAtBritamTemplate data={page} careers={careers} lang={lang} />
         </>
     );

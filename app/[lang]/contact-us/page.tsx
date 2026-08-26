@@ -3,6 +3,7 @@ import { getSingleType, getCollection } from "@/components/lib/api";
 import { buildMetadata } from "@/components/lib/seo";
 import type { GlobalSettingAttributes, ContactusAttributes } from "@/components/lib/types";
 import ContactUsTemplate from "@/components/design/templates/ContactUsTemplate";
+import JsonLd from "@/components/lib/jsonld";
 
 type Params = Promise<{ lang: string }>; // ← add this
 
@@ -24,7 +25,9 @@ export default async function ContactUs({ params }: { params: Params }) {
 
     const globalsettings = await getSingleType<GlobalSettingAttributes>("global-setting", lang);
 
-    const page = await getSingleType<ContactusAttributes>("contactus", lang);
+    const page = await getSingleType<ContactusAttributes>("contactus", lang, {
+        seo: { populate: "*" },
+    });
 
     if (!page) {
         return <main><p>Content not available.</p></main>;
@@ -32,6 +35,8 @@ export default async function ContactUs({ params }: { params: Params }) {
 
     return (
         <>
+            <JsonLd data={page.seo?.schema_markup} />
+
             <ContactUsTemplate data={page} globalsettings={globalsettings} lang={lang} />
         </>
     );

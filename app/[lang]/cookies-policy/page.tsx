@@ -3,7 +3,7 @@ import { getSingleType, getCollection } from "@/components/lib/api";
 import { buildMetadata } from "@/components/lib/seo";
 import type { CookiePolicyAttributes } from "@/components/lib/types";
 import CookiesPolicyTemplate from "@/components/design/templates/CookiesPolicyTemplate";
-
+import JsonLd from "@/components/lib/jsonld";
 type Params = Promise<{ lang: string }>; // ← add this
 
 export async function generateMetadata({
@@ -21,7 +21,9 @@ export async function generateMetadata({
 
 export default async function CookiesPolicy({ params }: { params: Params }) {
     const { lang } = await params;
-    const page = await getSingleType<CookiePolicyAttributes>("cookies-policy", lang);
+    const page = await getSingleType<CookiePolicyAttributes>("cookies-policy", lang, {
+        seo: { populate: "*" },
+    });
 
     if (!page) {
         return <main><p>Content not available.</p></main>;
@@ -29,6 +31,7 @@ export default async function CookiesPolicy({ params }: { params: Params }) {
 
     return (
         <>
+            <JsonLd data={page.seo?.schema_markup} />
             <CookiesPolicyTemplate data={page} lang={lang} />
         </>
     );

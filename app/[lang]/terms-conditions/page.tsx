@@ -3,7 +3,7 @@ import { getSingleType, getCollection } from "@/components/lib/api";
 import { buildMetadata } from "@/components/lib/seo";
 import type { PrivacyPolicyAttributes, TermsAndConditionsAttributes } from "@/components/lib/types";
 import TermsConditionsTemplate from "@/components/design/templates/TermsConditionsTemplate";
-
+import JsonLd from "@/components/lib/jsonld";
 type Params = Promise<{ lang: string }>; // ← add this
 
 export async function generateMetadata({
@@ -21,7 +21,9 @@ export async function generateMetadata({
 
 export default async function TermsConditions({ params }: { params: Params }) {
     const { lang } = await params;
-    const page = await getSingleType<TermsAndConditionsAttributes>("terms-and-condition", lang);
+    const page = await getSingleType<TermsAndConditionsAttributes>("terms-and-condition", lang, {
+        seo: { populate: "*" },
+    });
 
     if (!page) {
         return <main><p>Content not available.</p></main>;
@@ -29,6 +31,7 @@ export default async function TermsConditions({ params }: { params: Params }) {
 
     return (
         <>
+            <JsonLd data={page.seo?.schema_markup} />
             <TermsConditionsTemplate data={page} lang={lang} />
         </>
     );

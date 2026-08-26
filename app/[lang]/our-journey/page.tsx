@@ -4,7 +4,7 @@ import { buildMetadata } from "@/components/lib/seo";
 import type { CriticalEnvironments, OurJourneyAttributes } from "@/components/lib/types";
 import HomeTemplate from "@/components/design/templates/Home";
 import OurJourneyTemplate from "@/components/design/templates/OurJourney";
-
+import JsonLd from "@/components/lib/jsonld";
 type Params = Promise<{ lang: string }>; // ← add this
 
 export async function generateMetadata({
@@ -34,6 +34,7 @@ export default async function OurJourney({ params }: { params: Params }) {
             section4_image: true,
             team_members: { populate: "*" },
             operations_team: { populate: "*" },
+            seo: { populate: "*" },
         });
 
     if (!page) {
@@ -42,6 +43,7 @@ export default async function OurJourney({ params }: { params: Params }) {
 
     return (
         <>
+            <JsonLd data={page.seo?.schema_markup} />
             <OurJourneyTemplate ourJourneydata={page} critical_environments={critical_environments} lang={lang} />
         </>
     );

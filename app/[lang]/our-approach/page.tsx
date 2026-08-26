@@ -3,7 +3,7 @@ import { getCollection, getSingleType } from "@/components/lib/api";
 import { buildMetadata } from "@/components/lib/seo";
 import type { Capabilities, OurApproachAttributes } from "@/components/lib/types";
 import OurApproachTemplate from "@/components/design/templates/OurApproachTemplate";
-
+import JsonLd from "@/components/lib/jsonld";
 type Params = Promise<{ lang: string }>; // ← add this
 
 export async function generateMetadata({
@@ -32,7 +32,7 @@ export default async function OurApproach({ params }: { params: Params }) {
             section2_content: { populate: "*" },
             section3_steps: { populate: "*" },
             measurable_impacts: { populate: "*" },
-
+            seo: { populate: "*" },
         });
 
     if (!page) {
@@ -41,6 +41,7 @@ export default async function OurApproach({ params }: { params: Params }) {
 
     return (
         <>
+            <JsonLd data={page.seo?.schema_markup} />
             <OurApproachTemplate data={page} capabilities={capabilities} lang={lang} />
         </>
     );

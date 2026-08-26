@@ -4,7 +4,7 @@ import { buildMetadata } from "@/components/lib/seo";
 import type { CriticalEnvironments } from "@/components/lib/types";
 import CriticalEnvironmentTemplate from "@/components/design/templates/CriticalEnvironmentTemplate";
 import { notFound } from "next/navigation";
-
+import JsonLd from "@/components/lib/jsonld";
 // ── Both dynamic segments are in params ───────────────────────────────────────
 type Params = Promise<{ lang: string; slug: string }>;
 
@@ -61,10 +61,16 @@ export default async function CriticalEnvironmentPage({
         lang,
         {
             cover: true,  // populate cover image relation
+            seo: { populate: "*" },
         }
     );
 
     if (!page) notFound(); // renders app/not-found.tsx
 
-    return <CriticalEnvironmentTemplate data={page} lang={lang} />;
+    return (
+        <>
+            <JsonLd data={page.seo?.schema_markup} />
+            <CriticalEnvironmentTemplate data={page} lang={lang} />;
+        </>
+    );
 }

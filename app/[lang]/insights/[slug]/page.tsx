@@ -4,6 +4,7 @@ import { buildMetadata } from "@/components/lib/seo";
 import type { InsightsAttributes } from "@/components/lib/types";
 import { notFound } from "next/navigation";
 import InsightDetailTemplate from "@/components/design/templates/InsightDetailTemplate";
+import JsonLd from "@/components/lib/jsonld";
 // ── Both dynamic segments are in params ───────────────────────────────────────
 type Params = Promise<{ lang: string; slug: string }>;
 
@@ -69,10 +70,16 @@ export default async function InsightDetailPage({
         lang,
         {
             cover: true,  // populate cover image relation
+            seo: { populate: "*"},
         }
     );
 
     if (!page) notFound(); // renders app/not-found.tsx
 
-    return <InsightDetailTemplate data={page} relatedinsights={relatedinsights} lang={lang} />;
+    return (
+        <>
+            <JsonLd data={page.seo?.schema_markup} />
+            <InsightDetailTemplate data={page} relatedinsights={relatedinsights} lang={lang} />;
+        </>
+    );
 }
