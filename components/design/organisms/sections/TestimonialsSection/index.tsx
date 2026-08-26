@@ -80,7 +80,7 @@ function TestimonialCard({ item, index, isArabic }: CardProps) {
                     transition={{ duration: 0.3, ease: "easeOut" }}
                     className="mb-3 block h-[2px] bg-[#ED0000]"
                 />
-                <span className="text-base text-darkDefault">{item.title}</span>
+                <span className="text-base text-darkDefault font-medium">{item.title}</span>
             </div>
         </motion.article>
     );
