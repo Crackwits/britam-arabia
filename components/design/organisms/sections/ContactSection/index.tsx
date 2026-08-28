@@ -37,7 +37,6 @@ const translations = {
             "Government",
             "Corporate",
             "Projects",
-            "Careers",
         ],
         errors: {
             inquiryType: "Please select an inquiry type",
@@ -64,7 +63,6 @@ const translations = {
             "الحكومة",
             "الشركات",
             "المشاريع",
-            "الوظائف",
         ],
         errors: {
             inquiryType: "يرجى اختيار نوع الاستفسار",

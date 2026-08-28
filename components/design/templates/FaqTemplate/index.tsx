@@ -49,22 +49,23 @@ export default function FAQTemplate({ data, lang, allowMultipleOpen = false, def
             <Navbar activeSection={activeSection} lang={lang} />
             <section ref={pagecontentRef} id="pagecontent" aria-labelledby="faq-heading" className='pt-21'>
                 <div className="pb-20 px-4 w-full bg-white pt-15 overflow-hidden">
-                    <div className="max-w-5xl mx-auto">
+                    <div className="max-w-7xl mx-auto">
                         <div>
-                            {data.subtitle && (
-                                <p className="font-base text-darkLight pb-3">
-                                    {data.subtitle}
-                                </p>
-                            )}
+                            
                             {data.title && (
-                                <h1 className="font-medium text-darkDefault max-w-4xl pb-12 tracking-[-0.96px] text-4xl sm:text-4xl lg:text-5xl">
+                                <h1 className="font-medium text-darkDefault max-w-4xl pb-3 tracking-[-0.96px] text-4xl sm:text-4xl lg:text-5xl">
                                     {data.title}
                                 </h1>
+                            )}
+                            {data.subtitle && (
+                                <p className="font-lg text-darkLight pb-12">
+                                    {data.subtitle}
+                                </p>
                             )}
                         </div>
 
 
-                        <div className="border-t border-neutralLight">
+                        <div className="max-w-5xl w-full mx-auto">
                             {faqs.map((item) => (
                                 <FAQItem
                                     key={item.id}

@@ -137,7 +137,7 @@ export default function HomeTemplate({ homedata, capabilities, globalSettings, l
                 <HeroBanner homedata={homedata} />
             </section>
             <section ref={partnershipRef} id="partnership">
-                <PartnershipBanner homedata={homedata} />
+                {/* <PartnershipBanner homedata={homedata} /> */}
 
             </section>
             <section ref={resiliencesystemRef} id="resiliencesystem">

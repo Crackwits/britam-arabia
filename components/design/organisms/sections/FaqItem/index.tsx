@@ -1,9 +1,9 @@
 'use client';
 
-import { WhatYouGetItem } from "@/components/lib/types";
+import { QuestionAnswer } from "@/components/lib/types";
 
 interface FAQItemProps {
-    item: WhatYouGetItem;
+    item: QuestionAnswer;
     isArabic:boolean;
     isOpen: boolean;
     onToggle: (id: number) => void;
@@ -14,7 +14,8 @@ export default function FAQItem({ item,isArabic, isOpen, onToggle }: FAQItemProp
     const buttonId = `faq-trigger-${item.id}`;
 
     return (
-        <div className="border-b border-neutralLight last:border-b-0">
+        <div className="border-b border-neutralLighter "> 
+        {/* last:border-b-0 */}
             <h3>
                 <button
                     id={buttonId}
@@ -22,14 +23,14 @@ export default function FAQItem({ item,isArabic, isOpen, onToggle }: FAQItemProp
                     onClick={() => onToggle(item.id)}
                     aria-expanded={isOpen}
                     aria-controls={panelId}
-                    className="flex w-full justify-between gap-6 py-5"
+                    className="flex w-full justify-between gap-6 py-6"
                 >
-                    <h3 className={`${isArabic ? "text-right" : "text-left"} text-2xl  font-medium text-richNavy tracking-[-0.48px] pb-2`}>
-                        {item.title}
+                    <h3 className={`${isArabic ? "text-right" : "text-left"} text-lg  font-medium text-darkDefault pb-2`}>
+                        {item.question}
                     </h3>
                     <span
                         aria-hidden="true"
-                        className="flex h-7 w-7 flex-none items-center justify-center rounded-full border border-neutralLight text-neutralLight transition-transform duration-300 ease-out"
+                        className="flex h-7 w-7 flex-none items-center justify-center text-neutral900 transition-transform duration-300 ease-out"
                         style={{ transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)' }}
                     >
                         <svg viewBox="0 0 24 24" fill="none" className="h-3.5 w-3.5" strokeWidth={2} stroke="currentColor">
@@ -47,11 +48,15 @@ export default function FAQItem({ item,isArabic, isOpen, onToggle }: FAQItemProp
                     }`}
             >
                 <div className="overflow-hidden">
-                    <p
+                    {/* <p
                         className={`${isArabic ? "text-right" : "text-left"} pb-5 text-sm font-medium tracking-[0.84px] text-darkLight`}>
 
-                        {item.description}
-                    </p>
+                        {item.answer}
+                    </p> */}
+                    <div
+                        className={`${isArabic ? "text-right" : "text-left"} faq-answer pb-5 text-base text-darkDefault`}
+                        dangerouslySetInnerHTML={{ __html: item.answer }}
+                    />
                 </div>
             </div>
         </div>

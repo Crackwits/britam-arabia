@@ -88,7 +88,11 @@ export interface WhatYouGetItem {
     description: string;
     icon: CoverType;
 }
-
+export interface QuestionAnswer {
+    id: number;
+    question: string;
+    answer: string;
+}
 export interface MediaItem {
     id: number;
     title: string;
@@ -333,5 +337,5 @@ export interface CookiePolicyAttributes extends StrapiAttributes{
 export interface FAQAttributes extends StrapiAttributes{
     title: string;
     subtitle: string;
-    faqs: WhatYouGetItem[];
+    faqs: QuestionAnswer[];
 }

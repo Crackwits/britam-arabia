@@ -300,24 +300,32 @@ body {
   letter-spacing: -0.48px;
 }
 
+.faq-answer ul:not(.todo-list) {
+  list-style-type: disc;
+  margin-bottom: 15px;
+}
+
 .legal-content ul:not(.todo-list),
 .project-content ul:not(.todo-list) {
   list-style-type: disc;
   margin-bottom: 36px;
 }
 
+.faq-answer ol,
 .legal-content ol,
 .project-content ol {
   list-style-type: decimal;
   margin-bottom: 36px;
 }
 
+.faq-answer ol li:not(:last-child),
 .legal-content ol li:not(:last-child),
 .project-content ol li:not(:last-child) {
   margin-bottom: 0.5rem;
 }
 
 /* Directional padding — shared amount, side depends on dir */
+[dir="rtl"] .faq-answer ul:not(.todo-list),
 [dir="rtl"] .project-content ul:not(.todo-list),
 [dir="rtl"] .legal-content ul:not(.todo-list),
 [dir="rtl"] .legal-content ol,
@@ -325,6 +333,7 @@ body {
   padding-right: 1rem;
 }
 
+[dir="ltr"] .faq-answer ul:not(.todo-list),
 [dir="ltr"] .project-content ul:not(.todo-list),
 [dir="ltr"] .legal-content ul:not(.todo-list),
 [dir="ltr"] .legal-content ol,
@@ -436,14 +445,38 @@ body {
   border-style: solid;
 }
 
+.faq-answer p {
+  color: var(--color-darkDefault);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  padding-bottom: 15px;
+}
+
+.faq-answer li {
+  color: var(--color-darkDefault);
+  margin-bottom: 5px;
+}
+
 [dir="rtl"] .ck-prose li {
   border-right-width: 2px;
   padding-right: 8px;
 }
 
+[dir="rtl"] .faq-answer li {
+  /* border-right-width: 2px; */
+  padding-right: 10px;
+}
+
 [dir="ltr"] .ck-prose li {
   border-left-width: 2px;
   padding-left: 8px;
+}
+
+[dir="ltr"] .faq-answer li {
+  /* border-left-width: 2px; */
+  padding-left: 10px;
 }
 
 [dir="rtl"] .ck-prose blockquote,
