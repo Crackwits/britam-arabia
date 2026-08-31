@@ -45,7 +45,7 @@ export default function HomeTemplate({ homedata, capabilities, globalSettings, l
     useEffect(() => {
         const observerOptions = {
             root: null, // viewport
-            rootMargin: '-50% 0px -50% 0px', // trigger when section is in center
+            rootMargin: '-40% 0px -40% 0px', // trigger when section is in center
             // rootMargin: '0px 0px 100px 0px',
             threshold: 0 // 0 = any pixel visible, 1 = entire element visible
         };
