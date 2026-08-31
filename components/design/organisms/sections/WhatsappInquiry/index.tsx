@@ -34,7 +34,7 @@ const translations = {
         headerNote: "We'll get back to you shortly",
         subtitle: 'How can we help you?',
         newBusiness: 'New Business',
-        businessDesc: 'Inquire about our products and services',
+        businessDesc: 'Inquire about our services',
         recruitment: 'Recruitment',
         recruitmentDesc: 'Explore career opportunities with us',
         closeBtn: 'Close',
