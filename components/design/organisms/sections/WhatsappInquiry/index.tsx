@@ -1,7 +1,6 @@
 'use client';
 
 import React, {
-    useCallback,
     useEffect,
     useRef,
     useState,
@@ -9,6 +8,7 @@ import React, {
     type ReactNode,
 } from 'react';
 import { createPortal } from 'react-dom';
+import { useWhatsAppInquiry } from '../WhatsAppInquiryProvider';
 
 type Language = 'en' | 'ar';
 type InquiryIcon = 'lightning' | 'people';
@@ -66,19 +66,18 @@ const WhatsAppInquiry: React.FC<WhatsAppInquiryProps> = ({
     showBadge = false,
     hideAfterDelay = null,
 }) => {
-    const [isOpen, setIsOpen] = useState(false);
+    // Open state lives in the provider so the footer icon can trigger the same dialog
+    const { isOpen, open, close } = useWhatsAppInquiry();
+
     const [isButtonVisible, setIsButtonVisible] = useState(true);
     const [isMounted, setIsMounted] = useState(false);
 
-    const triggerRef = useRef<HTMLButtonElement>(null);
     const closeRef = useRef<HTMLButtonElement>(null);
     const dialogRef = useRef<HTMLDivElement>(null);
 
     const isArabic = language === 'ar';
     const direction = isArabic ? 'rtl' : 'ltr';
     const t = translations[language];
-
-    const close = useCallback(() => setIsOpen(false), []);
 
     // Portal target is only available on the client
     useEffect(() => setIsMounted(true), []);
@@ -106,13 +105,10 @@ const WhatsAppInquiry: React.FC<WhatsAppInquiryProps> = ({
         };
     }, [isOpen]);
 
-    // Move focus into the dialog, and back to the trigger when it closes
+    // Move focus into the dialog. Returning focus to whatever opened it
+    // (floating button or footer icon) is handled by the provider.
     useEffect(() => {
-        if (isOpen) {
-            closeRef.current?.focus();
-        } else if (document.activeElement === document.body) {
-            triggerRef.current?.focus();
-        }
+        if (isOpen) closeRef.current?.focus();
     }, [isOpen]);
 
     // Keep Tab focus inside the dialog
@@ -136,7 +132,8 @@ const WhatsAppInquiry: React.FC<WhatsAppInquiryProps> = ({
         }
     };
 
-    // Auto-hide the launcher, but never while the dialog is open
+    // Auto-hide the launcher, but never while the dialog is open.
+    // The footer icon keeps working after the launcher disappears.
     useEffect(() => {
         if (!hideAfterDelay || isOpen) return;
 
@@ -227,9 +224,8 @@ const WhatsAppInquiry: React.FC<WhatsAppInquiryProps> = ({
         <>
             {isButtonVisible && (
                 <button
-                    ref={triggerRef}
                     type="button"
-                    onClick={() => setIsOpen(true)}
+                    onClick={open}
                     aria-label={t.buttonLabel}
                     aria-haspopup="dialog"
                     aria-expanded={isOpen}

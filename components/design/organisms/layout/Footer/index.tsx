@@ -9,7 +9,7 @@ import IOSH from "@/public/clients/iosh.png";
 import Nebosh from "@/public/clients/nebosh.png";
 import FireService from "@/public/clients/fireservicecollege.png";
 import BritamLogoLight from '@/public/Britam-logo-light.svg';
-
+import { useWhatsAppInquiry } from '../../sections/WhatsAppInquiryProvider';
 import { FACEBOOK_URL, INSTAGRAM_URL, TWITTER_URL, LINKEDIN_URL, YOUTUBE_URL, WHATSAPP_URL } from "@/utils/consts";
 
 const socialLinks = [
@@ -91,7 +91,7 @@ function withLocale(lang: string, path: string): string {
 
 export default function FooterSection({ lang, isArabic }: FooterSectionProps) {
     const year = new Date().getFullYear();
-
+    const { open } = useWhatsAppInquiry();
     return (
         <footer
 
@@ -176,7 +176,7 @@ export default function FooterSection({ lang, isArabic }: FooterSectionProps) {
 
                 <div className='md:order-2 order-1 pb-12 md:pb-0'>
                     {/* Social icons */}
-                    <div className="flex items-center gap-3 ">
+                    {/* <div className="flex items-center gap-3 ">
                         {socialLinks.map((social) => (
                             <a
                                 key={social.label}
@@ -193,6 +193,44 @@ export default function FooterSection({ lang, isArabic }: FooterSectionProps) {
                                 <SocialIcon type={social.icon} />
                             </a>
                         ))}
+                    </div> */}
+                    <div className="flex items-center gap-3">
+                        {socialLinks.map((social) => {
+                            const iconClasses = `
+            flex h-9 w-9 items-center justify-center rounded-full border-[0.5px]
+            border-darkDefault text-white transition-colors duration-200
+            hover:bg-white/20 focus-visible:outline-none
+            focus-visible:ring-2 focus-visible:ring-white/60
+        `;
+
+                            if (social.icon === 'wt') {
+                                return (
+                                    <button
+                                        key={social.label}
+                                        type="button"
+                                        onClick={open}
+                                        aria-haspopup="dialog"
+                                        aria-label={isArabic ? 'فتح استفسار واتساب' : 'Open WhatsApp inquiry'}
+                                        className={`${iconClasses} bg-transparent p-0`}
+                                    >
+                                        <SocialIcon type={social.icon} />
+                                    </button>
+                                );
+                            }
+
+                            return (
+                                <a
+                                    key={social.label}
+                                    href={social.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label={social.label}
+                                    className={iconClasses}
+                                >
+                                    <SocialIcon type={social.icon} />
+                                </a>
+                            );
+                        })}
                     </div>
                 </div>
 

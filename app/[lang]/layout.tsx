@@ -6,6 +6,7 @@ import { Noto_Kufi_Arabic } from 'next/font/google';
 import '../globals.css';
 import FooterSection from "@/components/design/organisms/layout/Footer";
 import WhatsAppInquiry from "@/components/design/organisms/sections/WhatsappInquiry";
+import { WhatsAppInquiryProvider } from "@/components/design/organisms/sections/WhatsAppInquiryProvider";
 // const montserrat = Montserrat({ subsets: ['latin'], variable: '--font-en' });
 const notoKufiArabic = Noto_Kufi_Arabic({ subsets: ['arabic'], variable: '--font-ar' });
 
@@ -87,15 +88,13 @@ export default async function RootLayout({
       className={`${gotham.variable} ${notoKufiArabic.variable}`}
     >
       <body className={isArabic ? 'font-ar' : 'font-en'}>
-        <WhatsAppInquiry
-          businessPhone="966551765460"
-          recruitmentPhone="966138962802"
-          language={language}
-        />
-        <SmoothScrollProvider duration={1.4} wheelMultiplier={0.8}>
-          {children}
-        </SmoothScrollProvider>
-        <FooterSection lang={lang} isArabic={isArabic} />
+        <WhatsAppInquiryProvider>
+          <SmoothScrollProvider duration={1.4} wheelMultiplier={0.8}>
+            {children}
+          </SmoothScrollProvider>
+          <FooterSection lang={lang} isArabic={isArabic} />
+          <WhatsAppInquiry language={language} businessPhone="966551765460" recruitmentPhone="966138962802" />
+        </WhatsAppInquiryProvider>
       </body>
     </html>
   );
