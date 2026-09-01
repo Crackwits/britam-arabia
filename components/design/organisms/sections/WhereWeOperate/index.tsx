@@ -169,7 +169,7 @@ export default function WhereWeOperate({
                     100% { transform: translateX(-50%); }
                 }
                 .marquee-track {
-                    animation: marquee-scroll 30s linear infinite;
+                    animation: marquee-scroll 90s linear infinite;
                     animation-play-state: paused;
                 }
                 .marquee-track.active {

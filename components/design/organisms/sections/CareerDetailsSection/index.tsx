@@ -320,7 +320,7 @@ export default function CareerDetailsSection({
             dir={isArabic ? "rtl" : "ltr"}
             className={`w-full bg-white ${isArabic ? "rtl text-right" : "ltr text-left"}`}
         >
-            <div className="max-w-5xl mx-auto px-4 pt-15">
+            <div className="max-w-7xl mx-auto px-4 pt-15">
                 {/* ── Section 1: Job Details ── */}
                 <motion.div
                     variants={headerVariants}
@@ -347,12 +347,13 @@ export default function CareerDetailsSection({
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: "-60px 0px" }}
-                    className="project-content pt-12"
+                    className="project-content pt-6 max-w-5xl w-full"
                     dangerouslySetInnerHTML={{ __html: career.content }}
                 />
-
+            </div>
+            <div className="max-w-5xl mx-auto px-4 pt-8">
                 {/* ── Divider ── */}
-                <div className="border-t border-neutralLighter my-20" />
+                {/* <div className="border-t border-neutralLighter my-20" /> */}
 
                 {/* ── Section 2: Apply Form ── */}
                 <motion.div
@@ -361,7 +362,7 @@ export default function CareerDetailsSection({
                     whileInView="visible"
                     viewport={{ once: true, margin: "-60px 0px" }}
                 >
-                    <div
+                    {/* <div
                         className="inline-flex items-center gap-2 mb-4"
                         aria-hidden="false"
                     >
@@ -371,13 +372,12 @@ export default function CareerDetailsSection({
                         </span>
                     </div>
 
-                    {/* Main heading */}
                     <h2
                         id="our-approach-heading"
                         className="text-navy900 font-medium tracking-[-1.92px] text-4xl sm:text-4xl lg:text-5xl max-w-5xl w-full pb-14"
                     >
                         {t.joinHeading}
-                    </h2>
+                    </h2> */}
                     <form
                         onSubmit={handleSubmit(onSubmit)}
                         noValidate
