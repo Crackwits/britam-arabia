@@ -224,6 +224,15 @@ body {
    ═══════════════════════════════════════════════════════════════════════ */
 
 /* ── project-content ─────────────────────────────────────────────────── */
+/* select option {
+  color: var(--color-darkDefault);
+  font-size: var(--text-base);
+  line-height: var(--text-base--line-height);
+  font-style: normal;
+  font-weight: 400;
+  padding-bottom: 10px;
+} */
+
 .memberbio p {
   color: var(--color-darkLight);
   font-size: var(--text-base);
