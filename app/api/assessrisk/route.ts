@@ -255,7 +255,7 @@ Submitted at: ${new Date().toLocaleString()}
 
         await transporter.sendMail({
             from: process.env.SMTP_USER,
-            to: process.env.HR_EMAIL,
+            to: process.env.HR_CAREERS_EMAIL,
             replyTo: data.email,
             subject: `New Risk Assessment Submission from ${data.contactName}`,
             text: textContent,
@@ -287,7 +287,7 @@ Submitted at: ${new Date().toLocaleString()}
         await transporter.sendMail({
             from: process.env.SMTP_USER,
             to: data.email,
-            replyTo: process.env.HR_EMAIL,
+            replyTo: process.env.HR_INFO_EMAIL,
             subject: 'Risk Assessment Received - Thank You',
             html: confirmationEmailContent,
             text: confirmationEmailContent.replace(/<[^>]*>/g, ''),

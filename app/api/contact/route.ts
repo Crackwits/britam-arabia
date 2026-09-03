@@ -65,7 +65,7 @@ ${message}
 
         await transporter.sendMail({
             from: process.env.SMTP_USER,
-            to: process.env.HR_EMAIL,
+            to: process.env.HR_INFO_EMAIL,
             replyTo: email,
             subject: `BRITAM ARABIA - New Contact Inquiry — ${inquiryType}`,
             text: emailBody,

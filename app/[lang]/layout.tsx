@@ -7,6 +7,8 @@ import '../globals.css';
 import FooterSection from "@/components/design/organisms/layout/Footer";
 import WhatsAppInquiry from "@/components/design/organisms/sections/WhatsappInquiry";
 import { WhatsAppInquiryProvider } from "@/components/design/organisms/sections/WhatsAppInquiryProvider";
+import Script from "next/script";
+
 // const montserrat = Montserrat({ subsets: ['latin'], variable: '--font-en' });
 const notoKufiArabic = Noto_Kufi_Arabic({ subsets: ['arabic'], variable: '--font-ar' });
 

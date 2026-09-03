@@ -214,7 +214,7 @@ export async function POST(req: NextRequest) {
 
         await transporter.sendMail({
             from: process.env.SMTP_USER,
-            to: process.env.HR_EMAIL,
+            to: process.env.HR_CAREERS_EMAIL,
             ...(replyTo ? { replyTo } : {}),
             subject: `BRITAM ARABIA - New ${formLabel} Application - ${positionLabel}`,
             text: buildText(payload),
