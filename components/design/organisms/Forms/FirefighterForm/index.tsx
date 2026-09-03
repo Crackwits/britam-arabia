@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -46,7 +46,7 @@ interface FirefighterFormProps {
     isArabic: boolean;
     position: string;
     slug: string;
-    /** City from the CMS. When it matches a known value the field is locked. */
+    /** City of the posting, from the CMS. Sent with the payload, not asked of the applicant. */
     city?: string;
 }
 
@@ -56,8 +56,6 @@ const translations = {
         answerPlaceholder: "Enter your answer",
         nationality: "Nationality",
         nationalityPlaceholder: "Select your nationality",
-        city: "City",
-        cityPlaceholder: "Select a city",
         age: "Age",
         agePlaceholder: "The value must be a number",
         religion: "Religion",
@@ -96,8 +94,6 @@ const translations = {
         answerPlaceholder: "أدخل إجابتك",
         nationality: "الجنسية",
         nationalityPlaceholder: "اختر جنسيتك",
-        city: "المدينة",
-        cityPlaceholder: "اختر المدينة",
         age: "العمر",
         agePlaceholder: "يجب أن تكون القيمة رقمًا",
         religion: "الديانة",
@@ -143,7 +139,8 @@ export default function FirefighterForm({
     const t = translations[lang];
     const schema = buildFirefighterSchema(lang);
 
-    const presetCity = CITIES.find((c) => c.value === city)?.value;
+    // Not a form field — carried through to the submission so HR knows the posting's city.
+    const postingCity = city ? findLabel(CITIES, city, "en") : "";
 
     const [cvFile, setCvFile] = useState<File | null>(null);
     const [cvError, setCvError] = useState<string | undefined>();
@@ -154,7 +151,6 @@ export default function FirefighterForm({
     const [certs, setCerts] = useState<Record<string, CertStatus>>(defaultCertifications);
 
     const defaults = {
-        city: presetCity ?? "",
         appliedPositions: [],
         certifications: defaultCertifications(),
     } as Partial<FirefighterFormValues>;
@@ -171,11 +167,6 @@ export default function FirefighterForm({
         mode: "onBlur",
         defaultValues: defaults,
     });
-
-    // Covers a city that arrives after mount (client fetch, late hydration).
-    useEffect(() => {
-        if (presetCity) setValue("city", presetCity, { shouldValidate: true });
-    }, [presetCity, setValue]);
 
     const hasLicense = watch("hasDrivingLicense");
 
@@ -205,11 +196,10 @@ export default function FirefighterForm({
                     formType: "firefighters",
                     position,
                     slug,
-                    city: findLabel(CITIES, data.city),
+                    city: postingCity,
                     fields: [
                         { label: "Name", value: data.fullName },
                         { label: "Nationality", value: data.nationality },
-                        { label: "City", value: findLabel(CITIES, data.city) },
                         { label: "Age", value: String(data.age) },
                         { label: "Religion", value: findLabel(RELIGIONS, data.religion) },
                         { label: "Primary Email Address", value: data.primaryEmail },
@@ -308,26 +298,6 @@ export default function FirefighterForm({
                             hasError={!!errors.nationality}
                             {...register("nationality")}
                         />
-                    </Field>
-
-                    <Field id="city" label={t.city} error={errors.city?.message}>
-                        {presetCity ? (
-                            <>
-                                <p className="border border-neutralLighter bg-neutral50 px-4 py-3 text-base text-darkDefault">
-                                    {findLabel(CITIES, presetCity, lang)}
-                                </p>
-                                <input type="hidden" {...register("city")} />
-                            </>
-                        ) : (
-                            <SelectInput
-                                id="city"
-                                placeholder={t.cityPlaceholder}
-                                options={CITIES}
-                                lang={lang}
-                                hasError={!!errors.city}
-                                {...register("city")}
-                            />
-                        )}
                     </Field>
 
                     <Field id="age" label={t.age} error={errors.age?.message}>

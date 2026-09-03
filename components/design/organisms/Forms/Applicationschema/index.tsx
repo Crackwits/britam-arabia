@@ -79,7 +79,7 @@ export function buildFirefighterSchema(lang: Lang) {
         .object({
             fullName: z.string().trim().min(2, msg.name).max(120),
             nationality: z.enum(nationalityValues, { message: msg.nationality }),
-            city: z.enum(cityValues, { message: msg.city }),
+            // city: z.enum(cityValues, { message: msg.city }),
             // Kept as a string so the schema's input and output types match —
             // z.coerce.number() types its input as unknown and breaks zodResolver.
             age: z
