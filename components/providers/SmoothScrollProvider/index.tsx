@@ -1,6 +1,14 @@
 "use client";
 
-import { createContext, useContext, useEffect, useRef, ReactNode } from "react";
+import {
+    createContext,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+    ReactNode,
+} from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 
 const LenisContext = createContext<Lenis | null>(null);
@@ -9,9 +17,12 @@ export function useLenis() {
     return useContext(LenisContext);
 }
 
+// Module scope: a stable identity, so it can't retrigger the effect.
+const DEFAULT_EASING = (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t));
+
 interface SmoothScrollProviderProps {
     children: ReactNode;
-    duration?: number;       // default 1.4 — higher = slower
+    duration?: number;        // default 1.4 — higher = slower
     easing?: (t: number) => number;
     wheelMultiplier?: number; // default 0.8 — lower = slower wheel
     touchMultiplier?: number; // default 1.0
@@ -20,15 +31,18 @@ interface SmoothScrollProviderProps {
 export default function SmoothScrollProvider({
     children,
     duration = 1.4,
-    easing = (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // expo ease
+    easing = DEFAULT_EASING,
     wheelMultiplier = 0.8,
     touchMultiplier = 1.0,
 }: SmoothScrollProviderProps) {
-    const lenisRef = useRef<Lenis | null>(null);
+    // State, not a ref: a ref write doesn't re-render, so context consumers
+    // would be stuck with the initial null.
+    const [lenis, setLenis] = useState<Lenis | null>(null);
     const rafRef = useRef<number | null>(null);
+    const pathname = usePathname();
 
     useEffect(() => {
-        const lenis = new Lenis({
+        const instance = new Lenis({
             duration,
             easing,
             wheelMultiplier,
@@ -36,28 +50,30 @@ export default function SmoothScrollProvider({
             smoothWheel: true,
         });
 
-        lenisRef.current = lenis;
+        setLenis(instance);
 
         function raf(time: number) {
-            lenis.raf(time);
+            instance.raf(time);
             rafRef.current = requestAnimationFrame(raf);
         }
-
         rafRef.current = requestAnimationFrame(raf);
 
         return () => {
             if (rafRef.current) cancelAnimationFrame(rafRef.current);
-            lenis.destroy();
+            instance.destroy();
+            setLenis(null);
         };
     }, [duration, easing, wheelMultiplier, touchMultiplier]);
 
-    return (
-        <LenisContext.Provider value={lenisRef.current}>
-            {children}
-        </LenisContext.Provider>
-    );
-}
+    // Next resets window.scrollY on navigation, but Lenis overwrites it on the
+    // next frame from its own internal position — so reset Lenis directly.
+    useEffect(() => {
+        if (!lenis) return;
+        // Leave hash links alone; they want to land on an anchor, not the top.
+        if (window.location.hash) return;
 
-{/* <div data-lenis-prevent className="overflow-y-auto max-h-96">
-   This element scrolls natively, not through Lenis 
-</div> */}
+        lenis.scrollTo(0, { immediate: true, force: true });
+    }, [pathname, lenis]);
+
+    return <LenisContext.Provider value={lenis}>{children}</LenisContext.Provider>;
+}
