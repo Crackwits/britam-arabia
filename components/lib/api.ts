@@ -20,8 +20,13 @@ export async function fetchStrapi(
 }
 
 
+// Only send the bearer when a token is configured; otherwise rely on Strapi's Public role.
+const authHeaders: Record<string, string> = STRAPI_API_TOKEN
+    ? { Authorization: `Bearer ${STRAPI_API_TOKEN}` }
+    : {};
+
 const strapiHeaders = {
-    Authorization: `Bearer ${STRAPI_API_TOKEN}`,
+    ...authHeaders,
     "Content-Type": "application/json",
 };
 
@@ -68,9 +73,7 @@ export async function getSingleType<T>(
         }
         // console.log(url);
         const res = await fetch(url.toString(), {
-            headers: {
-                Authorization: `Bearer ${STRAPI_API_TOKEN}`,
-            },
+            headers: authHeaders,
             next: { revalidate: 60 },
         });
 
