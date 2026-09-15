@@ -62,7 +62,15 @@ ${message}
       <p style="color:#001239;white-space:pre-line;">${safeMessage}</p>
     `;
 
-   console.log(emailBody);
+    const recipient = process.env.HR_INFO_EMAIL || process.env.HR_BUSINESS_EMAIL;
+    if (!recipient || !process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
+      console.error("Inquiry form: missing mail config (HR_INFO_EMAIL / SMTP_HOST / SMTP_USER / SMTP_PASS)");
+      return NextResponse.json(
+        { success: false, error: "Mail service is not configured." },
+        { status: 500 }
+      );
+    }
+
     // ── Nodemailer transport ──────────────────────────────────────────────────
     const transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
@@ -77,7 +85,7 @@ ${message}
 
     await transporter.sendMail({
         from: process.env.SMTP_USER,
-        to: process.env.HR_INFO_EMAIL,
+        to: recipient,
         replyTo: email,
         subject: `BRITAM ARABIA - New Inquiry — ${fullName}`,
         text: emailBody,
@@ -87,7 +95,7 @@ ${message}
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Contact form submission error:", error);
+    console.error("Inquiry form submission error:", error);
     return NextResponse.json(
       { success: false, error: "Something went wrong. Please try again." },
       { status: 500 }
