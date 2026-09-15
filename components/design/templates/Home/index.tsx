@@ -7,7 +7,6 @@ import PartnershipBanner from "../../organisms/heros/Partnershipbanner";
 import { Capabilities, HomePageAttributes } from "@/components/lib/types";
 import Navbar from "../../organisms/layout/Navbar";
 import MediaBlock from "@/components/core/molecules/MediaBlock";
-import { assessRiskHref } from "@/components/lib/assessRisk";
 import WhatYouGetSection from "../../organisms/sections/Whatyougetsection";
 import WhyChooseUsSection from "../../organisms/sections/Whychooseussection";
 import OurApproach from "../../organisms/sections/OurApproach";
@@ -160,7 +159,7 @@ export default function HomeTemplate({ homedata, capabilities, globalSettings, l
             <MediaBlock lang={lang} isArabic={isArabic} title={homedata.section4_title}
                 desc={homedata.section4_desc}
                 cta={homedata.section4_cta}
-                cta_link={assessRiskHref(lang)}
+                cta_link="assess-risk"
                 cta2_label=""
                 cta2_link=""
                 image={homedata.section4_image} />

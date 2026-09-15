@@ -11,7 +11,6 @@ import BritamLogoLight from '@/public/Britam-logo-light.svg';
 import { usePathname } from 'next/navigation';
 import { FACEBOOK_URL, INSTAGRAM_URL, TWITTER_URL, LINKEDIN_URL, YOUTUBE_URL, WHATSAPP_URL } from "@/utils/consts";
 import { ALL_LOCALES as LOCALES, ARABIC_ENABLED, type Locale } from '@/components/lib/locales';
-import { assessRiskHref } from '@/components/lib/assessRisk';
 
 const SOCIAL_LINKS = [
     { icon: "f", href: FACEBOOK_URL, label: "Facebook" },
@@ -273,7 +272,7 @@ export default function Navbar({ activeSection, lang }: Props) {
                                 {ARABIC_ENABLED && <LangToggle />}
 
                                 <MotionLink
-                                    href={assessRiskHref(currentLocale)}
+                                    href={withLocale(pathname, "/assess-risk")}
                                     whileHover={{ scale: 1.04 }}
                                     whileTap={{ scale: 0.97 }}
                                     className={`${isDark ? "border-white text-white hover:text-darkDefault hover:bg-white" : "border-darkDefault text-darkDefault hover:text-white hover:bg-darkDefault"} hidden sm:flex px-6 py-4 items-center justify-center border
@@ -346,7 +345,7 @@ export default function Navbar({ activeSection, lang }: Props) {
                                         {/* <LangToggle onClick={() => setMenuOpen(false)} /> */}
 
                                         <Link
-                                            href={assessRiskHref(currentLocale)}
+                                            href={withLocale(pathname, "/assess-risk")}
                                             onClick={() => setMenuOpen(false)}
                                             className="md:hidden inline-flex items-center justify-center px-4 py-3 leading-none border border-white text-white text-sm tracking-[0.84px] uppercase font-medium hover:text-[#22285C] hover:bg-white transition-colors"                                        >
                                             {t('inquireNow')}
