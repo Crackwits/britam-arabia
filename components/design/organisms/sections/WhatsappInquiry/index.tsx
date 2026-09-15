@@ -237,8 +237,11 @@ const WhatsAppInquiry: React.FC<WhatsAppInquiryProps> = ({
                     className={`fixed ${positionClass} z-40 flex h-14 w-14 items-center justify-center rounded-full border-0 bg-transparent p-0 text-white shadow-lg outline-none ring-0 transition-transform duration-300 hover:scale-110 active:scale-95 focus:border-0 focus:outline-none focus:ring-0 focus-visible:border-0 focus-visible:outline-none focus-visible:ring-0`}
                     style={{ backgroundColor: BRAND }}
                 >
-                    <svg width="26" height="26" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+                    <svg width="32" height="32" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="none" aria-hidden="true">
+                        <path d="M92 250C92 158 165 92 256 92H300C391 92 464 158 464 250C464 342 391 408 300 408H218L110 458L136 378C108 344 92 300 92 250Z" stroke="#FFFFFF" strokeWidth="14" strokeLinecap="round" strokeLinejoin="round" />
+                        <circle cx="190" cy="250" r="12" fill="#FFFFFF" />
+                        <circle cx="256" cy="250" r="12" fill="#FFFFFF" />
+                        <circle cx="322" cy="250" r="12" fill="#FFFFFF" />
                     </svg>
 
                     {showBadge && (
