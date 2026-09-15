@@ -8,6 +8,7 @@ import FooterSection from "@/components/design/organisms/layout/Footer";
 import WhatsAppInquiry from "@/components/design/organisms/sections/WhatsappInquiry";
 import { WhatsAppInquiryProvider } from "@/components/design/organisms/sections/WhatsAppInquiryProvider";
 import Script from "next/script";
+import { SUPPORTED_LOCALES } from "@/components/lib/locales";
 
 // const montserrat = Montserrat({ subsets: ['latin'], variable: '--font-en' });
 const notoKufiArabic = Noto_Kufi_Arabic({ subsets: ['arabic'], variable: '--font-ar' });
@@ -69,7 +70,7 @@ const gotham = localFont({
 });
 
 export async function generateStaticParams() {
-  return [{ lang: 'en' }, { lang: 'ar' }];
+  return SUPPORTED_LOCALES.map((lang) => ({ lang }));
 }
 
 export default async function RootLayout({

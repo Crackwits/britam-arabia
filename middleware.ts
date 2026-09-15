@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
+import {
+  ALL_LOCALES,
+  DEFAULT_LOCALE,
+  SUPPORTED_LOCALES,
+  isSupportedLocale,
+  type Locale,
+} from "@/components/lib/locales";
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
-const SUPPORTED_LOCALES = ["en", "ar"] as const;
-type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
-const DEFAULT_LOCALE: SupportedLocale = "en";
+type SupportedLocale = Locale;
 const LOCALE_COOKIE = "NEXT_LOCALE";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -62,15 +67,32 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Prefer a previously saved cookie (e.g. user manually switched language)
-  const cookieLocale = request.cookies.get(LOCALE_COOKIE)?.value as
-    | SupportedLocale
-    | undefined;
+  // A locale that exists but is currently disabled (e.g. /ar while Arabic is
+  // switched off) — send the visitor to the same page in the default locale.
+  const disabledLocale = ALL_LOCALES.find(
+    (locale) =>
+      !isSupportedLocale(locale) &&
+      (pathname === `/${locale}` || pathname.startsWith(`/${locale}/`))
+  );
+  if (disabledLocale) {
+    const url = request.nextUrl.clone();
+    url.pathname = pathname.replace(`/${disabledLocale}`, `/${DEFAULT_LOCALE}`);
 
-  const locale =
-    cookieLocale && SUPPORTED_LOCALES.includes(cookieLocale)
-      ? cookieLocale
-      : detectLocaleFromHeader(request.headers.get("accept-language"));
+    const response = NextResponse.redirect(url);
+    // Overwrite a stale cookie so the next bare visit doesn't bounce again
+    response.cookies.set(LOCALE_COOKIE, DEFAULT_LOCALE, {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+    });
+    return response;
+  }
+
+  // Prefer a previously saved cookie (e.g. user manually switched language)
+  const cookieLocale = request.cookies.get(LOCALE_COOKIE)?.value;
+
+  const locale: SupportedLocale = isSupportedLocale(cookieLocale)
+    ? cookieLocale
+    : detectLocaleFromHeader(request.headers.get("accept-language"));
 
   const url = request.nextUrl.clone();
   url.pathname = `/${locale}${pathname === "/" ? "" : pathname}`;

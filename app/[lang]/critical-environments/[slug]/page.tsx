@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getBySlug, getCollection } from "@/components/lib/api";
 import { buildMetadata } from "@/components/lib/seo";
+import { SUPPORTED_LOCALES } from "@/components/lib/locales";
 import type { CriticalEnvironments } from "@/components/lib/types";
 import CriticalEnvironmentTemplate from "@/components/design/templates/CriticalEnvironmentTemplate";
 import { notFound } from "next/navigation";
@@ -10,7 +11,7 @@ type Params = Promise<{ lang: string; slug: string }>;
 
 // ── Pre-generate all slug paths at build time ─────────────────────────────────
 export async function generateStaticParams() {
-    const locales = ["en", "ar"];
+    const locales = SUPPORTED_LOCALES;
 
     const paths = await Promise.all(
         locales.map(async (lang) => {

@@ -10,6 +10,7 @@ import BritamLogoDark from '@/public/Britam-logo-dark.svg';
 import BritamLogoLight from '@/public/Britam-logo-light.svg';
 import { usePathname } from 'next/navigation';
 import { FACEBOOK_URL, INSTAGRAM_URL, TWITTER_URL, LINKEDIN_URL, YOUTUBE_URL, WHATSAPP_URL } from "@/utils/consts";
+import { ALL_LOCALES as LOCALES, ARABIC_ENABLED, type Locale } from '@/components/lib/locales';
 
 const SOCIAL_LINKS = [
     { icon: "f", href: FACEBOOK_URL, label: "Facebook" },
@@ -82,8 +83,6 @@ function useT(lang: string) {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const LOCALES = ['en', 'ar'] as const;
-type Locale = (typeof LOCALES)[number];
 
 const NAV_LINK_KEYS = [
     { key: 'ourJourney', href: '/our-journey' },
@@ -270,7 +269,7 @@ export default function Navbar({ activeSection, lang }: Props) {
                                     </ul>
                                 </nav>
 
-                                <LangToggle />
+                                {ARABIC_ENABLED && <LangToggle />}
 
                                 <MotionLink
                                     href={withLocale(pathname, "/assess-risk")}

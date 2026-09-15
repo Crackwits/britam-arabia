@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { StrapiSEO } from "@/components/lib/types";
 import { STRAPI_URL, SITE_URL, SITE_NAME } from "./settings";
+import { ALL_LOCALES, SUPPORTED_LOCALES } from "./locales";
 
 /* -------------------------------------------------------------------------- */
 /*  Config                                                                     */
@@ -11,7 +12,9 @@ const stripTrailing = (u: string) => u.replace(/\/+$/, "");
 const NSITE_URL = stripTrailing(SITE_URL);
 const NSTRAPI_URL = stripTrailing(STRAPI_URL || "");
 
-const SUPPORTED_LANGS = ["en", "ar"] as const;
+// All locales the app knows about (for typing / placeholders); SUPPORTED_LOCALES
+// is the subset currently exposed on the frontend (Arabic can be switched off).
+const SUPPORTED_LANGS = ALL_LOCALES;
 type Lang = (typeof SUPPORTED_LANGS)[number];
 
 /** Facebook-style locale codes. `ar_AR` is the valid OG code for Arabic. */
@@ -153,8 +156,8 @@ export function buildMetadata(
         `${SITE_URL}/${locale}${cleanPath}`;
 
     const languages = Object.fromEntries(
-        SUPPORTED_LANGS.map((l) => [l, `${SITE_URL}/${l}${cleanPath}`])
-    ) as Record<Lang, string>;
+        SUPPORTED_LOCALES.map((l) => [l, `${SITE_URL}/${l}${cleanPath}`])
+    ) as Partial<Record<Lang, string>>;
 
     /* ---- robots ---- */
     const noIndex =
@@ -196,7 +199,7 @@ export function buildMetadata(
             description,
             url: canonicalUrl,
             locale: OG_LOCALE[locale],
-            alternateLocale: SUPPORTED_LANGS.filter((l) => l !== locale).map(
+            alternateLocale: SUPPORTED_LOCALES.filter((l) => l !== locale).map(
                 (l) => OG_LOCALE[l]
             ),
             images: [image],
