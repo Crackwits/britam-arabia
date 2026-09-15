@@ -17,12 +17,13 @@ export default function DetailHero({ subheading, heading, cover }: DetailHeroPro
 
     useEffect(() => {
         const header = headerRef.current;
-        const image = imageRef.current;
-        if (!header || !image) return;
+        const image = imageRef.current; // null when there is no cover
+        if (!header) return;
 
         // Entrance animation via CSS class toggle
         requestAnimationFrame(() => {
             header.classList.add("hero-visible");
+            if (!image) return;
             setTimeout(() => {
                 image.classList.add("image-visible");
             }, 200);
@@ -49,13 +50,13 @@ export default function DetailHero({ subheading, heading, cover }: DetailHeroPro
                 </h1>
             </div>
 
-            <div className="md:max-w-7xl mx-auto md:px-4 mb-12">
-                {/* Cover Image */}
-                <div
-                    ref={imageRef}
-                    className="relative w-full aspect-[3/2] md:aspect-[5/2] overflow-hidden"
-                >
-                    {imageUrl && (
+            {/* Cover Image — omitted entirely when no cover is uploaded so no empty box is left behind */}
+            {imageUrl && (
+                <div className="md:max-w-7xl mx-auto md:px-4 mb-12">
+                    <div
+                        ref={imageRef}
+                        className="relative w-full aspect-[3/2] md:aspect-[5/2] overflow-hidden"
+                    >
                         <Image
                             src={imageUrl}
                             alt={cover?.alternativeText || heading}
@@ -64,9 +65,9 @@ export default function DetailHero({ subheading, heading, cover }: DetailHeroPro
                             className="object-cover"
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
                         />
-                    )}
+                    </div>
                 </div>
-            </div>
+            )}
         </section>
     );
 }

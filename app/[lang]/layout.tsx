@@ -95,7 +95,7 @@ export default async function RootLayout({
             {children}
           </SmoothScrollProvider>
           <FooterSection lang={lang} isArabic={isArabic} />
-          <WhatsAppInquiry language={language} businessPhone="966551765460" recruitmentPhone="966138962802" />
+          <WhatsAppInquiry language={language} businessPhone="966551765460" recruitmentEmail="cv@britamarabia.com" />
         </WhatsAppInquiryProvider>
       </body>
     </html>

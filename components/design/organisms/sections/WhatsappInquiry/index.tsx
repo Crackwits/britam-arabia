@@ -17,9 +17,10 @@ const BRAND = '#0034A5';
 
 interface WhatsAppInquiryProps {
     businessPhone?: string;
-    recruitmentPhone?: string;
+    /** Recruitment goes to email (CV submissions) rather than WhatsApp */
+    recruitmentEmail?: string;
     businessMessage?: string;
-    recruitmentMessage?: string;
+    recruitmentSubject?: string;
     language?: Language;
     /** Tailwind position utilities for the floating button, e.g. "bottom-8 right-8" */
     buttonPosition?: string;
@@ -58,9 +59,9 @@ const translations = {
 
 const WhatsAppInquiry: React.FC<WhatsAppInquiryProps> = ({
     businessPhone = '1234567890',
-    recruitmentPhone = '1234567890',
+    recruitmentEmail = 'cv@britamarabia.com',
     businessMessage = 'Hi, I am interested in your business services.',
-    recruitmentMessage = 'Hi, I am interested in career opportunities with your company.',
+    recruitmentSubject = 'Career opportunities at Britam Arabia',
     language = 'en',
     buttonPosition = 'bottom-8 right-8',
     showBadge = false,
@@ -144,6 +145,9 @@ const WhatsAppInquiry: React.FC<WhatsAppInquiryProps> = ({
     const getWhatsAppLink = (phone: string, message: string) =>
         `https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
 
+    const getMailtoLink = (email: string, subject: string) =>
+        `mailto:${email}?subject=${encodeURIComponent(subject)}`;
+
     const positionClass = isArabic
         ? 'bottom-8 left-8'//buttonPosition.replace('right-', 'left-')
         : buttonPosition;
@@ -207,8 +211,9 @@ const WhatsAppInquiry: React.FC<WhatsAppInquiryProps> = ({
                         icon="people"
                         title={t.recruitment}
                         description={t.recruitmentDesc}
-                        link={getWhatsAppLink(recruitmentPhone, recruitmentMessage)}
+                        link={getMailtoLink(recruitmentEmail, recruitmentSubject)}
                         isArabic={isArabic}
+                        external={false}
                     />
                 </div>
 
@@ -274,6 +279,8 @@ interface InquiryOptionProps {
     description: string;
     link: string;
     isArabic: boolean;
+    /** Open in a new tab (default). Set false for mailto: links. */
+    external?: boolean;
 }
 
 // Record<InquiryIcon, ReactNode> avoids the global JSX namespace entirely.
@@ -290,11 +297,10 @@ const icons: Record<InquiryIcon, ReactNode> = {
     ),
 };
 
-const InquiryOption: React.FC<InquiryOptionProps> = ({ icon, title, description, link, isArabic }) => (
+const InquiryOption: React.FC<InquiryOptionProps> = ({ icon, title, description, link, isArabic, external = true }) => (
     <a
         href={link}
-        target="_blank"
-        rel="noopener noreferrer"
+        {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
         className="group block border-1 border-neutralLighter p-4 transition-all duration-200 hover:border-[#0034A5] hover:shadow-md focus:outline-none focus-visible:border-[#0034A5] focus-visible:ring-2 focus-visible:ring-[#0034A5]"
     >
         <div className="flex items-start gap-3">
