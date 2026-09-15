@@ -22,6 +22,11 @@ interface MediaBlockProps {
 const getMediaUrl = (url?: string) =>
     url ? `${STRAPI_URL}${url}` : '';
 
+// cta_link is normally a slug relative to the locale ("assess-risk"), but an
+// absolute href (mailto:, https://, or a leading slash) is passed through as-is.
+const resolveCtaHref = (lang: string, link: string) =>
+    /^(mailto:|https?:\/\/|\/)/.test(link) ? link : `/${lang}/${link}`;
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function MediaBlock({
@@ -78,7 +83,7 @@ export default function MediaBlock({
                         {/* Primary CTA */}
                         {cta && cta_link && (
                             <Link
-                                href={`/${lang}/${cta_link}`}
+                                href={resolveCtaHref(lang, cta_link)}
                                 className="inline-flex uppercase items-center gap-2 text-white bg-primaryDefault px-6 py-4 font-medium tracking-[0.84px] text-sm
     border-2 border-primaryDefault hover:bg-brandDark hover:border-brandDark transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primaryDefault"
                             >
