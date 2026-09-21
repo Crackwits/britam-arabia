@@ -77,12 +77,12 @@ export const MANAGEMENT_POSITIONS: readonly Option[] = [
 // ─── Firefighters form ────────────────────────────────────────────────────────
 
 export const FIREFIGHTER_POSITIONS: readonly Option[] = [
-    { value: "dispatcher", en: "Dispatcher", ar: "منسق عمليات" },
+    { value: "dispatcher", en: "Dispatcher", ar: "موجه اتصالات" },
     { value: "firefighter", en: "Firefighter", ar: "رجل إطفاء" },
-    { value: "driver-operator", en: "Driver Operator", ar: "سائق مشغل" },
+    { value: "driver-operator", en: "Driver Operator", ar: "سائق ومشغل" },
     { value: "captain", en: "Captain", ar: "قائد فرقة" },
     { value: "station-commander", en: "Station Commander", ar: "قائد محطة" },
-    { value: "fire-inspector", en: "Fire Inspector", ar: "مفتش حريق" },
+    { value: "fire-inspector", en: "Fire Inspector", ar: "مفتش سلامة وحريق " },
 ] as const;
 
 export const RELIGIONS: readonly Option[] = [
@@ -97,7 +97,7 @@ export const ENGLISH_LEVELS: readonly Option[] = [
 ] as const;
 
 export const KSA_LOCATIONS: readonly Option[] = [
-    { value: "in", en: "In", ar: "داخل المملكة" },
+    { value: "in", en: "In", ar: "داخل المملكة العربية السعودية" },
     { value: "out", en: "Out", ar: "خارج المملكة" },
 ] as const;
 
@@ -115,8 +115,8 @@ export const LICENSE_TYPES: readonly Option[] = [
 // ─── Certifications matrix ────────────────────────────────────────────────────
 
 export const CERT_STATUSES: readonly Option[] = [
-    { value: "certified", en: "Certified", ar: "معتمد" },
-    { value: "non-certified", en: "Non-Certified", ar: "غير معتمد" },
+    { value: "certified", en: "Certified", ar: "معتمدة " },
+    { value: "non-certified", en: "Non-Certified", ar: "غير معتمدة" },
     { value: "none", en: "None", ar: "لا يوجد" },
 ] as const;
 

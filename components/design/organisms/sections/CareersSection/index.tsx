@@ -66,7 +66,7 @@ function CareerRow({ career, index, isArabic, lang }: CareerRowProps) {
                         className="md:col-span-3"
                     >
                         <p className="text-lg text-darkLight pb-3 md:pb-10">
-                            {isArabic ? "وظيفة شاغرة" : "Open Position"}
+                            {isArabic ? "الوظائف المتاحة" : "Open Position"}
                         </p>
                         <div
                             className="flex items-center gap-1.5 text-lg text-darkLight pb-7 md:pb-0 flex-row"
@@ -105,7 +105,7 @@ function CareerRow({ career, index, isArabic, lang }: CareerRowProps) {
                         >
                             {isArabic ? (
                                 <>
-                                    قدم الآن
+                                    قدّم الآن
                                     <ArrowLeft
                                         size={14}
                                         className="transition-transform duration-300 group-hover:-translate-x-1"

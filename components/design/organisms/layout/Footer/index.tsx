@@ -59,12 +59,12 @@ interface FooterLink {
 
 const FOOTER_LINKS_COL_1: FooterLink[] = [
     { label: { en: "Our Journey", ar: "مسيرتنا" }, href: "/our-journey" },
-    { label: { en: "Our Approach", ar: "منهجنا" }, href: "/our-approach" },
+    { label: { en: "Our Approach", ar: "منهجيتنا" }, href: "/our-approach" },
     // { label: { en: "Insights", ar: "رؤى" }, href: "/insights" },
 ];
 
 const FOOTER_LINKS_COL_2: FooterLink[] = [
-    { label: { en: "Life at Britam", ar: "الحياة في بريتام" }, href: "/life-at-britam" },
+    { label: { en: "Life at Britam", ar: "العمل معنا" }, href: "/life-at-britam" },
     { label: { en: "FAQ", ar: "الأسئلة الشائعة" }, href: "/faq" },
     { label: { en: "Business Inquiry", ar: "استفسار تجاري" }, href: "/contact-us" },
 ];
@@ -72,7 +72,7 @@ const FOOTER_LINKS_COL_2: FooterLink[] = [
 const LEGAL_LINKS: FooterLink[] = [
     { label: { en: "Privacy Policy", ar: "سياسة الخصوصية" }, href: "/privacy-policy" },
     { label: { en: "Terms of Service", ar: "شروط الخدمة" }, href: "/terms-conditions" },
-    { label: { en: "Cookie Settings", ar: "إعدادات ملفات تعريف الارتباط" }, href: "/cookies-policy" },
+    { label: { en: "Cookie Settings", ar: "إعدادات ملفات تعريف الارتباط (الكوكيز)" }, href: "/cookies-policy" },
 ];
 
 // ─── Helper ───────────────────────────────────────────────────────────────────
@@ -246,7 +246,7 @@ export default function FooterSection({ lang, isArabic }: FooterSectionProps) {
                             md:flex-row md:justify-between">
                 <p>
                     {isArabic ? (
-                        <>© {year}   <span className="text-white">بريتام أرابيا</span>. جميع الحقوق محفوظة.</>
+                        <>© {year}   <span className="text-white">بريتام العربية</span>. جميع الحقوق محفوظة.</>
                     ) : (
                         <>
                             © {year} <span className="text-white">Britam Arabia</span>. All

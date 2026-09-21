@@ -158,7 +158,7 @@ export default function OurApproach({ isArabic, subheading, heading, desc, steps
                                                 className="text-primaryDefault text-sm font-bold uppercase tracking-[4px]"
                                                 variants={fadeUp}
                                             >
-                                                {isArabic ? `خطوة ${stepNum}` : `STEP ${stepNum}`}
+                                                {isArabic ? `الخطوة ${stepNum}` : `STEP ${stepNum}`}
                                             </motion.span>
                                         </motion.div>
                                         <motion.div

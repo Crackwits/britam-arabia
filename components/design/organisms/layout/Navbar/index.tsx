@@ -64,10 +64,10 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
         followUs: 'Follow Us',
     },
     ar: {
-        ourJourney: 'رحلتنا',
-        ourApproach: 'نهجنا',
+        ourJourney: 'مسيرتنا',
+        ourApproach: 'منهجيتنا',
         insights: 'رؤى',
-        lifeAtBritam: 'الحياة في بريتام',
+        lifeAtBritam: 'العمل معنا',
         contactus: 'اتصل بنا',
         inquireNow: 'جدول التقييم',
         menu: 'القائمة',
