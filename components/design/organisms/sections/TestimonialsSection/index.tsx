@@ -71,7 +71,7 @@ function TestimonialCard({ item, index, isArabic }: CardProps) {
             </p>
 
             {/* ── Accent line + company name ── */}
-            <div className={`mt-6 flex flex-col ${isArabic ? "items-end" : "items-start"}`}>
+            <div className={`mt-6 flex flex-col items-start`}>
                 <motion.span
                     aria-hidden="true"
                     initial={{ width: 32 }}

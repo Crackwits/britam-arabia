@@ -247,7 +247,7 @@ export default function Navbar({ activeSection, lang }: Props) {
                     <AnimatePresence>
                         {!isMobileMenuOpen && (
                             <motion.div
-                                className="flex items-center gap-6 lg:gap-8 ml-auto"
+                                className={`${isArabic ? "flex items-center gap-6 lg:gap-8 mr-auto" : "flex items-center gap-6 lg:gap-8 ml-auto"}`}
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}

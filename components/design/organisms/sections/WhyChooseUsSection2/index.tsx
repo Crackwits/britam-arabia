@@ -11,6 +11,7 @@ const IMAGE_TRANSITION_MS = 800;
 export interface WhyChooseUsSectionProps {
     title: string;
     why_choose_us: WhyChooseUs[];
+    isArabic: boolean;
 }
 
 const getMediaUrl = (url?: string) => (url ? `${STRAPI_URL}${url}` : "");
@@ -18,6 +19,7 @@ const getMediaUrl = (url?: string) => (url ? `${STRAPI_URL}${url}` : "");
 export default function WhyChooseUsSection2({
     title,
     why_choose_us,
+    isArabic
 }: WhyChooseUsSectionProps) {
     const [activeIndex, setActiveIndex] = useState(0);
     const [previousIndex, setPreviousIndex] = useState<number | null>(null);
@@ -212,7 +214,7 @@ export default function WhyChooseUsSection2({
                                             tabIndex={isActive ? 0 : -1}
                                             onClick={() => handleItemClick(index)}
                                             onKeyDown={(e) => handleKeyDown(e, index)}
-                                            className={`w-full text-left text-2xl tracking-[-0.48px] px-0 py-4 transition-all duration-300 ${isActive
+                                            className={`${isArabic ? "text-right" : "text-left"} w-full text-2xl tracking-[-0.48px] px-0 py-4 transition-all duration-300 ${isActive
                                                     ? "text-richNavy font-medium"
                                                     : "text-darkDefault hover:text-richNavy/70"
                                                 }`}
