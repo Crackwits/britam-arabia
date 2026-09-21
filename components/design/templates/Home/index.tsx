@@ -173,7 +173,7 @@ export default function HomeTemplate({ homedata, capabilities, globalSettings, l
                 body={homedata.where_we_operate_body}
                 kpis={homedata.kpis}
                 project_title={homedata.project_title}
-                critical_projects={homedata.critical_projects} />
+                critical_projects={homedata.critical_projects} isArabic={isArabic} />
 
 
             <TestimonialsSection isArabic={isArabic}

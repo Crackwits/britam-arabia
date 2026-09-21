@@ -14,6 +14,7 @@ interface WhereWeOperateProps {
     kpis: KPIS[] | [];
     project_title: string;
     critical_projects: CriticalProjects[] | [];
+    isArabic: boolean;
 }
 
 // ─── useCountUp hook ──────────────────────────────────────────────────────────
@@ -91,7 +92,7 @@ function KpiCard({ title, number, suffix, animate, index }: KpiCardProps) {
 const getMediaUrl = (url?: string): string => url ? `${STRAPI_URL}${url}` : '';
 
 export default function WhereWeOperate({
-    title, heading, subheading, body, kpis, project_title, critical_projects
+    title, heading, subheading, body, kpis, project_title, critical_projects,isArabic
 }: WhereWeOperateProps) {
     const sectionRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLElement>(null);
@@ -164,12 +165,16 @@ export default function WhereWeOperate({
     return (
         <>
             <style>{`
-                @keyframes marquee-scroll {
+                @keyframes marquee-scroll-ar {
+                    0%   { transform: translateX(0); }
+                    100% { transform: translateX(50%); }
+                }
+                    @keyframes marquee-scroll {
                     0%   { transform: translateX(0); }
                     100% { transform: translateX(-50%); }
                 }
                 .marquee-track {
-                    animation: marquee-scroll 90s linear infinite;
+                    animation: ${isArabic ? 'marquee-scroll-ar' : 'marquee-scroll'} 90s linear infinite;
                     animation-play-state: paused;
                 }
                 .marquee-track.active {
