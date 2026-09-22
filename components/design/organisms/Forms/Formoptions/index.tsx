@@ -115,7 +115,7 @@ export const LICENSE_TYPES: readonly Option[] = [
 // ─── Certifications matrix ────────────────────────────────────────────────────
 
 export const CERT_STATUSES: readonly Option[] = [
-    { value: "certified", en: "Certified", ar: "معتمدة " },
+    { value: "certified", en: "Certified", ar: "معتمدة" },
     { value: "non-certified", en: "Non-Certified", ar: "غير معتمدة" },
     { value: "none", en: "None", ar: "لا يوجد" },
 ] as const;
