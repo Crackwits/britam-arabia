@@ -90,6 +90,31 @@ export default async function RootLayout({
       dir={isArabic ? 'rtl' : 'ltr'}
       className={`${gotham.variable} ${notoKufiArabic.variable}`}
     >
+
+      <head>
+        {/* Google Analytics */}
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-S6VWEXZ3MF"
+        />
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+        >
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-S6VWEXZ3MF');
+          `}
+        </Script>
+
+        {/* Google Search Console Verification */}
+        <meta
+          name="google-site-verification"
+          content="G-S6VWEXZ3MF"
+        />
+      </head>
       <body className={isArabic ? 'font-ar' : 'font-en'}>
         <WhatsAppInquiryProvider>
           <SmoothScrollProvider duration={1.4} wheelMultiplier={0.8}>

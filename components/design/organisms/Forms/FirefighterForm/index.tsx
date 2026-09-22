@@ -75,8 +75,7 @@ const translations = {
         licenseTypeHint: "What type of KSA driving license do you have?",
         certs1: "Certifications 1/2",
         certs2: "Certifications 2/2",
-        certsHint:
-            "Please select CERTIFIED if your certificate meets the approval requirement of TVTC, IFSAC, AFSSAC or PROBOARD.",
+        certsHint:"Please select CERTIFIED if your certificate meets the approval requirement of TVTC, IFSAC, AFSSAC or PROBOARD",
         uploadTitle: "Drag your resume here or click to upload",
         uploadSubtitle: "Acceptable file types: PDF, DOC (5MB max)",
         removeFile: "Remove file",
