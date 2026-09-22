@@ -122,47 +122,41 @@ export const CERT_STATUSES: readonly Option[] = [
 
 export type CertStatus = "certified" | "non-certified" | "none";
 
-/** Certification names stay in English in both locales — they are proper credential titles. */
+/** Certification credential titles, with an Arabic translation for display. */
 export interface Certification {
     value: string;
-    name: string;
+    name: string; // English name (credential titles stay in English internally/in emails)
+    ar: string;   // Arabic display label
 }
 
-export const CERTIFICATIONS_GROUP_1: readonly Certification[] = [
-    { value: "hazmat-awareness", name: "HazMat Awareness" },
-    { value: "hazmat-operations", name: "HazMat Operations" },
-    { value: "hazmat-technician", name: "HazMat Technician" },
-    { value: "firefighter-i", name: "Firefighter I" },
-    { value: "firefighter-ii", name: "Firefighter II" },
-    { value: "airport-firefighter", name: "Airport Firefighter" },
-    { value: "public-telecommunicator-i", name: "Public Telecommunicator I" },
-    { value: "public-telecommunicator-ii", name: "Public Telecommunicator II" },
-    { value: "driver-operator-pumper", name: "Driver Operator Pumper" },
-    { value: "fire-instructor-i", name: "Fire Instructor I" },
-    { value: "fire-instructor-ii", name: "Fire Instructor II" },
-    { value: "fire-instructor-iii", name: "Fire Instructor III" },
-    { value: "fire-officer-i", name: "Fire Officer I" },
-    { value: "fire-officer-ii", name: "Fire Officer II" },
-    { value: "fire-officer-iii", name: "Fire Officer III" },
-] as const;
-
-export const CERTIFICATIONS_GROUP_2: readonly Certification[] = [
-    { value: "fire-inspector-i", name: "Fire Inspector I" },
-    { value: "fire-inspector-ii", name: "Fire Inspector II" },
-    { value: "ics-100", name: "ICS 100" },
-    { value: "ics-200", name: "ICS 200" },
-    { value: "ics-700", name: "ICS 700" },
-    { value: "rope-rescue-awareness", name: "Rope Rescue Awareness" },
-    { value: "rope-rescue-operations", name: "Rope Rescue Operations" },
-    { value: "rope-rescue-technician", name: "Rope Rescue Technician" },
-    { value: "rope-rescue-confined-space", name: "Rope Rescue Confined Space" },
-    { value: "bls-cpr", name: "BLS-CPR" },
-] as const;
-
+/** Single merged list — replaces the old CERTIFICATIONS_GROUP_1 / GROUP_2 split. */
 export const ALL_CERTIFICATIONS: readonly Certification[] = [
-    ...CERTIFICATIONS_GROUP_1,
-    ...CERTIFICATIONS_GROUP_2,
-];
+    { value: "hazmat-awareness", name: "HazMat Awareness", ar: "الوعي بالمواد الخطرة" },
+    { value: "hazmat-operations", name: "HazMat Operations", ar: "عمليات المواد الخطرة" },
+    { value: "hazmat-technician", name: "HazMat Technician", ar: "فني المواد الخطرة" },
+    { value: "firefighter-i", name: "Firefighter I", ar: "رجل إطفاء - المستوى الأول" },
+    { value: "firefighter-ii", name: "Firefighter II", ar: "رجل إطفاء - المستوى الثاني" },
+    { value: "airport-firefighter", name: "Airport Firefighter", ar: "رجل إطفاء المطارات" },
+    { value: "public-telecommunicator-i", name: "Public Telecommunicator I", ar: "موجه اتصالات عامة - المستوى الأول" },
+    { value: "public-telecommunicator-ii", name: "Public Telecommunicator II", ar: "موجه اتصالات عامة - المستوى الثاني" },
+    { value: "driver-operator-pumper", name: "Driver Operator Pumper", ar: "سائق ومشغل مضخة" },
+    { value: "fire-instructor-i", name: "Fire Instructor I", ar: "مدرب سلامة وحريق - المستوى الأول" },
+    { value: "fire-instructor-ii", name: "Fire Instructor II", ar: "مدرب سلامة وحريق - المستوى الثاني" },
+    { value: "fire-instructor-iii", name: "Fire Instructor III", ar: "مدرب سلامة وحريق - المستوى الثالث" },
+    { value: "fire-officer-i", name: "Fire Officer I", ar: "ضابط سلامة وحريق - المستوى الأول" },
+    { value: "fire-officer-ii", name: "Fire Officer II", ar: "ضابط سلامة وحريق - المستوى الثاني" },
+    { value: "fire-officer-iii", name: "Fire Officer III", ar: "ضابط سلامة وحريق - المستوى الثالث" },
+    { value: "fire-inspector-i", name: "Fire Inspector I", ar: "مفتش سلامة وحريق - المستوى الأول" },
+    { value: "fire-inspector-ii", name: "Fire Inspector II", ar: "مفتش سلامة وحريق - المستوى الثاني" },
+    { value: "ics-100", name: "ICS 100", ar: "نظام قيادة الحوادث 100" },
+    { value: "ics-200", name: "ICS 200", ar: "نظام قيادة الحوادث 200" },
+    { value: "ics-700", name: "ICS 700", ar: "نظام قيادة الحوادث 700" },
+    { value: "rope-rescue-awareness", name: "Rope Rescue Awareness", ar: "الوعي بالإنقاذ بالحبال" },
+    { value: "rope-rescue-operations", name: "Rope Rescue Operations", ar: "عمليات الإنقاذ بالحبال" },
+    { value: "rope-rescue-technician", name: "Rope Rescue Technician", ar: "فني الإنقاذ بالحبال" },
+    { value: "rope-rescue-confined-space", name: "Rope Rescue Confined Space", ar: "الإنقاذ بالحبال في الأماكن الضيقة" },
+    { value: "bls-cpr", name: "BLS-CPR", ar: "دعم الحياة الأساسي والإنعاش القلبي الرئوي" },
+] as const;
 
 /** Every row starts at "none" so the applicant only marks what they actually hold. */
 export const defaultCertifications = (): Record<string, CertStatus> =>

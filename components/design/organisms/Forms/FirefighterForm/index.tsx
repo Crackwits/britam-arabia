@@ -12,8 +12,6 @@ import {
 } from "../Applicationschema";
 import {
     ALL_CERTIFICATIONS,
-    CERTIFICATIONS_GROUP_1,
-    CERTIFICATIONS_GROUP_2,
     CERT_STATUSES,
     CITIES,
     ENGLISH_LEVELS,
@@ -73,9 +71,9 @@ const translations = {
         drivingLicenseHint: "Do you currently hold a KSA driving license?",
         licenseType: "KSA license type",
         licenseTypeHint: "What type of KSA driving license do you have?",
-        certs1: "Certifications 1/2",
-        certs2: "Certifications 2/2",
-        certsHint:"Please select CERTIFIED if your certificate meets the approval requirement of TVTC, IFSAC, AFSSAC or PROBOARD",
+        certs: "Certifications",
+        certsHint:
+            "Please select CERTIFIED if your certificate meets the approval requirement of TVTC, IFSAC, AFSSAC or PROBOARD",
         uploadTitle: "Drag your resume here or click to upload",
         uploadSubtitle: "Acceptable file types: PDF, DOC (5MB max)",
         removeFile: "Remove file",
@@ -110,8 +108,7 @@ const translations = {
         drivingLicenseHint: "هل تحمل حاليًا رخصة قيادة سعودية؟",
         licenseType: "نوع الرخصة السعودية",
         licenseTypeHint: "ما نوع رخصة القيادة السعودية التي تحملها؟",
-        certs1: "الشهادات والمؤهلات (الجزء 1 من 2)",
-        certs2: "الشهادات والمؤهلات (الجزء 2 من 2)",
+        certs: "الشهادات والمؤهلات",
         certsHint:
             "يرجى توضيح ما إذا كانت شهاداتك معتمدة من TVTC، IFSAF، AFSSAC، أو ProBoard",
         uploadTitle: "اسحب سيرتك الذاتية هنا أو انقر للتحميل",
@@ -442,20 +439,10 @@ export default function FirefighterForm({
                     </Field>
                 )}
 
-                {/* ── Certifications ── */}
-                <Field id="certs1" label={t.certs1} hint={t.certsHint}>
+                {/* ── Certifications (merged single table) ── */}
+                <Field id="certs" label={t.certs} hint={t.certsHint}>
                     <CertMatrix
-                        rows={CERTIFICATIONS_GROUP_1}
-                        statuses={CERT_STATUSES}
-                        lang={lang}
-                        values={certs}
-                        onChange={handleCertChange}
-                    />
-                </Field>
-
-                <Field id="certs2" label={t.certs2} hint={t.certsHint}>
-                    <CertMatrix
-                        rows={CERTIFICATIONS_GROUP_2}
+                        rows={ALL_CERTIFICATIONS}
                         statuses={CERT_STATUSES}
                         lang={lang}
                         values={certs}

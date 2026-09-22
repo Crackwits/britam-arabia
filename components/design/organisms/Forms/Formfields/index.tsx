@@ -62,7 +62,6 @@ interface SelectInputProps extends React.SelectHTMLAttributes<HTMLSelectElement>
     lang: Lang;
 }
 
-
 export const SelectInput = forwardRef<HTMLSelectElement, SelectInputProps>(
     ({ hasError, placeholder, options, lang, className = "", ...props }, ref) => (
         <select
@@ -160,6 +159,9 @@ interface CertMatrixProps {
     onChange: (cert: string, status: CertStatus) => void;
 }
 
+/** Certification name in the active language. */
+const certLabel = (cert: Certification, lang: Lang) => (lang === "ar" ? cert.ar : cert.name);
+
 export function CertMatrix({ rows, statuses, lang, values, onChange }: CertMatrixProps) {
     return (
         <div className="border border-neutralLighter">
@@ -177,7 +179,7 @@ export function CertMatrix({ rows, statuses, lang, values, onChange }: CertMatri
                 <div
                     key={row.value}
                     role="radiogroup"
-                    aria-label={row.name}
+                    aria-label={certLabel(row, lang)}
                     className={`
                         grid grid-cols-1 sm:grid-cols-[minmax(0,1.6fr)_repeat(3,minmax(0,1fr))]
                         items-center gap-2 sm:gap-0 px-3 py-3
@@ -185,7 +187,7 @@ export function CertMatrix({ rows, statuses, lang, values, onChange }: CertMatri
                         ${i === rows.length - 1 ? "" : "border-b border-neutralLighter"}
                     `}
                 >
-                    <span className="text-base text-darkDefault">{row.name}</span>
+                    <span className="text-base text-darkDefault">{certLabel(row, lang)}</span>
 
                     {statuses.map((s) => (
                         <label
