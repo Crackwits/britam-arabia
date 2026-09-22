@@ -82,7 +82,7 @@ export const FIREFIGHTER_POSITIONS: readonly Option[] = [
     { value: "driver-operator", en: "Driver Operator", ar: "سائق ومشغل" },
     { value: "captain", en: "Captain", ar: "قائد فرقة" },
     { value: "station-commander", en: "Station Commander", ar: "قائد محطة" },
-    { value: "fire-inspector", en: "Fire Inspector", ar: "مفتش سلامة وحريق " },
+    { value: "fire-inspector", en: "Fire Inspector", ar: "مفتش سلامة وحريق" },
 ] as const;
 
 export const RELIGIONS: readonly Option[] = [
