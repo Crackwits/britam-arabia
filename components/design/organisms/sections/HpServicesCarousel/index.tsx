@@ -16,12 +16,10 @@ interface Props {
 const getMediaUrl = (url?: string) => (url ? `${STRAPI_URL}${url}` : "");
 
 // Gap between cards — must match the `gap-8` class on the track below.
-// Kept as a constant (rather than measured) since it's a fixed design value.
 const GAP_PX = 32;
 
 // ─── Arrow icons ────────────────────────────────────────────────────────────
 // Icon_11 = left-pointing arrow, Icon_12 = right-pointing arrow.
-// stroke="currentColor" so button text-color classes (hover/disabled) drive it.
 
 function LeftArrowIcon(props: React.SVGProps<SVGSVGElement>) {
     return (
@@ -45,33 +43,14 @@ function RightArrowIcon(props: React.SVGProps<SVGSVGElement>) {
 
 interface CardProps {
     item: Capabilities;
-    isArabic: boolean;
     lang: string;
-
-    // ── Uniform image-height synchronization ──
-    // Shared height (px) computed by the parent from the smallest
-    // available image area across all cards. `null` until the first
-    // measurement completes, in which case the card falls back to its
-    // original flex-1/min-h-0 sizing — no hardcoded height is ever used.
     imageHeight: number | null;
     cardRef: (el: HTMLElement | null) => void;
     textBlockRef: (el: HTMLDivElement | null) => void;
     onImageLoad: () => void;
 }
 
-/* ──────────────────────────────────────────────────────────
-   Card — no entrance/stagger animation. Only the hover
-   image-scale transition remains for a bit of polish.
-────────────────────────────────────────────────────────── */
-function ServiceCard({
-    item,
-    isArabic,
-    lang,
-    imageHeight,
-    cardRef,
-    textBlockRef,
-    onImageLoad,
-}: CardProps) {
+function ServiceCard({ item, imageHeight, cardRef, textBlockRef, onImageLoad }: CardProps) {
     const imageUrl = getMediaUrl(item.image?.url);
 
     return (
@@ -82,8 +61,6 @@ function ServiceCard({
             <div
                 className={[
                     "relative w-full overflow-hidden flex-shrink-0",
-                    // Pre-measurement fallback: same flex-1/min-h-0 behavior,
-                    // so nothing shifts before the shared height is known.
                     imageHeight === null ? "flex-1 min-h-0" : "",
                 ].join(" ")}
                 style={{
@@ -101,7 +78,6 @@ function ServiceCard({
                     onError={onImageLoad}
                 />
                 <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/20 to-transparent" />
-                {/* </Link> */}
             </div>
 
             <div ref={textBlockRef} className="mt-4 flex flex-col flex-shrink-0">
@@ -122,23 +98,13 @@ export default function ServicesCarousel({
     services_entry_subheading,
     services_entry_items,
 }: Props) {
-    // The visible, overflow-hidden viewport (max-w-7xl/px-4 box). We measure
-    // its clientWidth to know how much of the track is on-screen at once.
     const wrapperRef = useRef<HTMLDivElement>(null);
-
-    // The flex row that holds all the cards. We measure its natural
-    // (unclipped) width via `scrollWidth`.
     const trackRef = useRef<HTMLDivElement>(null);
 
     const [trackWidth, setTrackWidth] = useState(0);
     const [containerWidth, setContainerWidth] = useState(0);
-
-    // Current translate offset, always a positive magnitude — direction
-    // (left vs right) is applied only in the transform style below, based
-    // on `isArabic`. Clamped to [0, scrollDistance].
     const [x, setX] = useState(0);
 
-    // ── Uniform image-height synchronization ── (unchanged logic)
     const cardRefs = useRef<(HTMLElement | null)[]>([]);
     const textBlockRefs = useRef<(HTMLDivElement | null)[]>([]);
     const [imageHeight, setImageHeight] = useState<number | null>(null);
@@ -186,7 +152,6 @@ export default function ServicesCarousel({
         return () => cancelAnimationFrame(fallback);
     }, [services_entry_items, recalcImageHeight]);
 
-    // ── Measure track + container widths, react to resize ──
     const updateMeasurements = useCallback(() => {
         if (trackRef.current) setTrackWidth(trackRef.current.scrollWidth);
         if (wrapperRef.current) setContainerWidth(wrapperRef.current.clientWidth);
@@ -204,28 +169,30 @@ export default function ServicesCarousel({
             resizeObserver.disconnect();
             window.removeEventListener("resize", updateMeasurements);
         };
-    }, [updateMeasurements, services_entry_items]);
+        // Re-measure whenever direction changes too, since dir flips the
+        // track's internal layout without necessarily firing a resize.
+    }, [updateMeasurements, services_entry_items, isArabic]);
 
-    // Also re-check text/image layout on resize (breakpoint shifts change
-    // card width → text wrapping → available image height).
     useEffect(() => {
         const onResize = () => recalcImageHeight();
         window.addEventListener("resize", onResize);
         return () => window.removeEventListener("resize", onResize);
     }, [recalcImageHeight]);
 
-    // How far the track can travel so its last card ends up flush with
-    // the edge of the visible container.
     const scrollDistance = Math.max(trackWidth - containerWidth, 0);
     const isCarousel = scrollDistance > 0;
 
-    // Keep x in range whenever the max changes (e.g. window resized down
-    // to a point where fewer cards fit, or up to a point where they all fit).
+    // Reset to the start whenever direction or item set changes — carrying
+    // over an `x` computed under the other direction's geometry is what
+    // caused the broken/half-scrolled Arabic state.
+    useEffect(() => {
+        setX(0);
+    }, [isArabic, services_entry_items]);
+
     useEffect(() => {
         setX((prev) => Math.min(prev, scrollDistance));
     }, [scrollDistance]);
 
-    // Step size = one card's width + the gap between cards.
     const step = useCallback(() => {
         const first = cardRefs.current.find(Boolean);
         const cardWidth = first?.getBoundingClientRect().width ?? 0;
@@ -239,12 +206,15 @@ export default function ServicesCarousel({
     const canNext = x < scrollDistance - 0.5;
 
     const arrowButtonClasses = (enabled: boolean) => [
-        "flex items-center justify-center h-12 w-12 transition-colors",
+        "flex items-center justify-center h-11 w-11 transition-colors",
         enabled
-            ? "text-darkDefault border-neutralLighter hover:text-primaryDefault hover:border-primaryDefault cursor-pointer"
+            ? "text-darkDefault border-neutralLighter cursor-pointer"
             : "text-neutralLighter border-neutralLighter cursor-not-allowed",
     ].join(" ");
 
+    // "Previous" always points toward where earlier items sit, "Next" toward
+    // later items — which screen side that is flips with direction, so the
+    // icon (not the button's position) is what swaps.
     const PrevIcon = isArabic ? RightArrowIcon : LeftArrowIcon;
     const NextIcon = isArabic ? LeftArrowIcon : RightArrowIcon;
 
@@ -269,7 +239,7 @@ export default function ServicesCarousel({
             </div>
 
             {isCarousel && (
-                <div className={`flex items-center gap-3 shrink-0 pb-4 ${isArabic ? "flex-row-reverse" : ""}`}>
+                <div className="flex items-center gap-3 shrink-0 pb-4">
                     <button
                         type="button"
                         onClick={goPrev}
@@ -300,20 +270,25 @@ export default function ServicesCarousel({
             <div ref={wrapperRef} className="overflow-hidden px-4 mx-auto max-w-7xl w-full mt-6">
                 <div
                     ref={trackRef}
+                    // Explicit dir, set directly on this element rather than
+                    // inherited: this is what makes `flex-direction: row`
+                    // lay items right-to-left for Arabic. Doing it this way
+                    // (instead of a `flex-row-reverse` class layered on top
+                    // of whatever `dir` the page already has) means this
+                    // component works correctly whether or not an ancestor
+                    // (e.g. `<html dir="rtl">`) also sets direction — no
+                    // double-reversal, no depending on the rest of the app.
+                    dir={isArabic ? "rtl" : "ltr"}
                     style={{
                         transform: `translateX(${isArabic ? x : -x}px)`,
                         transition: "transform 500ms cubic-bezier(0.22, 1, 0.36, 1)",
                     }}
-                    className={[
-                        "flex flex-nowrap items-stretch gap-8",
-                        isArabic ? "flex-row-reverse" : "flex-row",
-                    ].join(" ")}
+                    className="flex flex-row flex-nowrap items-stretch gap-8"
                 >
                     {services_entry_items.map((item, index) => (
                         <ServiceCard
                             key={item.id}
                             item={item}
-                            isArabic={isArabic}
                             lang={lang}
                             imageHeight={imageHeight}
                             cardRef={(el) => {
