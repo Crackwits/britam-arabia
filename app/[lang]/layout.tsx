@@ -93,7 +93,7 @@ export default async function RootLayout({
 
       <head>
         {/* Google Analytics */}
-        <Script
+        {/* <Script
           strategy="afterInteractive"
           src="https://www.googletagmanager.com/gtag/js?id=G-S6VWEXZ3MF"
         />
@@ -107,7 +107,7 @@ export default async function RootLayout({
             gtag('js', new Date());
             gtag('config', 'G-S6VWEXZ3MF');
           `}
-        </Script>
+        </Script> */}
 
         {/* Google Search Console Verification */}
         <meta
