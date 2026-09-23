@@ -16,6 +16,7 @@ import TestimonialsSection from "../../organisms/sections/TestimonialsSection";
 import HpContactSection from "../../organisms/sections/HpContact";
 import { GlobalSettingAttributes } from "@/components/lib/types";
 import WhyChooseUsSection2 from '../../organisms/sections/WhyChooseUsSection2';
+import ServicesCarousel from '../../organisms/sections/HpServicesCarousel';
 
 
 interface HomePageTemplateProps {
@@ -148,10 +149,12 @@ export default function HomeTemplate({ homedata, capabilities, globalSettings, l
                     cta2_link=""
                     image={homedata.section1_image} />
             </section>
-
-            <ServicesEntry lang={lang} isArabic={isArabic} services_entry_heading={homedata.services_entry_heading}
+            <ServicesCarousel lang={lang} isArabic={isArabic} services_entry_heading={homedata.services_entry_heading}
                 services_entry_subheading=""
                 services_entry_items={capabilities} />
+            {/* <ServicesEntry lang={lang} isArabic={isArabic} services_entry_heading={homedata.services_entry_heading}
+                services_entry_subheading=""
+                services_entry_items={capabilities} /> */}
             {/* <WhatYouGetSection section2_title={homedata.section2_title} intro_what_you_get={homedata.intro_what_you_get} titleclass="" /> */}
 
             {/* <WhyChooseUsSection section3_title={homedata.section3_title} intro_why_choose_us={homedata.intro_why_choose_us} /> */}
