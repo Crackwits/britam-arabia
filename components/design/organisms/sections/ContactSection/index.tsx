@@ -25,6 +25,8 @@ const translations = {
         name: "Enter your name",
         email: "Enter your email",
         phone: "Phone number",
+        companyName: "Enter your company name",
+        companyNameLabel: "Company Name",
         phoneLabel: "Phone",
         emailLabel: "Email",
         addressLabel: "Address",
@@ -42,6 +44,7 @@ const translations = {
             inquiryType: "Please select an inquiry type",
             name: "Please enter your name",
             email: "Please enter a valid email",
+            companyName: "Please enter your company name",
             phone: "Please enter a valid phone number",
             message: "Please tell us how we can help",
         },
@@ -52,6 +55,8 @@ const translations = {
         email: "أدخل بريدك الإلكتروني",
         phone: "رقم الهاتف",
         phoneLabel: "الهاتف",
+        companyName: "أدخل اسم شركتك",
+        companyNameLabel: "اسم الشركة",
         emailLabel: "البريد الإلكتروني",
         addressLabel: "العنوان",
         message: "كيف يمكننا مساعدتك؟ *",
@@ -68,6 +73,7 @@ const translations = {
             inquiryType: "يرجى اختيار نوع الاستفسار",
             name: "يرجى إدخال اسمك",
             email: "يرجى إدخال بريد إلكتروني صحيح",
+            companyName: "يرجى إدخال اسم شركتك.",
             phone: "يرجى إدخال رقم هاتف صحيح",
             message: "يرجى إخبارنا كيف يمكننا مساعدتك",
         },
@@ -82,6 +88,7 @@ function buildSchema(locale: "en" | "ar") {
         inquiryType: z.string().min(1, e.inquiryType),
         name: z.string().trim().min(2, e.name),
         email: z.string().trim().email(e.email),
+        companyName: z.string().trim().min(2, e.companyName),
         phone: z
             .string()
             .trim()
@@ -351,6 +358,27 @@ export default function ContactSection({
                                 {errors.phone && (
                                     <p role="alert" className="mt-1 text-xs text-[#ED0000]">
                                         {errors.phone.message}
+                                    </p>
+                                )}
+                            </div>
+
+                            {/* Company Name */}
+                            <div>
+                                <label htmlFor="companyName" className="sr-only">
+                                    {t.companyNameLabel}
+                                </label>
+                                <input
+                                    id="companyName"
+                                    type="text"
+                                    placeholder={t.companyName}
+                                    dir={isArabic ? "rtl" : "ltr"}
+                                    aria-invalid={!!errors.companyName}
+                                    {...register("companyName")}
+                                    className={inputClass}
+                                />
+                                {errors.companyName && (
+                                    <p role="alert" className="mt-1 text-xs text-[#ED0000]">
+                                        {errors.companyName.message}
                                     </p>
                                 )}
                             </div>

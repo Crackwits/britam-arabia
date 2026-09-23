@@ -15,10 +15,10 @@ function escapeHtml(value: string) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { fullName, email, phoneNumber, message, locale } = body;
+    const { fullName, email, phoneNumber, companyName, message, locale } = body;
 
     // ── Validation ────────────────────────────────────────────────────────────
-    if (!fullName || !email || !phoneNumber || !message) {
+    if (!fullName || !email || !phoneNumber || !companyName || !message) {
       return NextResponse.json(
         { success: false, error: "All fields are required." },
         { status: 400 }
@@ -33,6 +33,7 @@ export async function POST(req: NextRequest) {
     }
 
     const safeName = escapeHtml(fullName);
+    const safecompanyName = escapeHtml(companyName);
     const safeEmail = escapeHtml(email);
     const safePhone = escapeHtml(phoneNumber);
     const safeMessage = escapeHtml(message);
@@ -45,7 +46,7 @@ New inquiry received.
 Name: ${fullName}
 Email: ${email}
 Phone: ${phoneNumber}
-
+Company Name: ${companyName}
 Message:
 ${message}
     `.trim();
@@ -56,7 +57,8 @@ ${message}
         <tr><td style="color:#6E6F89;font-size:12px;text-transform:uppercase;">Name</td><td style="font-weight:600;color:#001239;">${safeName}</td></tr>
         <tr><td style="color:#6E6F89;font-size:12px;text-transform:uppercase;">Email</td><td style="font-weight:600;color:#001239;"><a href="mailto:${safeEmail}">${safeEmail}</a></td></tr>
         <tr><td style="color:#6E6F89;font-size:12px;text-transform:uppercase;">Phone</td><td style="font-weight:600;color:#001239;">${safePhone}</td></tr>
-      </table>
+        <tr><td style="color:#6E6F89;font-size:12px;text-transform:uppercase;">Company Name</td><td style="font-weight:600;color:#001239;">${safecompanyName}</td></tr>
+        </table>
       <hr style="margin:16px 0;border:none;border-top:1px solid #e5e7eb;" />
       <p style="color:#6E6F89;font-size:12px;text-transform:uppercase;margin-bottom:4px;">Message</p>
       <p style="color:#001239;white-space:pre-line;">${safeMessage}</p>

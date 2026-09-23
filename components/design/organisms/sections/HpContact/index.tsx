@@ -27,17 +27,20 @@ const translations = {
     fullName: "Enter your full name",
     email: "Enter your email",
     phone: "Phone number",
+    companyName: "Enter your company name",
     message: "How Can We Help?",
     submit: "SEND INQUIRY",
     submitting: "SENDING...",
     phoneLabel: "Phone",
     emailLabel: "Email",
+    companyNameLabel: "Company Name",
     addressLabel: "Address",
     successMessage: "Your inquiry has been sent successfully",
     errorMessage: "Something went wrong. Please try again.",
     errors: {
       fullName: "Please enter your full name",
       email: "Please enter a valid email address",
+      companyName: "Please enter your company name",
       phone: "Please enter a valid phone number",
       message: "Please tell us how we can help",
     },
@@ -46,18 +49,21 @@ const translations = {
     inquiryLine: "للاستفسار",
     fullName: "الاسم الكامل",
     email: "البريد الإلكتروني",
+    companyName: "أدخل اسم شركتك",
     phone: "رقم الجوال",
     message: "كيف يمكننا مساعدتك؟",
     submit: "إرسال الطلب",
     submitting: "جاري الإرسال...",
     phoneLabel: "الهاتف",
     emailLabel: "البريد الإلكتروني",
+    companyNameLabel: "اسم الشركة",
     addressLabel: "العنوان",
     successMessage: "تم إرسال إرسال طلبكم بنجاح",
     errorMessage: "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
     errors: {
       fullName: "يرجى إدخال الاسم الكامل",
       email: "يرجى إدخال بريد إلكتروني صحيح",
+      companyName: "يرجى إدخال اسم شركتك.",
       phone: "يرجى إدخال رقم جوال صحيح",
       message: "يرجى إخبارنا كيف يمكننا مساعدتك",
     },
@@ -71,6 +77,7 @@ function buildContactSchema(locale: "en" | "ar") {
   return z.object({
     fullName: z.string().trim().min(2, t.fullName),
     email: z.string().trim().email(t.email),
+    companyName: z.string().trim().min(2, t.companyName),
     phoneNumber: z
       .string()
       .trim()
@@ -321,6 +328,26 @@ export default function HpContactSection({ locale, globalSettings, heading, body
                     transition-colors duration-200
                     focus:border-darkDefault focus:outline-none"
                     />
+                  </FieldWrapper>
+
+                  <FieldWrapper index={0} error={errors.companyName?.message}>
+                    <label htmlFor="companyName" className="sr-only">
+                      {t.companyNameLabel}
+                    </label>
+                    <input
+                      id="companyName"
+                      type="text"
+                      dir={isArabic ? "rtl" : "ltr"}
+                      placeholder={t.companyName}
+                      aria-invalid={!!errors.companyName}
+                      aria-describedby={
+                        errors.companyName ? "companyName-error" : undefined
+                      }
+                      {...register("companyName")}
+                      className="w-full border border-e2e2e2 p-4
+                    text-base text-darkDefault placeholder:text-darkLight
+                    transition-colors duration-200
+                    focus:border-darkDefault focus:outline-none" />
                   </FieldWrapper>
 
                   <FieldWrapper index={3} error={errors.message?.message}>

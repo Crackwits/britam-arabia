@@ -6,10 +6,10 @@ export const runtime = "nodejs";
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        const { inquiryType, name, email, phone, message, lang } = body;
+        const { inquiryType, name, email, phone, companyName, message, lang } = body;
 
         // ── Validation ────────────────────────────────────────────────────────────
-        if (!inquiryType || !name || !email || !phone || !message) {
+        if (!inquiryType || !name || !email || !phone || !companyName || !message) {
             return NextResponse.json(
                 { success: false, error: "All fields are required." },
                 { status: 400 }
@@ -31,6 +31,7 @@ Inquiry Type: ${inquiryType}
 Name: ${name}
 Email: ${email}
 Phone: ${phone}
+Company Name: ${companyName}
 Language: ${lang ?? "en"}
 
 Message:
@@ -44,6 +45,7 @@ ${message}
         <tr><td style="color:#6E6F89;font-size:12px;text-transform:uppercase;">Name</td><td style="font-weight:600;color:#001239;">${name}</td></tr>
         <tr><td style="color:#6E6F89;font-size:12px;text-transform:uppercase;">Email</td><td style="font-weight:600;color:#001239;"><a href="mailto:${email}">${email}</a></td></tr>
         <tr><td style="color:#6E6F89;font-size:12px;text-transform:uppercase;">Phone</td><td style="font-weight:600;color:#001239;">${phone}</td></tr>
+        <tr><td style="color:#6E6F89;font-size:12px;text-transform:uppercase;">Company Name</td><td style="font-weight:600;color:#001239;">${companyName}</td></tr>
         <tr><td style="color:#6E6F89;font-size:12px;text-transform:uppercase;">Language</td><td style="font-weight:600;color:#001239;">${lang ?? "en"}</td></tr>
       </table>
       <hr style="margin:16px 0;border:none;border-top:1px solid #e5e7eb;" />
