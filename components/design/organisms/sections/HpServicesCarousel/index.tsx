@@ -13,10 +13,17 @@ interface Props {
     services_entry_items: Capabilities[];
 }
 
+interface DragState {
+    isDragging: boolean;
+    startX: number;
+    currentX: number;
+}
+
 const getMediaUrl = (url?: string) => (url ? `${STRAPI_URL}${url}` : "");
 
 // Gap between cards — must match the `gap-8` class on the track below.
 const GAP_PX = 32;
+const DRAG_THRESHOLD = 5; // pixels to move before considering it a drag
 
 // ─── Arrow icons ────────────────────────────────────────────────────────────
 // Icon_11 = left-pointing arrow, Icon_12 = right-pointing arrow.
@@ -110,6 +117,15 @@ export default function ServicesCarousel({
     const [imageHeight, setImageHeight] = useState<number | null>(null);
     const loadedCountRef = useRef(0);
 
+    // Drag state using refs for immediate updates
+    const dragStateRef = useRef<DragState>({
+        isDragging: false,
+        startX: 0,
+        currentX: 0,
+    });
+    const [displayDragDelta, setDisplayDragDelta] = useState(0);
+    const [isTransitioning, setIsTransitioning] = useState(true);
+
     const recalcImageHeight = useCallback(() => {
         const cards = cardRefs.current;
         const texts = textBlockRefs.current;
@@ -169,8 +185,6 @@ export default function ServicesCarousel({
             resizeObserver.disconnect();
             window.removeEventListener("resize", updateMeasurements);
         };
-        // Re-measure whenever direction changes too, since dir flips the
-        // track's internal layout without necessarily firing a resize.
     }, [updateMeasurements, services_entry_items, isArabic]);
 
     useEffect(() => {
@@ -182,9 +196,6 @@ export default function ServicesCarousel({
     const scrollDistance = Math.max(trackWidth - containerWidth, 0);
     const isCarousel = scrollDistance > 0;
 
-    // Reset to the start whenever direction or item set changes — carrying
-    // over an `x` computed under the other direction's geometry is what
-    // caused the broken/half-scrolled Arabic state.
     useEffect(() => {
         setX(0);
     }, [isArabic, services_entry_items]);
@@ -199,11 +210,110 @@ export default function ServicesCarousel({
         return cardWidth + GAP_PX;
     }, []);
 
-    const goPrev = () => setX((prev) => Math.max(prev - step(), 0));
-    const goNext = () => setX((prev) => Math.min(prev + step(), scrollDistance));
+    const clampX = useCallback((value: number) => {
+        return Math.max(0, Math.min(value, scrollDistance));
+    }, [scrollDistance]);
+
+    const goPrev = () => setX((prev) => clampX(prev - step()));
+    const goNext = () => setX((prev) => clampX(prev + step()));
 
     const canPrev = x > 0.5;
     const canNext = x < scrollDistance - 0.5;
+
+    // ─── Drag Handlers ──────────────────────────────────────────────────────
+
+    const handleDragStart = useCallback((clientX: number) => {
+        dragStateRef.current = {
+            isDragging: true,
+            startX: clientX,
+            currentX: clientX,
+        };
+        setDisplayDragDelta(0);
+        setIsTransitioning(false);
+    }, []);
+
+    const handleDragMove = useCallback((clientX: number) => {
+        if (!dragStateRef.current.isDragging) return;
+
+        dragStateRef.current.currentX = clientX;
+        const delta = dragStateRef.current.startX - dragStateRef.current.currentX;
+        setDisplayDragDelta(delta);
+    }, []);
+
+    const handleDragEnd = useCallback(() => {
+        if (!dragStateRef.current.isDragging) return;
+
+        const delta = dragStateRef.current.startX - dragStateRef.current.currentX;
+        const absDelta = Math.abs(delta);
+
+        dragStateRef.current = {
+            isDragging: false,
+            startX: 0,
+            currentX: 0,
+        };
+        setDisplayDragDelta(0);
+
+        // Only process if drag moved more than threshold
+        if (absDelta > DRAG_THRESHOLD) {
+            const direction = isArabic ? -1 : 1;
+            const newX = clampX(x + delta * direction);
+            setX(newX);
+        }
+
+        setIsTransitioning(true);
+    }, [x, isArabic, clampX]);
+
+    // ─── Mouse Events ───────────────────────────────────────────────────────
+
+    const handleMouseDown = useCallback((e: React.MouseEvent) => {
+        // Only allow left-click (button 0)
+        if (e.button !== 0) return;
+        // Prevent drag on interactive elements
+        if ((e.target as HTMLElement).closest("button, a")) return;
+        handleDragStart(e.clientX);
+    }, [handleDragStart]);
+
+    const handleMouseMove = useCallback((e: MouseEvent) => {
+        if (!dragStateRef.current.isDragging) return;
+        e.preventDefault();
+        handleDragMove(e.clientX);
+    }, [handleDragMove]);
+
+    const handleMouseUp = useCallback(() => {
+        handleDragEnd();
+    }, [handleDragEnd]);
+
+    useEffect(() => {
+        document.addEventListener("mousemove", handleMouseMove);
+        document.addEventListener("mouseup", handleMouseUp);
+
+        return () => {
+            document.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener("mouseup", handleMouseUp);
+        };
+    }, [handleMouseMove, handleMouseUp]);
+
+    // ─── Touch Events ───────────────────────────────────────────────────────
+
+    const handleTouchStart = useCallback((e: React.TouchEvent) => {
+        handleDragStart(e.touches[0].clientX);
+    }, [handleDragStart]);
+
+    const handleTouchMove = useCallback((e: React.TouchEvent) => {
+        if (!dragStateRef.current.isDragging) return;
+        e.preventDefault();
+        handleDragMove(e.touches[0].clientX);
+    }, [handleDragMove]);
+
+    const handleTouchEnd = useCallback(() => {
+        handleDragEnd();
+    }, [handleDragEnd]);
+
+    // ─── Render ─────────────────────────────────────────────────────────────
+
+    // Calculate the visual offset during drag
+    const direction = isArabic ? -1 : 1;
+    const displayX = x + displayDragDelta * direction;
 
     const arrowButtonClasses = (enabled: boolean) => [
         "flex items-center justify-center h-11 w-11 transition-colors",
@@ -212,9 +322,6 @@ export default function ServicesCarousel({
             : "text-neutralLighter border-neutralLighter cursor-not-allowed",
     ].join(" ");
 
-    // "Previous" always points toward where earlier items sit, "Next" toward
-    // later items — which screen side that is flips with direction, so the
-    // icon (not the button's position) is what swaps.
     const PrevIcon = isArabic ? RightArrowIcon : LeftArrowIcon;
     const NextIcon = isArabic ? LeftArrowIcon : RightArrowIcon;
 
@@ -267,21 +374,26 @@ export default function ServicesCarousel({
         <section className="relative w-full bg-white py-10 md:py-16">
             {heading}
 
-            <div ref={wrapperRef} className="overflow-hidden px-4 mx-auto max-w-7xl w-full mt-6">
+            <div
+                ref={wrapperRef}
+                className="overflow-hidden px-4 mx-auto max-w-7xl w-full mt-6 select-none"
+                onMouseDown={handleMouseDown}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                style={{
+                    cursor: dragStateRef.current.isDragging ? "grabbing" : "grab",
+                    touchAction: "none",
+                }}
+            >
                 <div
                     ref={trackRef}
-                    // Explicit dir, set directly on this element rather than
-                    // inherited: this is what makes `flex-direction: row`
-                    // lay items right-to-left for Arabic. Doing it this way
-                    // (instead of a `flex-row-reverse` class layered on top
-                    // of whatever `dir` the page already has) means this
-                    // component works correctly whether or not an ancestor
-                    // (e.g. `<html dir="rtl">`) also sets direction — no
-                    // double-reversal, no depending on the rest of the app.
                     dir={isArabic ? "rtl" : "ltr"}
                     style={{
-                        transform: `translateX(${isArabic ? x : -x}px)`,
-                        transition: "transform 500ms cubic-bezier(0.22, 1, 0.36, 1)",
+                        transform: `translateX(${isArabic ? displayX : -displayX}px)`,
+                        transition: isTransitioning
+                            ? "transform 500ms cubic-bezier(0.22, 1, 0.36, 1)"
+                            : "none",
                     }}
                     className="flex flex-row flex-nowrap items-stretch gap-8"
                 >
