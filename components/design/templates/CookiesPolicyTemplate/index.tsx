@@ -119,7 +119,7 @@ export default function CookiesPolicyTemplate({ data, lang }: CookiesPolicyTempl
         <>
             <Navbar activeSection={activeSection} lang={lang} />
             <section ref={pagecontentRef} id="pagecontent" className='pt-21'>
-                <PolicySection data={data} lang={lang} />
+                <PolicySection data={data} lang={lang} isArabic={isArabic} />
             </section>
         </>
     );
