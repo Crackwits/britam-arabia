@@ -15,11 +15,9 @@ interface Props {
 
 const getMediaUrl = (url?: string) => (url ? `${STRAPI_URL}${url}` : "");
 
-// Gap between cards — must match the `gap-8` class on the track below.
 const GAP_PX = 32;
 
 // ─── Arrow icons ────────────────────────────────────────────────────────────
-// Icon_11 = left-pointing arrow, Icon_12 = right-pointing arrow.
 
 function LeftArrowIcon(props: React.SVGProps<SVGSVGElement>) {
     return (
@@ -43,7 +41,6 @@ function RightArrowIcon(props: React.SVGProps<SVGSVGElement>) {
 
 interface CardProps {
     item: Capabilities;
-    lang: string;
     imageHeight: number | null;
     cardRef: (el: HTMLElement | null) => void;
     textBlockRef: (el: HTMLDivElement | null) => void;
@@ -55,7 +52,7 @@ function ServiceCard({ item, imageHeight, cardRef, textBlockRef, onImageLoad }: 
 
     return (
         <article
-            ref={cardRef as (el: HTMLElement | null) => void}
+            ref={cardRef}
             className="group flex flex-col flex-shrink-0 h-full w-[88vw] sm:w-[70vw] lg:w-[450px]"
         >
             <div
@@ -98,18 +95,26 @@ export default function ServicesCarousel({
     services_entry_subheading,
     services_entry_items,
 }: Props) {
-    const wrapperRef = useRef<HTMLDivElement>(null);
-    const trackRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
-    const [trackWidth, setTrackWidth] = useState(0);
-    const [containerWidth, setContainerWidth] = useState(0);
-    const [x, setX] = useState(0);
+    // Drag state
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
+    const [startY, setStartY] = useState(0);
+    const [isHorizontalScroll, setIsHorizontalScroll] = useState(false);
+    const [currentScrollLeft, setCurrentScrollLeft] = useState(0);
 
+    // Card & image measurements
     const cardRefs = useRef<(HTMLElement | null)[]>([]);
     const textBlockRefs = useRef<(HTMLDivElement | null)[]>([]);
     const [imageHeight, setImageHeight] = useState<number | null>(null);
     const loadedCountRef = useRef(0);
 
+    const [containerWidth, setContainerWidth] = useState(0);
+    const [scrollWidth, setScrollWidth] = useState(0);
+
+    // Calculate image heights to match across all cards
     const recalcImageHeight = useCallback(() => {
         const cards = cardRefs.current;
         const texts = textBlockRefs.current;
@@ -152,71 +157,175 @@ export default function ServicesCarousel({
         return () => cancelAnimationFrame(fallback);
     }, [services_entry_items, recalcImageHeight]);
 
+    // Update measurements
     const updateMeasurements = useCallback(() => {
-        if (trackRef.current) setTrackWidth(trackRef.current.scrollWidth);
-        if (wrapperRef.current) setContainerWidth(wrapperRef.current.clientWidth);
+        if (containerRef.current) {
+            setScrollWidth(containerRef.current.scrollWidth);
+            setContainerWidth(containerRef.current.clientWidth);
+        }
     }, []);
 
     useEffect(() => {
         updateMeasurements();
 
         const resizeObserver = new ResizeObserver(() => updateMeasurements());
-        if (trackRef.current) resizeObserver.observe(trackRef.current);
-        if (wrapperRef.current) resizeObserver.observe(wrapperRef.current);
+        if (containerRef.current) resizeObserver.observe(containerRef.current);
 
         window.addEventListener("resize", updateMeasurements);
         return () => {
             resizeObserver.disconnect();
             window.removeEventListener("resize", updateMeasurements);
         };
-        // Re-measure whenever direction changes too, since dir flips the
-        // track's internal layout without necessarily firing a resize.
     }, [updateMeasurements, services_entry_items, isArabic]);
 
+    // Track scroll position for button states
     useEffect(() => {
-        const onResize = () => recalcImageHeight();
-        window.addEventListener("resize", onResize);
-        return () => window.removeEventListener("resize", onResize);
-    }, [recalcImageHeight]);
+        const handleScroll = () => {
+            if (containerRef.current) {
+                setCurrentScrollLeft(containerRef.current.scrollLeft);
+            }
+        };
 
-    const scrollDistance = Math.max(trackWidth - containerWidth, 0);
-    const isCarousel = scrollDistance > 0;
+        const container = containerRef.current;
+        if (container) {
+            container.addEventListener("scroll", handleScroll);
+            return () => container.removeEventListener("scroll", handleScroll);
+        }
+    }, []);
 
-    // Reset to the start whenever direction or item set changes — carrying
-    // over an `x` computed under the other direction's geometry is what
-    // caused the broken/half-scrolled Arabic state.
+    // Reset scroll on language change
     useEffect(() => {
-        setX(0);
+        if (containerRef.current) {
+            containerRef.current.scrollLeft = 0;
+        }
     }, [isArabic, services_entry_items]);
 
-    useEffect(() => {
-        setX((prev) => Math.min(prev, scrollDistance));
-    }, [scrollDistance]);
+    const scrollDistance = Math.max(scrollWidth - containerWidth, 0);
+    const isCarousel = scrollDistance > 0;
 
-    const step = useCallback(() => {
+    // ✅ FIXED: Same button logic for both LTR and RTL
+    // Both use the same scrollLeft manipulation logic
+    const canPrev = isArabic? -currentScrollLeft < scrollDistance - 10 : currentScrollLeft > 10;
+    const canNext = isArabic? -currentScrollLeft > 10 : currentScrollLeft < scrollDistance - 10;
+
+    // ─── Mouse Drag Handlers ───────────────────────────────────────────────
+
+    const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!containerRef.current) return;
+        if ((e.target as HTMLElement).closest("button, a")) return;
+
+        e.preventDefault();
+        setIsDragging(true);
+        setStartX(e.pageX - containerRef.current.offsetLeft);
+        setScrollLeft(containerRef.current.scrollLeft);
+        containerRef.current.style.cursor = "grabbing";
+        containerRef.current.style.scrollBehavior = "auto";
+    };
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!isDragging || !containerRef.current) return;
+        e.preventDefault();
+
+        const x = e.pageX - containerRef.current.offsetLeft;
+        const walk = (x - startX) * 1.5;
+
+        if (isArabic) {
+            containerRef.current.scrollLeft = scrollLeft + walk;
+        } else {
+            containerRef.current.scrollLeft = scrollLeft - walk;
+        }
+    };
+
+    const handleMouseUp = () => {
+        if (!containerRef.current) return;
+        setIsDragging(false);
+        containerRef.current.style.cursor = "grab";
+        containerRef.current.style.scrollBehavior = "smooth";
+    };
+
+    const handleMouseLeave = () => {
+        if (!containerRef.current) return;
+        setIsDragging(false);
+        containerRef.current.style.cursor = "grab";
+        containerRef.current.style.scrollBehavior = "smooth";
+    };
+
+    // ─── Touch Drag Handlers ───────────────────────────────────────────────
+
+    const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+        if (!containerRef.current) return;
+        setIsDragging(true);
+        setStartX(e.touches[0].clientX);
+        setStartY(e.touches[0].clientY);
+        setScrollLeft(containerRef.current.scrollLeft);
+        setIsHorizontalScroll(false);
+        containerRef.current.style.scrollBehavior = "auto";
+    };
+
+    const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+        if (!isDragging || !containerRef.current) return;
+
+        const x = e.touches[0].clientX;
+        const y = e.touches[0].clientY;
+        const deltaX = Math.abs(x - startX);
+        const deltaY = Math.abs(y - startY);
+
+        // Determine scroll direction on first move
+        if (!isHorizontalScroll && (deltaX > 5 || deltaY > 5)) {
+            setIsHorizontalScroll(deltaX > deltaY);
+        }
+
+        // Only prevent default and scroll horizontally if user is scrolling horizontally
+        if (isHorizontalScroll) {
+            e.preventDefault();
+            const walk = (startX - x) * 1.5;
+
+            if (isArabic) {
+                containerRef.current.scrollLeft = scrollLeft - walk;
+            } else {
+                containerRef.current.scrollLeft = scrollLeft + walk;
+            }
+        }
+    };
+
+    const handleTouchEnd = () => {
+        if (!containerRef.current) return;
+        setIsDragging(false);
+        setIsHorizontalScroll(false);
+        containerRef.current.style.scrollBehavior = "smooth";
+    };
+
+    // ─── Arrow Navigation ────────────────────────────────────────────────────
+
+    const getCardStep = useCallback(() => {
         const first = cardRefs.current.find(Boolean);
         const cardWidth = first?.getBoundingClientRect().width ?? 0;
         return cardWidth + GAP_PX;
     }, []);
 
-    const goPrev = () => setX((prev) => Math.max(prev - step(), 0));
-    const goNext = () => setX((prev) => Math.min(prev + step(), scrollDistance));
+    // ✅ FIXED - Same logic for both languages
+    const goPrev = () => {
+        if (!containerRef.current) return;
+        containerRef.current.style.scrollBehavior = "smooth";
+        containerRef.current.scrollLeft -= getCardStep();
+    };
 
-    const canPrev = x > 0.5;
-    const canNext = x < scrollDistance - 0.5;
+    const goNext = () => {
+        if (!containerRef.current) return;
+        containerRef.current.style.scrollBehavior = "smooth";
+        containerRef.current.scrollLeft += getCardStep();
+    };
 
-    const arrowButtonClasses = (enabled: boolean) => [
-        "flex items-center justify-center h-11 w-11 transition-colors",
-        enabled
-            ? "text-darkDefault border-neutralLighter cursor-pointer"
-            : "text-neutralLighter border-neutralLighter cursor-not-allowed",
-    ].join(" ");
+    const arrowButtonClasses = (enabled: boolean) =>
+        [
+            "flex items-center justify-center h-11 w-11 transition-colors",
+            enabled
+                ? "text-darkDefault cursor-pointer hover:text-darkDefault/80"
+                : "text-neutralLighter cursor-not-allowed",
+        ].join(" ");
 
-    // "Previous" always points toward where earlier items sit, "Next" toward
-    // later items — which screen side that is flips with direction, so the
-    // icon (not the button's position) is what swaps.
-    const PrevIcon = isArabic ? RightArrowIcon : LeftArrowIcon;
-    const NextIcon = isArabic ? LeftArrowIcon : RightArrowIcon;
+    const PrevIcon = LeftArrowIcon;
+    const NextIcon = RightArrowIcon;
 
     const heading = (
         <div className="px-4 mx-auto max-w-7xl w-full flex items-end justify-between gap-6">
@@ -239,12 +348,12 @@ export default function ServicesCarousel({
             </div>
 
             {isCarousel && (
-                <div className="flex items-center gap-3 shrink-0 pb-4">
+                <div className={`flex items-center gap-3 shrink-0 pb-4 ${isArabic ? "flex-row-reverse" : ""}`}>
                     <button
                         type="button"
                         onClick={goPrev}
                         disabled={!canPrev}
-                        aria-label={isArabic ? "التالي" : "Previous"}
+                        aria-label={isArabic ? "السابق" : "Previous"}
                         className={arrowButtonClasses(canPrev)}
                     >
                         <PrevIcon width={48} height={48} />
@@ -253,7 +362,7 @@ export default function ServicesCarousel({
                         type="button"
                         onClick={goNext}
                         disabled={!canNext}
-                        aria-label={isArabic ? "السابق" : "Next"}
+                        aria-label={isArabic ? "التالي" : "Next"}
                         className={arrowButtonClasses(canNext)}
                     >
                         <NextIcon width={48} height={48} />
@@ -267,29 +376,28 @@ export default function ServicesCarousel({
         <section className="relative w-full bg-white py-10 md:py-16">
             {heading}
 
-            <div ref={wrapperRef} className="overflow-hidden px-4 mx-auto max-w-7xl w-full mt-6">
-                <div
-                    ref={trackRef}
-                    // Explicit dir, set directly on this element rather than
-                    // inherited: this is what makes `flex-direction: row`
-                    // lay items right-to-left for Arabic. Doing it this way
-                    // (instead of a `flex-row-reverse` class layered on top
-                    // of whatever `dir` the page already has) means this
-                    // component works correctly whether or not an ancestor
-                    // (e.g. `<html dir="rtl">`) also sets direction — no
-                    // double-reversal, no depending on the rest of the app.
-                    dir={isArabic ? "rtl" : "ltr"}
-                    style={{
-                        transform: `translateX(${isArabic ? x : -x}px)`,
-                        transition: "transform 500ms cubic-bezier(0.22, 1, 0.36, 1)",
-                    }}
-                    className="flex flex-row flex-nowrap items-stretch gap-8"
-                >
+            <div
+                ref={containerRef}
+                className="overflow-x-auto overflow-y-hidden cursor-grab active:cursor-grabbing px-4 mx-auto max-w-7xl w-full mt-6 select-none scrollbar-hide"
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseLeave}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                style={{
+                    scrollBehavior: "smooth",
+                    WebkitOverflowScrolling: "touch",
+                    touchAction: "pan-y",
+                    userSelect: "none",
+                }}
+            >
+                <div className="flex flex-row flex-nowrap items-stretch gap-8">
                     {services_entry_items.map((item, index) => (
                         <ServiceCard
                             key={item.id}
                             item={item}
-                            lang={lang}
                             imageHeight={imageHeight}
                             cardRef={(el) => {
                                 cardRefs.current[index] = el;
@@ -303,6 +411,17 @@ export default function ServicesCarousel({
                     <div className="flex-shrink-0 w-4 sm:w-6 lg:w-8" aria-hidden="true" />
                 </div>
             </div>
+
+            <style jsx>{`
+                .scrollbar-hide::-webkit-scrollbar {
+                    display: none;
+                }
+
+                .scrollbar-hide {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+            `}</style>
         </section>
     );
 }
