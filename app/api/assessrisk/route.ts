@@ -1,6 +1,7 @@
 // app/api/send-email/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { isMailConfigured, sendMail, type MailAttachment } from '@/lib/mail';
+import { createHubSpotLead, isHubSpotConfigured } from '@/lib/hubspot';
 
 export const runtime = "nodejs";
 
@@ -160,8 +161,8 @@ export async function POST(request: NextRequest) {
         }
 
         const recipient = process.env.HR_BUSINESS_EMAIL || process.env.HR_INFO_EMAIL;
-        if (!recipient || !isMailConfigured()) {
-            console.error('Assess risk form: missing mail config (HR_BUSINESS_EMAIL / MS_TENANT_ID / MS_CLIENT_ID / MS_CLIENT_SECRET / MS_SENDER)');
+        if (!recipient || !isMailConfigured() || !isHubSpotConfigured()) {
+            console.error('Assess risk form: missing config (HR_BUSINESS_EMAIL / MS_TENANT_ID / MS_CLIENT_ID / MS_CLIENT_SECRET / MS_SENDER / HUBSPOT_ACCESS_TOKEN)');
             return NextResponse.json(
                 { success: false, message: 'Mail service is not configured.' },
                 { status: 500 }
@@ -220,13 +221,55 @@ export async function POST(request: NextRequest) {
       <p><em>Submitted at: ${new Date().toLocaleString()}</em></p>
     `;
 
-        await sendMail({
-            to: recipient,
-            replyTo: data.email,
-            subject: `New Risk Assessment Submission from ${data.contactName}`,
-            html: htmlContent,
-            attachments,
-        });
+        const dealDescription = `
+Inquiry type: Assess Your Risk
+
+Position: ${data.position}
+
+Facility Profile
+- Facility Type: ${data.facilityType}
+- Facility Size: ${data.facilitySize}
+- Project Stage: ${data.projectStage}
+
+Risk & Hazard Profile
+- Hazards: ${data.hazards.join(', ')}
+
+Current Fire & Life Safety Readiness
+- Emergency Fire & Rescue Service: ${data.emergencyService}
+- Pre Risk Assessment: ${data.preRiskAssessment}
+${fileInput ? `- Assessment Document: ${fileInput.name} (attached to the notification email)` : ''}
+
+Services & Support Required
+- Services Interested: ${data.servicesInterested.join(', ')}
+- Support Required: ${data.supportRequired}
+    `.trim();
+
+        // The submission counts as received if either the email or HubSpot gets it
+        const [mailResult, hubspotResult] = await Promise.allSettled([
+            sendMail({
+                to: recipient,
+                replyTo: data.email,
+                subject: `New Risk Assessment Submission from ${data.contactName}`,
+                html: htmlContent,
+                attachments,
+            }),
+            createHubSpotLead({
+                source: 'assess_your_risk',
+                fullName: data.contactName,
+                email: data.email,
+                phone: data.telephone,
+                companyName: data.organizationName,
+                jobTitle: data.position,
+                dealName: `${data.organizationName} — Risk Assessment`,
+                description: dealDescription,
+            }),
+        ]);
+
+        if (mailResult.status === 'rejected') console.error('Assess risk form: email failed:', mailResult.reason);
+        if (hubspotResult.status === 'rejected') console.error('Assess risk form: HubSpot failed:', hubspotResult.reason);
+        if (mailResult.status === 'rejected' && hubspotResult.status === 'rejected') {
+            throw new Error('Assess risk form: email and HubSpot both failed');
+        }
 
         // Send confirmation email to the user
         const confirmationEmailContent = `

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isMailConfigured, sendMail } from "@/lib/mail";
+import { createHubSpotLead, isHubSpotConfigured } from "@/lib/hubspot";
 
 export const runtime = "nodejs";
 
@@ -54,21 +55,38 @@ export async function POST(req: NextRequest) {
     `;
 
     const recipient = process.env.HR_INFO_EMAIL || process.env.HR_BUSINESS_EMAIL;
-    if (!recipient || !isMailConfigured()) {
-      console.error("Inquiry form: missing mail config (HR_INFO_EMAIL / MS_TENANT_ID / MS_CLIENT_ID / MS_CLIENT_SECRET / MS_SENDER)");
+    if (!recipient || !isMailConfigured() || !isHubSpotConfigured()) {
+      console.error("Inquiry form: missing config (HR_INFO_EMAIL / MS_TENANT_ID / MS_CLIENT_ID / MS_CLIENT_SECRET / MS_SENDER / HUBSPOT_ACCESS_TOKEN)");
       return NextResponse.json(
         { success: false, error: "Mail service is not configured." },
         { status: 500 }
       );
     }
 
-    await sendMail({
+    // The submission counts as received if either the email or HubSpot gets it
+    const [mailResult, hubspotResult] = await Promise.allSettled([
+      sendMail({
         to: recipient,
         replyTo: email,
         subject: `BRITAM ARABIA - New Inquiry — ${fullName}`,
         html: emailHtml,
-    });
+      }),
+      createHubSpotLead({
+        source: "inquiry_form",
+        fullName,
+        email,
+        phone: phoneNumber,
+        companyName,
+        dealName: `${companyName} — Website Inquiry`,
+        description: `Inquiry type: Make an Inquiry (homepage form)\n\nMessage:\n${message}`,
+      }),
+    ]);
 
+    if (mailResult.status === "rejected") console.error("Inquiry form: email failed:", mailResult.reason);
+    if (hubspotResult.status === "rejected") console.error("Inquiry form: HubSpot failed:", hubspotResult.reason);
+    if (mailResult.status === "rejected" && hubspotResult.status === "rejected") {
+      throw new Error("Inquiry form: email and HubSpot both failed");
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -88,6 +106,7 @@ export async function POST(req: NextRequest) {
  MS_CLIENT_SECRET=<client secret value>
  MS_SENDER=mailbox@yourdomain.com
  HR_INFO_EMAIL=inbox@yourdomain.com
+ HUBSPOT_ACCESS_TOKEN=pat-...
 
  See lib/mail.ts for the Entra app registration this relies on.
 */

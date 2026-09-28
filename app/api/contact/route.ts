@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isMailConfigured, sendMail } from "@/lib/mail";
+import { createHubSpotLead, isHubSpotConfigured } from "@/lib/hubspot";
 
 export const runtime = "nodejs";
 
@@ -40,20 +41,38 @@ export async function POST(req: NextRequest) {
     `;
 
         const recipient = process.env.HR_BUSINESS_EMAIL || process.env.HR_INFO_EMAIL;
-        if (!recipient || !isMailConfigured()) {
-            console.error("Contact form: missing mail config (HR_BUSINESS_EMAIL / MS_TENANT_ID / MS_CLIENT_ID / MS_CLIENT_SECRET / MS_SENDER)");
+        if (!recipient || !isMailConfigured() || !isHubSpotConfigured()) {
+            console.error("Contact form: missing config (HR_BUSINESS_EMAIL / MS_TENANT_ID / MS_CLIENT_ID / MS_CLIENT_SECRET / MS_SENDER / HUBSPOT_ACCESS_TOKEN)");
             return NextResponse.json(
                 { success: false, error: "Mail service is not configured." },
                 { status: 500 }
             );
         }
 
-        await sendMail({
-            to: recipient,
-            replyTo: email,
-            subject: `BRITAM ARABIA - New Contact Inquiry — ${inquiryType}`,
-            html: emailHtml,
-        });
+        // The submission counts as received if either the email or HubSpot gets it
+        const [mailResult, hubspotResult] = await Promise.allSettled([
+            sendMail({
+                to: recipient,
+                replyTo: email,
+                subject: `BRITAM ARABIA - New Contact Inquiry — ${inquiryType}`,
+                html: emailHtml,
+            }),
+            createHubSpotLead({
+                source: "contact_form",
+                fullName: name,
+                email,
+                phone,
+                companyName,
+                dealName: `${companyName} — ${inquiryType}`,
+                description: `Inquiry type: ${inquiryType}\nLanguage: ${lang ?? "en"}\n\nMessage:\n${message}`,
+            }),
+        ]);
+
+        if (mailResult.status === "rejected") console.error("Contact form: email failed:", mailResult.reason);
+        if (hubspotResult.status === "rejected") console.error("Contact form: HubSpot failed:", hubspotResult.reason);
+        if (mailResult.status === "rejected" && hubspotResult.status === "rejected") {
+            throw new Error("Contact form: email and HubSpot both failed");
+        }
 
         return NextResponse.json({ success: true });
     } catch (error) {
