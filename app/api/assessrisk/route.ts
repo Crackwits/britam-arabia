@@ -1,6 +1,6 @@
 // app/api/send-email/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
+import { isMailConfigured, sendMail, type MailAttachment } from '@/lib/mail';
 
 export const runtime = "nodejs";
 
@@ -159,20 +159,17 @@ export async function POST(request: NextRequest) {
             }
         }
 
-        // Create a transporter using environment variables
-        const transporter = nodemailer.createTransport({
-            host: process.env.SMTP_HOST,
-            port: Number(process.env.SMTP_PORT) || 587,
-            secure: false,
-            requireTLS: true,
-            auth: {
-                user: process.env.SMTP_USER,
-                pass: process.env.SMTP_PASS,
-            },
-        });
+        const recipient = process.env.HR_BUSINESS_EMAIL || process.env.HR_INFO_EMAIL;
+        if (!recipient || !isMailConfigured()) {
+            console.error('Assess risk form: missing mail config (HR_BUSINESS_EMAIL / MS_TENANT_ID / MS_CLIENT_ID / MS_CLIENT_SECRET / MS_SENDER)');
+            return NextResponse.json(
+                { success: false, message: 'Mail service is not configured.' },
+                { status: 500 }
+            );
+        }
 
         // Prepare file attachments
-        const attachments: any[] = [];
+        const attachments: MailAttachment[] = [];
         if (fileInput) {
             const buffer = await fileInput.arrayBuffer();
             attachments.push({
@@ -223,42 +220,10 @@ export async function POST(request: NextRequest) {
       <p><em>Submitted at: ${new Date().toLocaleString()}</em></p>
     `;
 
-        const textContent = `
-New Risk Assessment Submission
-
-Organisation & Contact Information
-- Organization Name: ${data.organizationName}
-- Contact Name: ${data.contactName}
-- Email: ${data.email}
-- Position: ${data.position}
-- Telephone: ${data.telephone}
-
-Facility Profile
-- Facility Type: ${data.facilityType}
-- Facility Size: ${data.facilitySize}
-- Project Stage: ${data.projectStage}
-
-Risk & Hazard Profile
-- Hazards: ${data.hazards.join(', ')}
-
-Current Fire & Life Safety Readiness
-- Emergency Fire & Rescue Service: ${data.emergencyService}
-- Pre Risk Assessment: ${data.preRiskAssessment}
-${fileInput ? `- Assessment Document: ${fileInput.name}` : ''}
-
-Services & Support Required
-- Services Interested: ${data.servicesInterested.join(', ')}
-- Support Required: ${data.supportRequired}
-
-Submitted at: ${new Date().toLocaleString()}
-    `;
-
-        await transporter.sendMail({
-            from: process.env.SMTP_USER,
-            to: process.env.HR_BUSINESS_EMAIL || process.env.HR_INFO_EMAIL,
+        await sendMail({
+            to: recipient,
             replyTo: data.email,
             subject: `New Risk Assessment Submission from ${data.contactName}`,
-            text: textContent,
             html: htmlContent,
             attachments,
         });
@@ -284,13 +249,11 @@ Submitted at: ${new Date().toLocaleString()}
       <p>Best regards,<br/>The Risk Assessment Team</p>
     `;
 
-        await transporter.sendMail({
-            from: process.env.SMTP_USER,
+        await sendMail({
             to: data.email,
             replyTo: process.env.HR_INFO_EMAIL,
             subject: 'Risk Assessment Received - Thank You',
             html: confirmationEmailContent,
-            text: confirmationEmailContent.replace(/<[^>]*>/g, ''),
         });
 
         return NextResponse.json(

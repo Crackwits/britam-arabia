@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import nodemailer from "nodemailer";
+import { isMailConfigured, sendMail } from "@/lib/mail";
 
 export const runtime = "nodejs";
 
@@ -24,20 +24,6 @@ export async function POST(req: NextRequest) {
         }
 
         // ── Build email body ──────────────────────────────────────────────────────
-        const emailBody = `
-New contact inquiry received.
-
-Inquiry Type: ${inquiryType}
-Name: ${name}
-Email: ${email}
-Phone: ${phone}
-Company Name: ${companyName}
-Language: ${lang ?? "en"}
-
-Message:
-${message}
-    `.trim();
-
         const emailHtml = `
       <h2 style="color:#001239;">New Contact Inquiry</h2>
       <table cellpadding="8" style="border-collapse:collapse;width:100%;max-width:600px;">
@@ -53,24 +39,19 @@ ${message}
       <p style="color:#001239;white-space:pre-line;">${message}</p>
     `;
 
-        // ── Nodemailer transport ──────────────────────────────────────────────────
-        const transporter = nodemailer.createTransport({
-            host: process.env.SMTP_HOST,
-            port: Number(process.env.SMTP_PORT) || 587,
-            secure: false,
-            requireTLS: true,
-            auth: {
-                user: process.env.SMTP_USER,
-                pass: process.env.SMTP_PASS,
-            },
-        });
+        const recipient = process.env.HR_BUSINESS_EMAIL || process.env.HR_INFO_EMAIL;
+        if (!recipient || !isMailConfigured()) {
+            console.error("Contact form: missing mail config (HR_BUSINESS_EMAIL / MS_TENANT_ID / MS_CLIENT_ID / MS_CLIENT_SECRET / MS_SENDER)");
+            return NextResponse.json(
+                { success: false, error: "Mail service is not configured." },
+                { status: 500 }
+            );
+        }
 
-        await transporter.sendMail({
-            from: process.env.SMTP_USER,
-            to: process.env.HR_BUSINESS_EMAIL || process.env.HR_INFO_EMAIL,
+        await sendMail({
+            to: recipient,
             replyTo: email,
             subject: `BRITAM ARABIA - New Contact Inquiry — ${inquiryType}`,
-            text: emailBody,
             html: emailHtml,
         });
 

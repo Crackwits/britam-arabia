@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import nodemailer from "nodemailer";
+import { isMailConfigured, sendMail } from "@/lib/mail";
 
 export const runtime = "nodejs";
 
@@ -107,26 +107,6 @@ function buildHtml(payload: SubmissionPayload) {
     </div>`;
 }
 
-function buildText(payload: SubmissionPayload) {
-    const lines = payload.fields.map((f) => `${f.label}: ${f.value || "—"}`);
-    if (payload.certifications) {
-        lines.push("", "Certifications:");
-        lines.push(
-            ...(payload.certifications.length
-                ? payload.certifications.map((c) => `  ${c.name}: ${c.status}`)
-                : ["  None declared."])
-        );
-    }
-    return [
-        "New job application received.",
-        "",
-        `Form: ${payload.formType}`,
-        `Posting: ${payload.position || "N/A"} (${payload.slug || "N/A"})`,
-        "",
-        ...lines,
-    ].join("\n");
-}
-
 // ─── Handler ──────────────────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
@@ -190,6 +170,7 @@ export async function POST(req: NextRequest) {
                     {
                         filename: file.name,
                         content: Buffer.from(await file.arrayBuffer()),
+                        contentType: file.type,
                     },
                 ]
                 : [];
@@ -197,27 +178,22 @@ export async function POST(req: NextRequest) {
         // ── Reply-to: first email-looking answer in the payload ──
         const replyTo = payload.fields.find((f) => /\S+@\S+\.\S+/.test(f.value))?.value;
 
-        // ── Build transporter ──
-        const transporter = nodemailer.createTransport({
-            host: process.env.SMTP_HOST,
-            port: Number(process.env.SMTP_PORT) || 587,
-            secure: false,
-            requireTLS: true,
-            auth: {
-                user: process.env.SMTP_USER,
-                pass: process.env.SMTP_PASS,
-            },
-        });
+        const recipient = process.env.HR_CAREERS_EMAIL;
+        if (!recipient || !isMailConfigured()) {
+            console.error("Careers form: missing mail config (HR_CAREERS_EMAIL / MS_TENANT_ID / MS_CLIENT_ID / MS_CLIENT_SECRET / MS_SENDER)");
+            return NextResponse.json(
+                { success: false, error: "Mail service is not configured." },
+                { status: 500 }
+            );
+        }
 
         const positionLabel = payload.position?.trim() || "N/A";
         const formLabel = payload.formType === "firefighters" ? "Firefighters" : "Management";
 
-        await transporter.sendMail({
-            from: process.env.SMTP_USER,
-            to: process.env.HR_CAREERS_EMAIL,
-            ...(replyTo ? { replyTo } : {}),
+        await sendMail({
+            to: recipient,
+            replyTo,
             subject: `BRITAM ARABIA - New ${formLabel} Application - ${positionLabel}`,
-            text: buildText(payload),
             html: buildHtml(payload),
             attachments,
         });

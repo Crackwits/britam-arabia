@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import nodemailer from "nodemailer";
+import { isMailConfigured, sendMail } from "@/lib/mail";
 
 export const runtime = "nodejs";
 
@@ -40,17 +40,6 @@ export async function POST(req: NextRequest) {
     // const safeLang = escapeHtml(locale ?? "en");
 
     // ── Build email body ──────────────────────────────────────────────────────
-    const emailBody = `
-New inquiry received.
-
-Name: ${fullName}
-Email: ${email}
-Phone: ${phoneNumber}
-Company Name: ${companyName}
-Message:
-${message}
-    `.trim();
-
     const emailHtml = `
       <h2 style="color:#001239;">New Inquiry</h2>
       <table cellpadding="8" style="border-collapse:collapse;width:100%;max-width:600px;">
@@ -65,32 +54,18 @@ ${message}
     `;
 
     const recipient = process.env.HR_INFO_EMAIL || process.env.HR_BUSINESS_EMAIL;
-    if (!recipient || !process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
-      console.error("Inquiry form: missing mail config (HR_INFO_EMAIL / SMTP_HOST / SMTP_USER / SMTP_PASS)");
+    if (!recipient || !isMailConfigured()) {
+      console.error("Inquiry form: missing mail config (HR_INFO_EMAIL / MS_TENANT_ID / MS_CLIENT_ID / MS_CLIENT_SECRET / MS_SENDER)");
       return NextResponse.json(
         { success: false, error: "Mail service is not configured." },
         { status: 500 }
       );
     }
 
-    // ── Nodemailer transport ──────────────────────────────────────────────────
-    const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: Number(process.env.SMTP_PORT) || 587,
-        secure: false,
-        requireTLS: true,
-        auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS,
-        },
-    });
-
-    await transporter.sendMail({
-        from: process.env.SMTP_USER,
+    await sendMail({
         to: recipient,
         replyTo: email,
         subject: `BRITAM ARABIA - New Inquiry — ${fullName}`,
-        text: emailBody,
         html: emailHtml,
     });
 
@@ -108,13 +83,11 @@ ${message}
 /*
  ─── Required environment variables (.env.local) ───────────────────────────
 
- SMTP_HOST=smtp.yourprovider.com
- SMTP_PORT=587
- SMTP_USER=your-smtp-username
- SMTP_PASS=your-smtp-password
- CONTACT_RECEIVER_EMAIL=inbox@yourdomain.com
+ MS_TENANT_ID=<Directory (tenant) ID>
+ MS_CLIENT_ID=<Application (client) ID>
+ MS_CLIENT_SECRET=<client secret value>
+ MS_SENDER=mailbox@yourdomain.com
+ HR_INFO_EMAIL=inbox@yourdomain.com
 
- Install nodemailer if not already present:
-   npm install nodemailer
-   npm install -D @types/nodemailer
+ See lib/mail.ts for the Entra app registration this relies on.
 */
