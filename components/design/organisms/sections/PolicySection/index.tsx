@@ -7,9 +7,10 @@ import { formatDate } from "@/components/providers/FormatDate";
 type PolicySectionProps = {
     data: PrivacyPolicyAttributes | TermsAndConditionsAttributes | CookiePolicyAttributes;
     lang: string;
+    isArabic: boolean;
 };
 
-export default function PolicySection({ data, lang }: PolicySectionProps) {
+export default function PolicySection({ data, lang, isArabic }: PolicySectionProps) {
     const headerRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
 
@@ -63,7 +64,7 @@ export default function PolicySection({ data, lang }: PolicySectionProps) {
                         </h1>
                     )}
                     <p className="font-sm text-darkLight pb-12">
-                        Last updated: {formatDate(data.updatedAt)}
+                        {isArabic ? "تاريخ آخر تحديث:" : "Last updated:"} {formatDate(data.updatedAt)}
                     </p>
                 </div>
                 <div

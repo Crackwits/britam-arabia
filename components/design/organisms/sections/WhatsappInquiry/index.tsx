@@ -44,16 +44,16 @@ const translations = {
     },
     ar: {
         buttonLabel: 'فتح استفسار واتساب',
-        title: 'استفسار واتساب',
-        headerNote: 'سنرد عليك قريبًا',
+        title: 'استفسار عبر واتساب',
+        headerNote: 'سنعاود الاتصال بك في أقرب وقت ممكن.',
         subtitle: 'كيف يمكننا مساعدتك؟',
         newBusiness: 'أعمال جديدة',
-        businessDesc: 'استفسر عن منتجاتنا وخدماتنا',
+        businessDesc: 'استفسر عن خدماتنا',
         recruitment: 'التوظيف',
-        recruitmentDesc: 'استكشف فرص الوظائف لدينا',
+        recruitmentDesc: 'استكشف الفرص الوظيفية المتاحة لدينا',
         closeBtn: 'إغلاق',
         closeLabel: 'إغلاق النافذة',
-        footer: '💬 وقت الرد: عادة خلال ١-٢ ساعة',
+        footer: '💬 نرد خلال ساعة أو ساعتين',
     },
 } as const;
 

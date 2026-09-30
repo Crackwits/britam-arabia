@@ -23,6 +23,7 @@ const translations = {
     en: {
         inquiryTypePlaceholder: "Select Inquiry Type",
         name: "Enter your name",
+        nameLabel: "Fullname",
         email: "Enter your email",
         phone: "Phone number",
         companyName: "Enter your company name",
@@ -30,7 +31,8 @@ const translations = {
         phoneLabel: "Phone",
         emailLabel: "Email",
         addressLabel: "Address",
-        message: "How Can We Help? *",
+        messageLabel: "How Can We Help? *",
+        message: "Enter your inquiry details here",
         submit: "SEND MESSAGE",
         submitting: "SENDING...",
         success: "Your message has been sent successfully. We'll be in touch shortly.",
@@ -50,24 +52,26 @@ const translations = {
         },
     },
     ar: {
-        inquiryTypePlaceholder: "اختر نوع الاستفسار",
-        name: "أدخل اسمك",
+        inquiryTypePlaceholder: "حدد نوع الاستفسار:",
+        name: "أدخل الاسم",
+        nameLabel: "الاسم الكامل",
         email: "أدخل بريدك الإلكتروني",
-        phone: "رقم الهاتف",
+        phone: "أدخل رقم الهاتف",
         phoneLabel: "الهاتف",
         companyName: "أدخل اسم شركتك",
         companyNameLabel: "اسم الشركة",
         emailLabel: "البريد الإلكتروني",
         addressLabel: "العنوان",
-        message: "كيف يمكننا مساعدتك؟ *",
-        submit: "إرسال الرسالة",
+        messageLabel: "كيف يمكننا مساعدتك؟ *",
+        message: "اكتب تفاصيل استفسارك هنا",
+        submit: "ارسل",
         submitting: "جارٍ الإرسال...",
         success: "تم إرسال رسالتك بنجاح. سنتواصل معك قريباً.",
         genericError: "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
         inquiryOptions: [
-            "الحكومة",
-            "الشركات",
-            "المشاريع",
+            "حكومي",
+            "شركات",
+            "مشاريع",
         ],
         errors: {
             inquiryType: "يرجى اختيار نوع الاستفسار",
@@ -302,7 +306,7 @@ export default function ContactSection({
                             {/* Name */}
                             <div>
                                 <label htmlFor="name" className="sr-only">
-                                    {t.name}
+                                    {t.nameLabel}
                                 </label>
                                 <input
                                     id="name"
@@ -386,7 +390,7 @@ export default function ContactSection({
                             {/* Message */}
                             <div>
                                 <label htmlFor="message" className="sr-only">
-                                    {t.message}
+                                    {t.messageLabel}
                                 </label>
                                 <textarea
                                     id="message"
