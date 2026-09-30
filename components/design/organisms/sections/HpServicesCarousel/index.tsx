@@ -16,25 +16,77 @@ interface Props {
 const getMediaUrl = (url?: string) => (url ? `${STRAPI_URL}${url}` : "");
 
 const GAP_PX = 32;
+const EDGE_THRESHOLD = 10;
+const SCROLL_DURATION = 800; // ms, raise for slower, lower for faster
+
+const easeInOutCubic = (t: number) =>
+    t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
 // ─── Arrow icons ────────────────────────────────────────────────────────────
-
-function LeftArrowIcon(props: React.SVGProps<SVGSVGElement>) {
+export function LeftArrowIcon(props: React.SVGProps<SVGSVGElement>) {
     return (
-        <svg width="50" height="51" viewBox="0 0 50 51" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-            <path fillRule="evenodd" clipRule="evenodd" d="M0.999999 24.5V24.5C0.999999 37.756 11.744 48.5 25 48.5V48.5C38.256 48.5 49 37.756 49 24.5V24.5C49 11.244 38.256 0.500002 25 0.500002V0.500002C11.744 0.500001 1 11.244 0.999999 24.5Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M31.2656 25.3732L18.7342 25.3732" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M23.7393 30.3818L18.7401 25.3818L23.7393 20.3818" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+        <svg
+            width="62"
+            height="62"
+            viewBox="0 0 62 62"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}
+        >
+            <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M7.75 31C7.75 18.1583 18.1583 7.75 31 7.75C43.8418 7.75 54.25 18.1583 54.25 31C54.25 43.8418 43.8418 54.25 31 54.25C18.1583 54.25 7.75 43.8418 7.75 31Z"
+                fill="#34343F"
+            />
+            <path
+                d="M38.7695 31.0104L23.2306 31.0104"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+            <path
+                d="M29.4365 24.8001L23.2376 31.0001L29.4365 37.2001"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
         </svg>
     );
 }
 
-function RightArrowIcon(props: React.SVGProps<SVGSVGElement>) {
+export function RightArrowIcon(props: React.SVGProps<SVGSVGElement>) {
     return (
-        <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-            <path fillRule="evenodd" clipRule="evenodd" d="M48.7998 25.1182V25.1182C48.7998 38.3742 38.0558 49.1182 24.7998 49.1182V49.1182C11.5438 49.1182 0.799806 38.3742 0.799806 25.1182V25.1182C0.799805 11.8622 11.5438 1.11817 24.7998 1.11817V1.11817C38.0558 1.11817 48.7998 11.8622 48.7998 25.1182Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M18.7344 24.9914L31.2658 24.9914" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M26.2607 30L31.2599 25L26.2607 20" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+        <svg
+            width="62"
+            height="62"
+            viewBox="0 0 62 62"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            {...props}
+        >
+            <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M54.25 31C54.25 43.8418 43.8418 54.25 31 54.25C18.1583 54.25 7.75 43.8418 7.75 31C7.75 18.1583 18.1583 7.75 31 7.75C43.8418 7.75 54.25 18.1583 54.25 31Z"
+                fill="#34343F"
+            />
+            <path
+                d="M23.2305 30.9897L38.7694 30.9897"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
+            <path
+                d="M32.5635 37.2L38.7624 31L32.5635 24.7999"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
         </svg>
     );
 }
@@ -89,21 +141,20 @@ function ServiceCard({ item, imageHeight, cardRef, textBlockRef, onImageLoad }: 
 }
 
 export default function ServicesCarousel({
-    lang,
     isArabic,
     services_entry_heading,
     services_entry_subheading,
     services_entry_items,
 }: Props) {
     const containerRef = useRef<HTMLDivElement>(null);
+    const trackRef = useRef<HTMLDivElement>(null);
 
-    // Drag state
-    const [isDragging, setIsDragging] = useState(false);
-    const [startX, setStartX] = useState(0);
-    const [scrollLeft, setScrollLeft] = useState(0);
-    const [startY, setStartY] = useState(0);
-    const [isHorizontalScroll, setIsHorizontalScroll] = useState(false);
-    const [currentScrollLeft, setCurrentScrollLeft] = useState(0);
+    // Arrow state
+    const [edges, setEdges] = useState({
+        isCarousel: false,
+        canLeft: false,
+        canRight: false,
+    });
 
     // Card & image measurements
     const cardRefs = useRef<(HTMLElement | null)[]>([]);
@@ -111,10 +162,15 @@ export default function ServicesCarousel({
     const [imageHeight, setImageHeight] = useState<number | null>(null);
     const loadedCountRef = useRef(0);
 
-    const [containerWidth, setContainerWidth] = useState(0);
-    const [scrollWidth, setScrollWidth] = useState(0);
+    // Drag + animation bookkeeping (refs => no re-renders)
+    const dragRef = useRef({ active: false, startX: 0, startScroll: 0 });
+    const rafRef = useRef<number | null>(null);
+    const animRef = useRef<{ raf: number | null; target: number | null }>({
+        raf: null,
+        target: null,
+    });
 
-    // Calculate image heights to match across all cards
+    // ─── Image height matching ──────────────────────────────────────────────
     const recalcImageHeight = useCallback(() => {
         const cards = cardRefs.current;
         const texts = textBlockRefs.current;
@@ -131,14 +187,10 @@ export default function ServicesCarousel({
             const textMarginTop = parseFloat(getComputedStyle(textEl).marginTop) || 0;
 
             const available = cardHeight - textHeight - textMarginTop;
-            if (available > 0 && available < min) {
-                min = available;
-            }
+            if (available > 0 && available < min) min = available;
         }
 
-        if (Number.isFinite(min)) {
-            setImageHeight(Math.floor(min));
-        }
+        if (Number.isFinite(min)) setImageHeight(Math.floor(min));
     }, [services_entry_items.length]);
 
     const handleImageLoad = useCallback(() => {
@@ -157,175 +209,180 @@ export default function ServicesCarousel({
         return () => cancelAnimationFrame(fallback);
     }, [services_entry_items, recalcImageHeight]);
 
-    // Update measurements
-    const updateMeasurements = useCallback(() => {
-        if (containerRef.current) {
-            setScrollWidth(containerRef.current.scrollWidth);
-            setContainerWidth(containerRef.current.clientWidth);
-        }
+    // ─── Arrow enabled/disabled state ───────────────────────────────────────
+    const updateEdges = useCallback(() => {
+        const el = containerRef.current;
+        if (!el) return;
+
+        const max = el.scrollWidth - el.clientWidth;
+        const isRtl = getComputedStyle(el).direction === "rtl";
+
+        // Physical distance scrolled from the LEFT edge.
+        // LTR: scrollLeft goes 0 → max.  RTL: scrollLeft goes 0 → -max.
+        const fromLeft = isRtl ? max + el.scrollLeft : el.scrollLeft;
+        const fromRight = max - fromLeft;
+
+        const next = {
+            isCarousel: max > EDGE_THRESHOLD,
+            canLeft: fromLeft > EDGE_THRESHOLD,
+            canRight: fromRight > EDGE_THRESHOLD,
+        };
+
+        setEdges((prev) =>
+            prev.isCarousel === next.isCarousel &&
+                prev.canLeft === next.canLeft &&
+                prev.canRight === next.canRight
+                ? prev
+                : next,
+        );
     }, []);
 
+    // Listen to scroll (rAF-throttled)
     useEffect(() => {
-        updateMeasurements();
+        const el = containerRef.current;
+        if (!el) return;
 
-        const resizeObserver = new ResizeObserver(() => updateMeasurements());
-        if (containerRef.current) resizeObserver.observe(containerRef.current);
+        const onScroll = () => {
+            if (rafRef.current !== null) return;
+            rafRef.current = requestAnimationFrame(() => {
+                rafRef.current = null;
+                updateEdges();
+            });
+        };
 
-        window.addEventListener("resize", updateMeasurements);
+        el.addEventListener("scroll", onScroll, { passive: true });
         return () => {
-            resizeObserver.disconnect();
-            window.removeEventListener("resize", updateMeasurements);
+            el.removeEventListener("scroll", onScroll);
+            if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+            rafRef.current = null;
         };
-    }, [updateMeasurements, services_entry_items, isArabic]);
+    }, [updateEdges]);
 
-    // Track scroll position for button states
+    // Re-measure when container OR content size changes
     useEffect(() => {
-        const handleScroll = () => {
-            if (containerRef.current) {
-                setCurrentScrollLeft(containerRef.current.scrollLeft);
-            }
-        };
+        updateEdges();
 
-        const container = containerRef.current;
-        if (container) {
-            container.addEventListener("scroll", handleScroll);
-            return () => container.removeEventListener("scroll", handleScroll);
-        }
+        const ro = new ResizeObserver(() => updateEdges());
+        if (containerRef.current) ro.observe(containerRef.current);
+        if (trackRef.current) ro.observe(trackRef.current);
+
+        window.addEventListener("resize", updateEdges);
+        return () => {
+            ro.disconnect();
+            window.removeEventListener("resize", updateEdges);
+        };
+    }, [updateEdges, services_entry_items, isArabic]);
+
+    // ─── Smooth scroll animation ────────────────────────────────────────────
+    const cancelAnimation = useCallback(() => {
+        const anim = animRef.current;
+        if (anim.raf !== null) cancelAnimationFrame(anim.raf);
+        anim.raf = null;
+        anim.target = null;
     }, []);
 
-    // Reset scroll on language change
-    useEffect(() => {
-        if (containerRef.current) {
-            containerRef.current.scrollLeft = 0;
-        }
-    }, [isArabic, services_entry_items]);
+    const animateScrollTo = useCallback((to: number) => {
+        const el = containerRef.current;
+        if (!el) return;
 
-    const scrollDistance = Math.max(scrollWidth - containerWidth, 0);
-    const isCarousel = scrollDistance > 0;
+        const anim = animRef.current;
+        if (anim.raf !== null) cancelAnimationFrame(anim.raf);
 
-    // ✅ FIXED: Same button logic for both LTR and RTL
-    // Both use the same scrollLeft manipulation logic
-    const canPrev = isArabic? -currentScrollLeft < scrollDistance - 10 : currentScrollLeft > 10;
-    const canNext = isArabic? -currentScrollLeft > 10 : currentScrollLeft < scrollDistance - 10;
-
-    // ─── Mouse Drag Handlers ───────────────────────────────────────────────
-
-    const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!containerRef.current) return;
-        if ((e.target as HTMLElement).closest("button, a")) return;
-
-        e.preventDefault();
-        setIsDragging(true);
-        setStartX(e.pageX - containerRef.current.offsetLeft);
-        setScrollLeft(containerRef.current.scrollLeft);
-        containerRef.current.style.cursor = "grabbing";
-        containerRef.current.style.scrollBehavior = "auto";
-    };
-
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!isDragging || !containerRef.current) return;
-        e.preventDefault();
-
-        const x = e.pageX - containerRef.current.offsetLeft;
-        const walk = (x - startX) * 1.5;
-
-        if (isArabic) {
-            containerRef.current.scrollLeft = scrollLeft + walk;
-        } else {
-            containerRef.current.scrollLeft = scrollLeft - walk;
-        }
-    };
-
-    const handleMouseUp = () => {
-        if (!containerRef.current) return;
-        setIsDragging(false);
-        containerRef.current.style.cursor = "grab";
-        containerRef.current.style.scrollBehavior = "smooth";
-    };
-
-    const handleMouseLeave = () => {
-        if (!containerRef.current) return;
-        setIsDragging(false);
-        containerRef.current.style.cursor = "grab";
-        containerRef.current.style.scrollBehavior = "smooth";
-    };
-
-    // ─── Touch Drag Handlers ───────────────────────────────────────────────
-
-    const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-        if (!containerRef.current) return;
-        setIsDragging(true);
-        setStartX(e.touches[0].clientX);
-        setStartY(e.touches[0].clientY);
-        setScrollLeft(containerRef.current.scrollLeft);
-        setIsHorizontalScroll(false);
-        containerRef.current.style.scrollBehavior = "auto";
-    };
-
-    const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-        if (!isDragging || !containerRef.current) return;
-
-        const x = e.touches[0].clientX;
-        const y = e.touches[0].clientY;
-        const deltaX = Math.abs(x - startX);
-        const deltaY = Math.abs(y - startY);
-
-        // Determine scroll direction on first move
-        if (!isHorizontalScroll && (deltaX > 5 || deltaY > 5)) {
-            setIsHorizontalScroll(deltaX > deltaY);
+        const from = el.scrollLeft;
+        const distance = to - from;
+        if (Math.abs(distance) < 1) {
+            anim.raf = null;
+            anim.target = null;
+            return;
         }
 
-        // Only prevent default and scroll horizontally if user is scrolling horizontally
-        if (isHorizontalScroll) {
-            e.preventDefault();
-            const walk = (startX - x) * 1.5;
+        const reduceMotion = window.matchMedia(
+            "(prefers-reduced-motion: reduce)",
+        ).matches;
+        const duration = reduceMotion ? 0 : SCROLL_DURATION;
 
-            if (isArabic) {
-                containerRef.current.scrollLeft = scrollLeft - walk;
+        // Make sure no CSS smooth-scrolling fights the JS animation
+        el.style.scrollBehavior = "auto";
+        anim.target = to;
+        const start = performance.now();
+
+        const step = (now: number) => {
+            const t = duration === 0 ? 1 : Math.min((now - start) / duration, 1);
+            el.scrollLeft = from + distance * easeInOutCubic(t);
+
+            if (t < 1) {
+                anim.raf = requestAnimationFrame(step);
             } else {
-                containerRef.current.scrollLeft = scrollLeft + walk;
+                anim.raf = null;
+                anim.target = null;
             }
-        }
-    };
+        };
 
-    const handleTouchEnd = () => {
-        if (!containerRef.current) return;
-        setIsDragging(false);
-        setIsHorizontalScroll(false);
-        containerRef.current.style.scrollBehavior = "smooth";
-    };
+        anim.raf = requestAnimationFrame(step);
+    }, []);
 
-    // ─── Arrow Navigation ────────────────────────────────────────────────────
+    // Reset scroll on language / data change
+    useEffect(() => {
+        cancelAnimation();
+        if (containerRef.current) containerRef.current.scrollLeft = 0;
+        updateEdges();
+    }, [isArabic, services_entry_items, updateEdges, cancelAnimation]);
 
+    // Stop animation on unmount
+    useEffect(() => cancelAnimation, [cancelAnimation]);
+
+    // ─── Arrow navigation ───────────────────────────────────────────────────
     const getCardStep = useCallback(() => {
         const first = cardRefs.current.find(Boolean);
         const cardWidth = first?.getBoundingClientRect().width ?? 0;
         return cardWidth + GAP_PX;
     }, []);
 
-    // ✅ FIXED - Same logic for both languages
-    const goPrev = () => {
-        if (!containerRef.current) return;
-        containerRef.current.style.scrollBehavior = "smooth";
-        containerRef.current.scrollLeft -= getCardStep();
+    const scrollByCard = (direction: "left" | "right") => {
+        const el = containerRef.current;
+        if (!el) return;
+
+        const max = el.scrollWidth - el.clientWidth;
+        const isRtl = getComputedStyle(el).direction === "rtl";
+        const minPos = isRtl ? -max : 0;
+        const maxPos = isRtl ? 0 : max;
+
+        // Chain from the in-flight target so rapid clicks keep moving forward
+        const base = animRef.current.target ?? el.scrollLeft;
+        const delta = direction === "right" ? getCardStep() : -getCardStep();
+        const target = Math.min(maxPos, Math.max(minPos, base + delta));
+
+        animateScrollTo(target);
     };
 
-    const goNext = () => {
-        if (!containerRef.current) return;
-        containerRef.current.style.scrollBehavior = "smooth";
-        containerRef.current.scrollLeft += getCardStep();
+    // ─── Mouse drag (touch uses native scrolling) ───────────────────────────
+    const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+        const el = containerRef.current;
+        if (!el) return;
+        if ((e.target as HTMLElement).closest("button, a")) return;
+
+        e.preventDefault(); // stops native image dragging
+        cancelAnimation();
+        dragRef.current = {
+            active: true,
+            startX: e.clientX,
+            startScroll: el.scrollLeft,
+        };
     };
 
-    const arrowButtonClasses = (enabled: boolean) =>
-        [
-            "flex items-center justify-center h-11 w-11 transition-colors",
-            enabled
-                ? "text-darkDefault cursor-pointer hover:text-darkDefault/80"
-                : "text-neutralLighter cursor-not-allowed",
-        ].join(" ");
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        const el = containerRef.current;
+        const drag = dragRef.current;
+        if (!drag.active || !el) return;
+        e.preventDefault();
 
-    const PrevIcon = LeftArrowIcon;
-    const NextIcon = RightArrowIcon;
+        // Same formula for LTR and RTL: content follows the pointer
+        el.scrollLeft = drag.startScroll - (e.clientX - drag.startX) * 1.5;
+    };
+
+    const endDrag = () => {
+        dragRef.current.active = false;
+    };
 
     const heading = (
         <div className="px-4 mx-auto max-w-7xl w-full flex items-end justify-between gap-6">
@@ -346,72 +403,86 @@ export default function ServicesCarousel({
                     {services_entry_heading}
                 </h2>
             </div>
-
-            {isCarousel && (
-                <div className={`flex items-center gap-3 shrink-0 pb-4 ${isArabic ? "flex-row-reverse" : ""}`}>
-                    <button
-                        type="button"
-                        onClick={goPrev}
-                        disabled={!canPrev}
-                        aria-label={isArabic ? "السابق" : "Previous"}
-                        className={arrowButtonClasses(canPrev)}
-                    >
-                        <PrevIcon width={48} height={48} />
-                    </button>
-                    <button
-                        type="button"
-                        onClick={goNext}
-                        disabled={!canNext}
-                        aria-label={isArabic ? "التالي" : "Next"}
-                        className={arrowButtonClasses(canNext)}
-                    >
-                        <NextIcon width={48} height={48} />
-                    </button>
-                </div>
-            )}
         </div>
     );
+
+    const arrowBase =
+        "absolute top-1/3 z-20 -translate-y-1/3 transition-opacity duration-200";
 
     return (
         <section className="relative w-full bg-white py-10 md:py-16">
             {heading}
+            <div className="relative w-full mt-6">
+                {/* Left button (physical left in both languages) */}
+                {edges.isCarousel && (
+                    <button
+                        type="button"
+                        onClick={() => scrollByCard("left")}
+                        disabled={!edges.canLeft}
+                        aria-label={isArabic ? "التالي" : "Previous"}
+                        className={`${arrowBase} left-4 ${edges.canLeft
+                                ? "cursor-pointer opacity-100"
+                                : "cursor-not-allowed opacity-40"
+                            }`}
+                    >
+                        <LeftArrowIcon width={62} height={62} />
+                    </button>
+                )}
 
-            <div
-                ref={containerRef}
-                className="overflow-x-auto overflow-y-hidden cursor-grab active:cursor-grabbing px-4 mx-auto max-w-7xl w-full mt-6 select-none scrollbar-hide"
-                onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={handleMouseLeave}
-                onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
-                onTouchEnd={handleTouchEnd}
-                style={{
-                    scrollBehavior: "smooth",
-                    WebkitOverflowScrolling: "touch",
-                    touchAction: "pan-y",
-                    userSelect: "none",
-                }}
-            >
-                <div className="flex flex-row flex-nowrap items-stretch gap-8">
-                    {services_entry_items.map((item, index) => (
-                        <ServiceCard
-                            key={item.id}
-                            item={item}
-                            imageHeight={imageHeight}
-                            cardRef={(el) => {
-                                cardRefs.current[index] = el;
-                            }}
-                            textBlockRef={(el) => {
-                                textBlockRefs.current[index] = el;
-                            }}
-                            onImageLoad={handleImageLoad}
-                        />
-                    ))}
-                    <div className="flex-shrink-0 w-4 sm:w-6 lg:w-8" aria-hidden="true" />
+                {/* Right button */}
+                {edges.isCarousel && (
+                    <button
+                        type="button"
+                        onClick={() => scrollByCard("right")}
+                        disabled={!edges.canRight}
+                        aria-label={isArabic ? "السابق" : "Next"}
+                        className={`${arrowBase} right-4 ${edges.canRight
+                                ? "cursor-pointer opacity-100"
+                                : "cursor-not-allowed opacity-40"
+                            }`}
+                    >
+                        <RightArrowIcon width={62} height={62} />
+                    </button>
+                )}
+
+                <div
+                    ref={containerRef}
+                    dir={isArabic ? "rtl" : "ltr"}
+                    className="overflow-x-auto overflow-y-hidden cursor-grab active:cursor-grabbing px-4 mx-auto w-full mt-6 select-none scrollbar-hide"
+                    onMouseDown={handleMouseDown}
+                    onMouseMove={handleMouseMove}
+                    onMouseUp={endDrag}
+                    onMouseLeave={endDrag}
+                    onWheel={cancelAnimation}
+                    onTouchStart={cancelAnimation}
+                    style={{
+                        WebkitOverflowScrolling: "touch",
+                        touchAction: "pan-x pan-y",
+                        userSelect: "none",
+                    }}
+                >
+                    <div
+                        ref={trackRef}
+                        className="flex flex-row flex-nowrap items-stretch gap-8"
+                    >
+                        {services_entry_items.map((item, index) => (
+                            <ServiceCard
+                                key={item.id}
+                                item={item}
+                                imageHeight={imageHeight}
+                                cardRef={(el) => {
+                                    cardRefs.current[index] = el;
+                                }}
+                                textBlockRef={(el) => {
+                                    textBlockRefs.current[index] = el;
+                                }}
+                                onImageLoad={handleImageLoad}
+                            />
+                        ))}
+                        <div className="flex-shrink-0 w-4 sm:w-6 lg:w-8" aria-hidden="true" />
+                    </div>
                 </div>
             </div>
-
             <style jsx>{`
                 .scrollbar-hide::-webkit-scrollbar {
                     display: none;
