@@ -24,7 +24,6 @@ const STATIC_PATHS = [
 
 // Strapi collection -> URL prefix of its [slug] pages
 const COLLECTIONS = [
-  { contentType: "integrated-capabilities", path: "/capabilities" },
   { contentType: "critical-projects", path: "/critical-environments" },
   { contentType: "insights", path: "/insights" },
   { contentType: "careers", path: "/careers" },

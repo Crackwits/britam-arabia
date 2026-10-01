@@ -49,6 +49,8 @@ export async function generateMetadata({
     );
 
     return buildMetadata(page?.seo, lang, `/capabilities/${slug}`, {
+        // Placeholder content until the service pages are published
+        noIndex: true,
         fallback: {
             title: page?.title && `${page.title} | Britam Arabia`,
             description: page?.description,
