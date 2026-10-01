@@ -28,11 +28,12 @@ export default function CriticalEnvironmentsSection({
                     <div className="flex flex-col justify-start lg:sticky lg:top-28 lg:self-start overflow-hidden">
                         {/* Heading */}
                         <motion.h2
+                            id="critical-environments"
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: 0.08 }}
-                            className="text-navy900 uppercase font-medium tracking-[-1.92px] pb-4 text-4xl sm:text-5xl lg:text-6xl max-w-6xl w-full"
+                            className="scroll-mt-28 text-navy900 uppercase font-medium tracking-[-1.92px] pb-4 text-4xl sm:text-5xl lg:text-6xl max-w-6xl w-full"
                         >
                             {section3_title}
                         </motion.h2>

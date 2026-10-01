@@ -18,7 +18,7 @@ interface OurJourneyTemplateProps {
 export default function OurJourneyTemplate({ ourJourneydata, critical_environments, lang }: OurJourneyTemplateProps) {
     const isArabic = lang === 'ar';
     const locale: "ar" | "en" = lang === "ar" ? "ar" : "en";
-    const [activeSection, setActiveSection] = useState('');
+    const [activeSection, setActiveSection] = useState('herobanner');
     const [visibleSections, setVisibleSections] = useState(new Set());
     const [scrollProgress, setScrollProgress] = useState(0);
 

@@ -16,8 +16,9 @@ export async function generateMetadata({
     const page = await getSingleType<OurJourneyAttributes>("our-journey", lang, {
         seo: { populate: "*", }
     });
-    if (!page?.seo) return { title: "Britam Arabia" };
-    return buildMetadata(page.seo, lang, "/our-journey");
+    return buildMetadata(page?.seo, lang, "/our-journey", {
+        fallback: { title: "About Britam Arabia" },
+    });
 }
 
 export default async function OurJourney({ params }: { params: Params }) {

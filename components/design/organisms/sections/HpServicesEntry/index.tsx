@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { Capabilities, MediaItem } from "@/components/lib/types";
 import { STRAPI_URL } from "@/components/lib/settings";
+import { getImageProps } from "next/image";
 import Link from "next/link";
 import HeadingTriangle from "@/public/svg/headingtriangle";
 
@@ -16,6 +17,14 @@ interface Props {
 }
 
 const getMediaUrl = (url?: string) => (url ? `${STRAPI_URL}${url}` : "");
+
+const IMAGE_SIZES = "(min-width: 1024px) 520px, (min-width: 640px) 70vw, 88vw";
+
+const getImageSources = (url: string) => {
+    if (!url) return { src: url };
+    const { props } = getImageProps({ src: url, alt: "", fill: true, sizes: IMAGE_SIZES });
+    return { src: props.src, srcSet: props.srcSet, sizes: props.sizes };
+};
 
 interface CardProps {
     item: Capabilities;
@@ -105,7 +114,7 @@ function ServiceCard({
                 }}
             >
                 <img
-                    src={imageUrl}
+                    {...getImageSources(imageUrl)}
                     alt={item.image?.alternativeText ?? item.title}
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                     loading="lazy"

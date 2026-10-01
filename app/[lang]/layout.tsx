@@ -37,16 +37,6 @@ const gotham = localFont({
       style: "italic",
     },
     {
-      path: "../fonts/Gotham-Light.woff2",
-      weight: "300",
-      style: "normal",
-    },
-    {
-      path: "../fonts/Gotham-LightItalic.woff2",
-      weight: "300",
-      style: "italic",
-    },
-    {
       path: "../fonts/Gotham-Medium.woff2",
       weight: "500",
       style: "normal",
@@ -54,16 +44,6 @@ const gotham = localFont({
     {
       path: "../fonts/Gotham-MediumItalic.woff2",
       weight: "500",
-      style: "italic",
-    },
-    {
-      path: "../fonts/Gotham-Thin.woff2",
-      weight: "100",
-      style: "normal",
-    },
-    {
-      path: "../fonts/Gotham-ThinItalic.woff2",
-      weight: "100",
       style: "italic",
     },
   ],

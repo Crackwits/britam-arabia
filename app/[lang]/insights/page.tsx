@@ -15,8 +15,12 @@ export async function generateMetadata({
     const page = await getSingleType<InsightHeroAttributes>("insight-hero", lang, {
         seo: { populate: "*", }
     });
-    if (!page?.seo) return { title: "Britam Arabia" };
-    return buildMetadata(page.seo, lang, "/insights");
+    return buildMetadata(page?.seo, lang, "/insights", {
+        fallback: {
+            title: "Insights | Britam Arabia",
+            description: page?.intro_desc,
+        },
+    });
 }
 
 export default async function Insights({ params }: { params: Params }) {

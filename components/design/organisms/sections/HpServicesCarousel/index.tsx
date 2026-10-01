@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Capabilities } from "@/components/lib/types";
 import { STRAPI_URL } from "@/components/lib/settings";
+import { getImageProps } from "next/image";
 import HeadingTriangle from "@/public/svg/headingtriangle";
 
 interface Props {
@@ -14,6 +15,14 @@ interface Props {
 }
 
 const getMediaUrl = (url?: string) => (url ? `${STRAPI_URL}${url}` : "");
+
+const IMAGE_SIZES = "(min-width: 1024px) 450px, (min-width: 640px) 70vw, 88vw";
+
+const getImageSources = (url: string) => {
+    if (!url) return { src: url };
+    const { props } = getImageProps({ src: url, alt: "", fill: true, sizes: IMAGE_SIZES });
+    return { src: props.src, srcSet: props.srcSet, sizes: props.sizes };
+};
 
 const GAP_PX = 32;
 const EDGE_THRESHOLD = 10;
@@ -118,7 +127,7 @@ function ServiceCard({ item, imageHeight, cardRef, textBlockRef, onImageLoad }: 
                 }}
             >
                 <img
-                    src={imageUrl}
+                    {...getImageSources(imageUrl)}
                     alt={item.image?.alternativeText ?? item.title}
                     className="inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                     loading="lazy"

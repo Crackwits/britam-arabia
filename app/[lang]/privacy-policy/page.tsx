@@ -15,8 +15,9 @@ export async function generateMetadata({
     const page = await getSingleType<PrivacyPolicyAttributes>("privacy-policy", lang, {
         seo: { populate: "*", }
     });
-    if (!page?.seo) return { title: "Britam Arabia" };
-    return buildMetadata(page.seo, lang, "/privacy-policy");
+    return buildMetadata(page?.seo, lang, "/privacy-policy", {
+        fallback: { title: "Privacy Policy | Britam Arabia" },
+    });
 }
 
 export default async function PrivacyPolicy({ params }: { params: Params }) {

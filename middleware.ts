@@ -97,7 +97,8 @@ export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   url.pathname = `/${locale}${pathname === "/" ? "" : pathname}`;
 
-  const response = NextResponse.redirect(url);
+  // Nothing to detect with a single locale, so the redirect can be permanent
+  const response = NextResponse.redirect(url, SUPPORTED_LOCALES.length === 1 ? 301 : 307);
   // Persist the detected/used locale so subsequent visits are consistent
   response.cookies.set(LOCALE_COOKIE, locale, {
     path: "/",

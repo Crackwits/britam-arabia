@@ -15,8 +15,7 @@ export async function generateMetadata({
   const page = await getSingleType<HomePageAttributes>("home-page", lang, {
     seo: { populate: "*", }
   });
-  if (!page?.seo) return { title: "Britam Arabia" };
-  return buildMetadata(page.seo, lang, "/");
+  return buildMetadata(page?.seo, lang, "/");
 }
 
 export default async function HomePage({ params }: { params: Params }) {

@@ -16,8 +16,12 @@ export async function generateMetadata({
     const page = await getSingleType<ContactusAttributes>("contactus", lang, {
         seo: { populate: "*", }
     });
-    if (!page?.seo) return { title: "Britam Arabia" };
-    return buildMetadata(page.seo, lang, "/contact-us");
+    return buildMetadata(page?.seo, lang, "/contact-us", {
+        fallback: {
+            title: "Contact Britam Arabia | Fire & Rescue Services KSA",
+            description: "Talk to Britam Arabia about fire and life safety, emergency response and fire station operations across Saudi Arabia.",
+        },
+    });
 }
 
 export default async function ContactUs({ params }: { params: Params }) {

@@ -15,8 +15,9 @@ export async function generateMetadata({
     const page = await getSingleType<OurApproachAttributes>("our-approach", lang, {
         seo: { populate: "*", }
     });
-    if (!page?.seo) return { title: "Britam Arabia" };
-    return buildMetadata(page.seo, lang, "/our-approach");
+    return buildMetadata(page?.seo, lang, "/our-approach", {
+        fallback: { title: "Our Approach | Britam Arabia" },
+    });
 }
 
 export default async function OurApproach({ params }: { params: Params }) {

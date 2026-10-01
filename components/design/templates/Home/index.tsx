@@ -30,7 +30,7 @@ interface HomePageTemplateProps {
 export default function HomeTemplate({ homedata, capabilities, globalSettings, lang }: HomePageTemplateProps) {
     const isArabic = lang === 'ar';
     const locale: "ar" | "en" = lang === "ar" ? "ar" : "en";
-    const [activeSection, setActiveSection] = useState('');
+    const [activeSection, setActiveSection] = useState('herobanner');
     const [visibleSections, setVisibleSections] = useState(new Set());
     const [scrollProgress, setScrollProgress] = useState(0);
 

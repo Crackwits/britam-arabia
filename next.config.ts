@@ -4,7 +4,17 @@ const isDevelopment = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
   i18n: undefined, // App Router handles this manually
+  async redirects() {
+    return [
+      {
+        source: "/:lang/critical-environments",
+        destination: "/:lang/our-journey#critical-environments",
+        statusCode: 301,
+      },
+    ];
+  },
   images: {
+    qualities: [75, 100],
     remotePatterns: [
       {
         protocol: "https",

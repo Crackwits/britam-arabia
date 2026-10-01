@@ -16,8 +16,9 @@ export async function generateMetadata({
     const page = await getSingleType<LifeAtBritamAttributes>("life-at-britam", lang, {
         seo: { populate: "*", }
     });
-    if (!page?.seo) return { title: "Britam Arabia" };
-    return buildMetadata(page.seo, lang, "/life-at-britam");
+    return buildMetadata(page?.seo, lang, "/life-at-britam", {
+        fallback: { title: "Life at Britam | Britam Arabia" },
+    });
 }
 
 export default async function LifeAtBritam({ params }: { params: Params }) {

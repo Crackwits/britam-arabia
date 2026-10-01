@@ -17,7 +17,7 @@ interface CapabilitiesTemplateProps {
 export default function CapabilitiesTemplate({ data, lang }: CapabilitiesTemplateProps) {
     const isArabic = lang === 'ar';
     const locale: "ar" | "en" = lang === "ar" ? "ar" : "en";
-    const [activeSection, setActiveSection] = useState('');
+    const [activeSection, setActiveSection] = useState('herobanner');
     const [visibleSections, setVisibleSections] = useState(new Set());
     const [scrollProgress, setScrollProgress] = useState(0);
 

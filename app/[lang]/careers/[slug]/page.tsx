@@ -44,8 +44,12 @@ export async function generateMetadata({
         }
     );
 
-    if (!page?.seo) return { title: "Britam Arabia" };
-    return buildMetadata(page.seo, lang, `/careers/${slug}`);
+    return buildMetadata(page?.seo, lang, `/careers/${slug}`, {
+        fallback: {
+            title: page?.position && `${page.position} | Britam Arabia`,
+            description: page?.brief || page?.content,
+        },
+    });
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────

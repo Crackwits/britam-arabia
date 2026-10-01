@@ -15,8 +15,9 @@ export async function generateMetadata({
     const page = await getSingleType<CookiePolicyAttributes>("cookies-policy", lang, {
         seo: { populate: "*", }
     });
-    if (!page?.seo) return { title: "Britam Arabia" };
-    return buildMetadata(page.seo, lang, "/cookies-policy");
+    return buildMetadata(page?.seo, lang, "/cookies-policy", {
+        fallback: { title: "Cookies Policy | Britam Arabia" },
+    });
 }
 
 export default async function CookiesPolicy({ params }: { params: Params }) {

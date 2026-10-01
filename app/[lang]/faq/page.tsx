@@ -15,8 +15,9 @@ export async function generateMetadata({
     const page = await getSingleType<FAQAttributes>("faq", lang, {
         seo: { populate: "*", }
     });
-    if (!page?.seo) return { title: "Britam Arabia" };
-    return buildMetadata(page.seo, lang, "/faq");
+    return buildMetadata(page?.seo, lang, "/faq", {
+        fallback: { title: "FAQ | Britam Arabia" },
+    });
 }
 
 export default async function FAQ({ params }: { params: Params }) {

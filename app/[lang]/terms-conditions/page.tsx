@@ -15,8 +15,9 @@ export async function generateMetadata({
     const page = await getSingleType<TermsAndConditionsAttributes>("terms-and-condition", lang, {
         seo: { populate: "*", }
     });
-    if (!page?.seo) return { title: "Britam Arabia" };
-    return buildMetadata(page.seo, lang, "/terms-conditions");
+    return buildMetadata(page?.seo, lang, "/terms-conditions", {
+        fallback: { title: "Terms & Conditions | Britam Arabia" },
+    });
 }
 
 export default async function TermsConditions({ params }: { params: Params }) {

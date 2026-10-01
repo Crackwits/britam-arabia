@@ -107,6 +107,19 @@ function clamp(text: string, max: number): string {
     return t.length <= max ? t : `${t.slice(0, max - 1).trimEnd()}…`;
 }
 
+function stripHtml(html?: string | null): string {
+    if (!html) return "";
+    return html
+        .replace(/<h[1-6][^>]*>[\s\S]*?<\/h[1-6]>/gi, " ")
+        .replace(/<[^>]+>/g, " ")
+        .replace(/&nbsp;/g, " ")
+        .replace(/&amp;/g, "&")
+        .replace(/&#39;|&rsquo;/g, "'")
+        .replace(/&quot;/g, '"')
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
 /* -------------------------------------------------------------------------- */
 /*  Builder                                                                    */
 /* -------------------------------------------------------------------------- */
@@ -120,18 +133,20 @@ export function buildMetadata(
         noIndex?: boolean;
         publishedTime?: string;
         modifiedTime?: string;
+        fallback?: { title?: string; description?: string };
     } = {}
 ): Metadata {
     const locale = resolveLang(lang);
     const cleanPath = normalizePath(path);
-    const fallback = PLACEHOLDER[locale];
+    const placeholder = PLACEHOLDER[locale];
+    const fallback = options.fallback ?? {};
 
     const s = (seo ?? {}) as Partial<StrapiSEO> & Record<string, any>;
 
     /* ---- text ---- */
-    const title = s.metaTitle?.trim() || fallback.title;
+    const title = s.metaTitle?.trim() || fallback.title?.trim() || placeholder.title;
     const description = clamp(
-        s.metaDescription?.trim() || fallback.description,
+        s.metaDescription?.trim() || stripHtml(fallback.description) || placeholder.description,
         160
     );
 
@@ -146,7 +161,7 @@ export function buildMetadata(
               height: media?.height ?? PLACEHOLDER_IMAGE.height,
               alt: media?.alternativeText?.trim() || title,
           }
-        : { ...PLACEHOLDER_IMAGE, alt: fallback.imageAlt };
+        : { ...PLACEHOLDER_IMAGE, alt: placeholder.imageAlt };
 
     /* ---- urls ---- */
     // Support both `canonicalUrl` and Strapi's default `canonicalURL` field name.

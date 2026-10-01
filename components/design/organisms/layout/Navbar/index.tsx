@@ -6,8 +6,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import BritamFooter from '@/public/britam-footer.png';
 import BritamGrey from '@/public/britam-grey.png';
-import BritamLogoDark from '@/public/Britam-logo-dark.svg';
-import BritamLogoLight from '@/public/Britam-logo-light.svg';
+import BritamLogoDark from '@/public/Britam-logo-dark.png';
+import BritamLogoLight from '@/public/Britam-logo-light.png';
 import { usePathname } from 'next/navigation';
 import { FACEBOOK_URL, INSTAGRAM_URL, TWITTER_URL, LINKEDIN_URL, YOUTUBE_URL, WHATSAPP_URL } from "@/utils/consts";
 import { ALL_LOCALES as LOCALES, ARABIC_ENABLED, type Locale } from '@/components/lib/locales';
@@ -234,11 +234,21 @@ export default function Navbar({ activeSection, lang }: Props) {
                         style={{ zIndex: 9997, pointerEvents: 'auto' }}
                     >
                         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                            {/* Both rendered so the light logo isn't fetched only after hydration */}
                             <Image
-                                src={isDark ? BritamLogoLight : BritamLogoDark}
+                                src={BritamLogoLight}
                                 alt="Britam Arabia"
                                 quality={100}
-                                className="w-auto object-contain h-[58px]"
+                                sizes="88px"
+                                className={`w-auto object-contain h-[58px] ${isDark ? "" : "hidden"}`}
+                                priority
+                            />
+                            <Image
+                                src={BritamLogoDark}
+                                alt="Britam Arabia"
+                                quality={100}
+                                sizes="88px"
+                                className={`w-auto object-contain h-[58px] ${isDark ? "hidden" : ""}`}
                                 priority
                             />
                         </motion.div>

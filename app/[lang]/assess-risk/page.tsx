@@ -15,8 +15,9 @@ export async function generateMetadata({
     const page = await getSingleType<AssessRiskAttributes>("risk-assessment", lang, {
         seo: { populate: "*", }
     });
-    if (!page?.seo) return { title: "Britam Arabia" };
-    return buildMetadata(page.seo, lang, "/assess-risk");
+    return buildMetadata(page?.seo, lang, "/assess-risk", {
+        fallback: { title: "Fire Risk Assessment | Britam Arabia" },
+    });
 }
 
 export default async function AssessRisk({ params }: { params: Params }) {
