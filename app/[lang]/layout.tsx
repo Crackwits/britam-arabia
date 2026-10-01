@@ -8,7 +8,8 @@ import FooterSection from "@/components/design/organisms/layout/Footer";
 import WhatsAppInquiry from "@/components/design/organisms/sections/WhatsappInquiry";
 import { WhatsAppInquiryProvider } from "@/components/design/organisms/sections/WhatsAppInquiryProvider";
 import Script from "next/script";
-import { SUPPORTED_LOCALES } from "@/components/lib/locales";
+import { notFound } from "next/navigation";
+import { SUPPORTED_LOCALES, isSupportedLocale } from "@/components/lib/locales";
 
 // const montserrat = Montserrat({ subsets: ['latin'], variable: '--font-en' });
 const notoKufiArabic = Noto_Kufi_Arabic({ subsets: ['arabic'], variable: '--font-ar' });
@@ -81,6 +82,8 @@ export default async function RootLayout({
   params: Promise<{ lang: string }>;
 }) {
   const { lang } = await params;
+  // Anything that isn't a locale (e.g. /ads.txt) lands here — 404 it, don't render
+  if (!isSupportedLocale(lang)) notFound();
 
   const isArabic = lang === 'ar';
   const language = lang as 'en' | 'ar'; // ✅ Cast to proper type
