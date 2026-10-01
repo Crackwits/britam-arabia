@@ -11,6 +11,11 @@ const nextConfig: NextConfig = {
         destination: "/:lang/our-journey#critical-environments",
         statusCode: 301,
       },
+      {
+        source: "/:lang/critical-environments/king-abdullah-economic-city-kaec",
+        destination: "/:lang/critical-environments/lucid-motors-kaec",
+        statusCode: 301,
+      },
     ];
   },
   images: {
