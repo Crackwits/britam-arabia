@@ -10,7 +10,8 @@ import { WhatsAppInquiryProvider } from "@/components/design/organisms/sections/
 import Script from "next/script";
 import { notFound } from "next/navigation";
 import { SUPPORTED_LOCALES, isSupportedLocale } from "@/components/lib/locales";
-
+import CookieConsent from "@/components/lib/cookieconsent";
+import Analytics from "@/components/design/organisms/cookies/Analytics";
 // const montserrat = Montserrat({ subsets: ['latin'], variable: '--font-en' });
 const notoKufiArabic = Noto_Kufi_Arabic({ subsets: ['arabic'], variable: '--font-ar' });
 
@@ -76,21 +77,7 @@ export default async function RootLayout({
 
       <head>
         {/* Google Analytics */}
-        <Script
-          strategy="afterInteractive"
-          src="https://www.googletagmanager.com/gtag/js?id=G-S6VWEXZ3MF"
-        />
-        <Script
-          id="google-analytics"
-          strategy="afterInteractive"
-        >
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-S6VWEXZ3MF');
-          `}
-        </Script>
+        <Analytics />
 
         {/* Google Search Console Verification */}
         <meta
@@ -103,6 +90,7 @@ export default async function RootLayout({
           <SmoothScrollProvider duration={1.4} wheelMultiplier={0.8}>
             {children}
           </SmoothScrollProvider>
+          <CookieConsent locale={lang === 'ar' ? 'ar' : 'en'} />
           <FooterSection lang={lang} isArabic={isArabic} />
           <WhatsAppInquiry language={language} businessPhone="966551765460" recruitmentEmail="cv@britamarabia.com" />
         </WhatsAppInquiryProvider>

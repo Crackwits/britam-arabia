@@ -11,6 +11,7 @@ import FireService from "@/public/clients/fireservicecollege.png";
 import BritamLogoLight from '@/public/Britam-logo-light.png';
 import { useWhatsAppInquiry } from '../../sections/WhatsAppInquiryProvider';
 import { FACEBOOK_URL, INSTAGRAM_URL, TWITTER_URL, LINKEDIN_URL, YOUTUBE_URL, WHATSAPP_URL } from "@/utils/consts";
+import { openCookieSettings } from '@/components/lib/cookieconsent';
 
 const socialLinks = [
     { icon: "f", href: FACEBOOK_URL, label: "Facebook" },
@@ -72,7 +73,7 @@ const FOOTER_LINKS_COL_2: FooterLink[] = [
 const LEGAL_LINKS: FooterLink[] = [
     { label: { en: "Privacy Policy", ar: "سياسة الخصوصية" }, href: "/privacy-policy" },
     { label: { en: "Terms of Service", ar: "شروط الخدمة" }, href: "/terms-conditions" },
-    { label: { en: "Cookie Settings", ar: "إعدادات ملفات تعريف الارتباط (الكوكيز)" }, href: "/cookies-policy" },
+    { label: { en: "Cookies Policy", ar: "سياسة الكوكيز" }, href: "/cookies-policy" },
 ];
 
 // ─── Helper ───────────────────────────────────────────────────────────────────
@@ -267,6 +268,11 @@ export default function FooterSection({ lang, isArabic }: FooterSectionProps) {
                             </Link>
                         </li>
                     ))}
+                    <li>
+                    <button className="text-xs text-neutralLight cursor-pointer
+                  transition-colors duration-200 hover:text-white"
+                  onClick={openCookieSettings}>{isArabic ? "إعدادات الكوكيز" : "Cookies settings"}</button>
+                    </li>
                 </ul>
             </div>
         </footer>
