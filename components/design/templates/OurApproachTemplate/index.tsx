@@ -12,7 +12,7 @@ import OurApproach from "../../organisms/sections/OurApproach";
 import ServicesEntry from "../../organisms/sections/HpServicesEntry";
 import { OurApproachAttributes } from "@/components/lib/types";
 import ImpactSection from "../../organisms/sections/ImpactSection";
-
+import ServicesCarousel from '../../organisms/sections/HpServicesCarousel';
 interface OurApproachTemplateProps {
     data: OurApproachAttributes;
     capabilities: Capabilities[];
@@ -151,9 +151,12 @@ export default function OurApproachTemplate({ data, capabilities, lang }: OurApp
                     isArabic={isArabic}
                 />
 
-                <ServicesEntry lang={lang} isArabic={isArabic} services_entry_heading={data.section5_heading}
+                <ServicesCarousel lang={lang} isArabic={isArabic} services_entry_heading={data.section5_heading}
                     services_entry_subheading={data.section5_subheading}
                     services_entry_items={capabilities} />
+                {/* <ServicesEntry lang={lang} isArabic={isArabic} services_entry_heading={data.section5_heading}
+                    services_entry_subheading={data.section5_subheading}
+                    services_entry_items={capabilities} /> */}
             </section>
         </>
     );
