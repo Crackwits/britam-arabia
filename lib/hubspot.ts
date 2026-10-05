@@ -1,6 +1,6 @@
 // Records website form submissions in HubSpot as a Contact + Company + Deal,
 // all associated with each other. Authenticates with a HubSpot Service Key
-// (pat- bearer token) that has the contacts/companies/deals write scopes.
+// (pat- bearer token) that has the contacts/companies/deals read + write scopes.
 
 const HUBSPOT_URL = "https://api.hubapi.com";
 
