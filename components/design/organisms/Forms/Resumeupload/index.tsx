@@ -118,7 +118,7 @@ export default function ResumeUpload({
                 ) : (
                     <>
                         <UploadSvg />
-                        <p className="pt-8 pb-3 font-medium text-darkDefault text-lg break-all px-4">
+                        <p className="pt-8 pb-3 font-medium text-darkDefault text-lg px-4">
                             {title}
                         </p>
                         <p id="cv-upload-subtext" className="text-base text-darkLight pb-2">

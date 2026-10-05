@@ -598,7 +598,7 @@ function ResumeUpload({ file, onFileSelect, error, isArabic, t, isEnabled }: Res
                 ) : (
                     <>
                         <UploadSvg />
-                        <p className="pt-8 pb-3 font-medium text-darkDefault text-lg break-all px-4">
+                        <p className="pt-8 pb-3 font-medium text-darkDefault text-lg px-4">
                             {isEnabled ? t.uploadTitle : t.uploadNotAvailable}
                         </p>
                         {isEnabled && (
