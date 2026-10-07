@@ -46,19 +46,20 @@ export function LeftArrowIcon(props: React.SVGProps<SVGSVGElement>) {
                 fillRule="evenodd"
                 clipRule="evenodd"
                 d="M7.75 31C7.75 18.1583 18.1583 7.75 31 7.75C43.8418 7.75 54.25 18.1583 54.25 31C54.25 43.8418 43.8418 54.25 31 54.25C18.1583 54.25 7.75 43.8418 7.75 31Z"
-                fill="#34343F"
+                fill="white"
+                fillOpacity="0.5"
             />
+
             <path
                 d="M38.7695 31.0104L23.2306 31.0104"
-                stroke="white"
-                strokeWidth="1.5"
+                stroke="#34343F"
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />
+
             <path
                 d="M29.4365 24.8001L23.2376 31.0001L29.4365 37.2001"
-                stroke="white"
-                strokeWidth="1.5"
+                stroke="#34343F"
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />
@@ -80,19 +81,20 @@ export function RightArrowIcon(props: React.SVGProps<SVGSVGElement>) {
                 fillRule="evenodd"
                 clipRule="evenodd"
                 d="M54.25 31C54.25 43.8418 43.8418 54.25 31 54.25C18.1583 54.25 7.75 43.8418 7.75 31C7.75 18.1583 18.1583 7.75 31 7.75C43.8418 7.75 54.25 18.1583 54.25 31Z"
-                fill="#34343F"
+                fill="white"
+                fillOpacity="0.5"
             />
+
             <path
                 d="M23.2305 30.9897L38.7694 30.9897"
-                stroke="white"
-                strokeWidth="1.5"
+                stroke="#34343F"
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />
+
             <path
                 d="M32.5635 37.2L38.7624 31L32.5635 24.7999"
-                stroke="white"
-                strokeWidth="1.5"
+                stroke="#34343F"
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />
@@ -430,8 +432,8 @@ export default function ServicesCarousel({
                         disabled={!edges.canLeft}
                         aria-label={isArabic ? "التالي" : "Previous"}
                         className={`${arrowBase} left-4 ${edges.canLeft
-                                ? "cursor-pointer opacity-100"
-                                : "cursor-not-allowed opacity-40"
+                            ? "cursor-pointer opacity-100"
+                            : "cursor-not-allowed opacity-40"
                             }`}
                     >
                         <LeftArrowIcon width={62} height={62} />
@@ -446,8 +448,8 @@ export default function ServicesCarousel({
                         disabled={!edges.canRight}
                         aria-label={isArabic ? "السابق" : "Next"}
                         className={`${arrowBase} right-4 ${edges.canRight
-                                ? "cursor-pointer opacity-100"
-                                : "cursor-not-allowed opacity-40"
+                            ? "cursor-pointer opacity-100"
+                            : "cursor-not-allowed opacity-40"
                             }`}
                     >
                         <RightArrowIcon width={62} height={62} />
