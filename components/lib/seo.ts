@@ -42,7 +42,7 @@ const PLACEHOLDER = {
 
 /** Put a real 1200x630 file at /public/og/default.png before shipping. */
 const PLACEHOLDER_IMAGE = {
-    url: `${SITE_URL}/og/default1.png`,
+    url: `${SITE_URL}/og/default.jpeg`,
     width: 1200,
     height: 630,
 };
