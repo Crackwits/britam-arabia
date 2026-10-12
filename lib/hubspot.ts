@@ -13,7 +13,7 @@ const DEAL_TO_CONTACT = 3;
 const DEAL_TO_PRIMARY_COMPANY = 5;
 
 /** Option values of the custom "Inquiry Source" deal property (scripts/hubspot-setup.mjs) */
-export type InquirySource = "inquiry_form" | "contact_form" | "assess_your_risk";
+export type InquirySource = "contact_form" | "assess_your_risk";
 
 export interface HubSpotLead {
     source: InquirySource;
