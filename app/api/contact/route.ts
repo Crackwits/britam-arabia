@@ -1,28 +1,57 @@
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { isMailConfigured, sendMail } from "@/lib/mail";
 import { createHubSpotLead, isHubSpotConfigured } from "@/lib/hubspot";
+import { saveSubmission } from "@/lib/strapi-submissions";
+import { clean, HONEYPOT_FIELD, isHoneypotFilled, isRateLimited } from "@/lib/spam";
 
 export const runtime = "nodejs";
 
+// Mirrors the client schema in components/design/organisms/sections/ContactSection
+const contactSchema = z.object({
+    inquiryType: z.string().min(1).max(100),
+    name: z.string().min(2).max(120),
+    email: z.string().email().max(254),
+    companyName: z.string().min(2).max(200),
+    phone: z.string().min(6).max(30).regex(/^[+0-9()\s-]+$/),
+    message: z.string().min(10).max(5000),
+    lang: z.enum(["en", "ar"]).optional(),
+});
+
 export async function POST(req: NextRequest) {
     try {
+        if (isRateLimited(req, "contact")) {
+            return NextResponse.json(
+                { success: false, error: "Too many submissions. Please try again later." },
+                { status: 429 }
+            );
+        }
+
         const body = await req.json();
-        const { inquiryType, name, email, phone, companyName, message, lang } = body;
+
+        // Bots that fill the hidden field get a normal-looking success and nothing else
+        if (isHoneypotFilled(body?.[HONEYPOT_FIELD])) {
+            return NextResponse.json({ success: true });
+        }
 
         // ── Validation ────────────────────────────────────────────────────────────
-        if (!inquiryType || !name || !email || !phone || !companyName || !message) {
+        const parsed = contactSchema.safeParse({
+            inquiryType: clean(body?.inquiryType, 100),
+            name: clean(body?.name, 120),
+            email: clean(body?.email, 254),
+            phone: clean(body?.phone, 30),
+            companyName: clean(body?.companyName, 200),
+            message: clean(body?.message, 5000),
+            lang: body?.lang === "ar" ? "ar" : body?.lang === "en" ? "en" : undefined,
+        });
+        if (!parsed.success) {
+            const emailInvalid = parsed.error.issues.some((i) => i.path[0] === "email");
             return NextResponse.json(
-                { success: false, error: "All fields are required." },
+                { success: false, error: emailInvalid ? "Invalid email address." : "All fields are required." },
                 { status: 400 }
             );
         }
-
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            return NextResponse.json(
-                { success: false, error: "Invalid email address." },
-                { status: 400 }
-            );
-        }
+        const { inquiryType, name, email, phone, companyName, message, lang } = parsed.data;
 
         // ── Build email body ──────────────────────────────────────────────────────
         const emailHtml = `
@@ -41,37 +70,48 @@ export async function POST(req: NextRequest) {
     `;
 
         const recipient = process.env.HR_BUSINESS_EMAIL || process.env.HR_INFO_EMAIL;
-        if (!recipient || !isMailConfigured() || !isHubSpotConfigured()) {
-            console.error("Contact form: missing config (HR_BUSINESS_EMAIL / MS_TENANT_ID / MS_CLIENT_ID / MS_CLIENT_SECRET / MS_SENDER / HUBSPOT_ACCESS_TOKEN)");
-            return NextResponse.json(
-                { success: false, error: "Mail service is not configured." },
-                { status: 500 }
-            );
-        }
 
-        // The submission counts as received if either the email or HubSpot gets it
-        const [mailResult, hubspotResult] = await Promise.allSettled([
-            sendMail({
-                to: recipient,
-                replyTo: email,
-                subject: `BRITAM ARABIA - New Contact Inquiry — ${inquiryType}`,
-                html: emailHtml,
-            }),
-            createHubSpotLead({
-                source: "contact_form",
-                fullName: name,
-                email,
-                phone,
-                companyName,
-                dealName: `${companyName} — ${inquiryType}`,
-                description: `Inquiry type: ${inquiryType}\nLanguage: ${lang ?? "en"}\n\nMessage:\n${message}`,
-            }),
+        // The submission counts as received if the email, HubSpot or Strapi gets it
+        const [mailResult, hubspotResult, strapiResult] = await Promise.allSettled([
+            (async () => {
+                if (!recipient || !isMailConfigured()) {
+                    throw new Error("Missing mail config (HR_BUSINESS_EMAIL / MS_TENANT_ID / MS_CLIENT_ID / MS_CLIENT_SECRET / MS_SENDER)");
+                }
+                await sendMail({
+                    to: recipient,
+                    replyTo: email,
+                    subject: `BRITAM ARABIA - New Contact Inquiry — ${inquiryType}`,
+                    html: emailHtml,
+                });
+            })(),
+            (async () => {
+                if (!isHubSpotConfigured()) throw new Error("Missing HubSpot config (HUBSPOT_ACCESS_TOKEN)");
+                await createHubSpotLead({
+                    source: "contact_form",
+                    fullName: name,
+                    email,
+                    phone,
+                    companyName,
+                    dealName: `${companyName} — ${inquiryType}`,
+                    description: `Inquiry type: ${inquiryType}\nLanguage: ${lang ?? "en"}\n\nMessage:\n${message}`,
+                });
+            })(),
+            saveSubmission(
+                "business-inquiries",
+                { inquiryType, name, email, phone, companyName, message, language: lang ?? "en" },
+                { sourcePage: `/${lang ?? "en"}/contact-us` }
+            ),
         ]);
 
         if (mailResult.status === "rejected") console.error("Contact form: email failed:", mailResult.reason);
         if (hubspotResult.status === "rejected") console.error("Contact form: HubSpot failed:", hubspotResult.reason);
-        if (mailResult.status === "rejected" && hubspotResult.status === "rejected") {
-            throw new Error("Contact form: email and HubSpot both failed");
+        if (strapiResult.status === "rejected") console.error("Contact form: Strapi save failed:", strapiResult.reason);
+        if (
+            mailResult.status === "rejected" &&
+            hubspotResult.status === "rejected" &&
+            strapiResult.status === "rejected"
+        ) {
+            throw new Error("Contact form: email, HubSpot and Strapi all failed");
         }
 
         return NextResponse.json({ success: true });

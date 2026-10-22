@@ -21,6 +21,7 @@ import { submitApplication, validateCv } from "../SubmitApplication";
 import { Field, SelectInput, TextInput } from "../Formfields";
 import ResumeUpload from "../Resumeupload";
 import SubmissionModal from "../SubmissionModal";
+import Honeypot, { readHoneypot } from "../Honeypot";
 
 interface ManagementFormProps {
     lang: Lang;
@@ -127,7 +128,7 @@ export default function ManagementForm({
         setCvError(file ? validateCv(file, lang, REQUIRE_CV.management) : undefined);
     };
 
-    const onSubmit = async (data: ManagementFormValues) => {
+    const onSubmit = async (data: ManagementFormValues, event?: React.BaseSyntheticEvent) => {
         const fileError = validateCv(cvFile, lang, REQUIRE_CV.management);
         if (fileError) {
             setCvError(fileError);
@@ -152,8 +153,10 @@ export default function ManagementForm({
                             value: findLabel(MANAGEMENT_POSITIONS, data.appliedPosition),
                         },
                     ],
+                    values: data,
                 },
-                cvFile
+                cvFile,
+                readHoneypot(event)
             );
 
             setModalType("success");
@@ -187,6 +190,7 @@ export default function ManagementForm({
             />
 
             <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-8">
+                <Honeypot />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <Field id="fullName" label={t.fullName} error={errors.fullName?.message}>
                         <TextInput

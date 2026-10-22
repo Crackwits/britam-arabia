@@ -18,12 +18,19 @@ export interface SubmissionPayload {
     fields: SubmissionField[];
     /** Firefighters only: rows the applicant did not mark as "None". */
     certifications?: { name: string; status: string }[];
+    /** Raw form values — re-validated server-side and saved to Strapi. */
+    values: Record<string, unknown>;
 }
 
-export async function submitApplication(payload: SubmissionPayload, cvFile: File | null) {
+export async function submitApplication(
+    payload: SubmissionPayload,
+    cvFile: File | null,
+    honeypot = ""
+) {
     const formData = new FormData();
     formData.append("data", JSON.stringify(payload));
     if (cvFile) formData.append("cv", cvFile);
+    formData.append("website", honeypot);
 
     const response = await fetch("/api/careers", { method: "POST", body: formData });
     const result = await response.json();

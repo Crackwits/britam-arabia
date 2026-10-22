@@ -27,6 +27,7 @@ import {
     type Lang,
 } from "../Formoptions";
 import { submitApplication, validateCv } from "../SubmitApplication";
+import Honeypot, { readHoneypot } from "../Honeypot";
 import {
     CertMatrix,
     CheckboxGroup,
@@ -179,7 +180,7 @@ export default function FirefighterForm({
         setCvError(file ? validateCv(file, lang, REQUIRE_CV.firefighters) : undefined);
     };
 
-    const onSubmit = async (data: FirefighterFormValues) => {
+    const onSubmit = async (data: FirefighterFormValues, event?: React.BaseSyntheticEvent) => {
         const fileError = validateCv(cvFile, lang, REQUIRE_CV.firefighters);
         if (fileError) {
             setCvError(fileError);
@@ -233,8 +234,10 @@ export default function FirefighterForm({
                         name: c.name,
                         status: findLabel(CERT_STATUSES, certs[c.value]),
                     })),
+                    values: { ...data, certifications: certs },
                 },
-                cvFile
+                cvFile,
+                readHoneypot(event)
             );
 
             setModalType("success");
@@ -269,6 +272,7 @@ export default function FirefighterForm({
             />
 
             <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-8">
+                <Honeypot />
                 {/* ── Personal details ── */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <Field id="fullName" label={t.name} error={errors.fullName?.message}>

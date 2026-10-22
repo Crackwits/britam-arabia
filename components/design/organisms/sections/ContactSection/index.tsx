@@ -1,12 +1,13 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, type BaseSyntheticEvent } from "react";
 import { motion, Variants } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Loader2 } from "lucide-react";
 import { ContactusAttributes, GlobalSettingAttributes } from "@/components/lib/types";
+import Honeypot, { readHoneypot } from "@/components/design/organisms/Forms/Honeypot";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -152,13 +153,13 @@ export default function ContactSection({
         mode: "onBlur",
     });
 
-    const onSubmit = async (data: ContactFormValues) => {
+    const onSubmit = async (data: ContactFormValues, event?: BaseSyntheticEvent) => {
         setSubmitState("idle");
         try {
             const res = await fetch("/api/contact", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ ...data, lang }),
+                body: JSON.stringify({ ...data, lang, website: readHoneypot(event) }),
             });
             const result = await res.json();
             if (!res.ok || !result.success) throw new Error(result.error);
@@ -275,6 +276,7 @@ export default function ContactSection({
                             noValidate
                             className="space-y-3"
                         >
+                            <Honeypot />
                             {/* Inquiry Type */}
                             <div>
                                 <label htmlFor="inquiryType" className="sr-only">
