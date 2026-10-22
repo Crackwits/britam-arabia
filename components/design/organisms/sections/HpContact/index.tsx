@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, type BaseSyntheticEvent } from "react";
 import Image from "next/image";
 import { motion, Variants } from "framer-motion";
 import { useForm } from "react-hook-form";
@@ -10,6 +10,7 @@ import HpContactBg from "@/public/homecontactbg.png";
 import WhiteTriangle from "@/public/svg/whitetriangle";
 import OrangeTriangle from "@/public/svg/orangetriangle";
 import { GlobalSettingAttributes } from "@/components/lib/types";
+import Honeypot, { readHoneypot } from "@/components/design/organisms/Forms/Honeypot";
 // ─── Types ────────────────────────────────────────────────────────────────────
 // type SupportedLocale = keyof typeof translations; // → "en" | "ar"
 interface ContactSectionProps {
@@ -178,14 +179,14 @@ export default function HpContactSection({ locale, globalSettings, heading, body
     mode: "onBlur",
   });
 
-  const onSubmit = async (data: ContactFormValues) => {
+  const onSubmit = async (data: ContactFormValues, event?: BaseSyntheticEvent) => {
     setSubmitStatus("idle");
 
     try {
       const response = await fetch("/api/inquiry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data }),
+        body: JSON.stringify({ ...data, locale, website: readHoneypot(event) }),
       });
 
       if (!response.ok) throw new Error("Submission failed");
@@ -270,6 +271,7 @@ export default function HpContactSection({ locale, globalSettings, heading, body
                   noValidate
                   className="space-y-4 relative bg-white w-full p-6"
                 >
+                  <Honeypot />
                   <FieldWrapper index={0} error={errors.fullName?.message}>
                     <label htmlFor="fullName" className="sr-only">
                       {t.fullName}

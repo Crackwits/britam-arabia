@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
             lang: body?.lang === "ar" ? "ar" : body?.lang === "en" ? "en" : undefined,
         });
         if (!parsed.success) {
-            const emailInvalid = parsed.error.issues.some((i) => i.path[0] === "email");
+            const emailInvalid = parsed.error.issues.every((i) => i.path[0] === "email");
             return NextResponse.json(
                 { success: false, error: emailInvalid ? "Invalid email address." : "All fields are required." },
                 { status: 400 }

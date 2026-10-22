@@ -9,7 +9,8 @@ const STRAPI_URL = (process.env.STRAPI_URL || PUBLIC_STRAPI_URL).replace(/\/+$/,
 export type SubmissionCollection =
     | "management-applications"
     | "firefighter-applications"
-    | "business-inquiries";
+    | "business-inquiries"
+    | "homepage-inquiries";
 
 export interface SubmissionFile {
     filename: string;
