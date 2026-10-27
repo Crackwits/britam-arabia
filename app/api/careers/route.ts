@@ -8,7 +8,6 @@ import {
 } from "@/components/design/organisms/Forms/Applicationschema";
 import {
     ALL_CERTIFICATIONS,
-    CERT_STATUSES,
     CITIES,
     ENGLISH_LEVELS,
     FIREFIGHTER_POSITIONS,
@@ -176,13 +175,10 @@ function toStrapiEntry(payload: SubmissionPayload) {
                 v.hasDrivingLicense === "yes" && v.licenseType
                     ? findLabel(LICENSE_TYPES, v.licenseType)
                     : null,
-            // Same rows as the email: only certifications the applicant holds
+            // Only "Certified" rows, as a list of names (the email still lists non-certified ones too)
             certifications: ALL_CERTIFICATIONS.filter(
-                (c) => v.certifications[c.value] && v.certifications[c.value] !== "none"
-            ).map((c) => ({
-                name: c.name,
-                status: findLabel(CERT_STATUSES, v.certifications[c.value]),
-            })),
+                (c) => v.certifications[c.value] === "certified"
+            ).map((c) => c.name),
             jobCity: clean(payload.city, 100),
             ...job,
         },
