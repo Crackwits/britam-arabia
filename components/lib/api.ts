@@ -1,4 +1,5 @@
 import { STRAPI_API_TOKEN, STRAPI_URL } from "./settings";
+import { isSupportedLocale } from "./locales";
 
 export async function fetchStrapi(
     path: string,
@@ -59,6 +60,7 @@ export async function getSingleType<T>(
     // populate = "*"
     populate: string | Record<string, unknown> = "*"  // ← change default
 ): Promise<T | null> {  // ← return null instead of throwing
+    if (!isSupportedLocale(lang)) return null;
     try {
         const url = new URL(`${STRAPI_URL}/api/${contentType}`);
         url.searchParams.set("locale", lang);
@@ -135,6 +137,7 @@ export async function getCollection<T>(
     populate: string | Record<string, unknown> = "*",
     filters?: Record<string, unknown>
 ): Promise<T[]> {
+    if (!isSupportedLocale(locale)) return [];
     const params: Record<string, string> = {
         locale,
         "pagination[pageSize]": "100",
@@ -203,6 +206,7 @@ export async function getBySlug<T>(
     locale: string,
     populate: string | Record<string, unknown> = "*"
 ): Promise<T | null> {
+    if (!isSupportedLocale(locale)) return null;
     const params: Record<string, string> = {
         locale,
         "filters[slug][$eq]": slug,
