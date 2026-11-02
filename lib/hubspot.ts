@@ -11,6 +11,8 @@ const DEAL_STAGE = "appointmentscheduled";
 // HubSpot-defined association type IDs
 const DEAL_TO_CONTACT = 3;
 const DEAL_TO_PRIMARY_COMPANY = 5;
+const NOTE_TO_CONTACT = 202;
+const NOTE_TO_DEAL = 214;
 
 /** Option values of the custom "Inquiry Source" deal property (scripts/hubspot-setup.mjs) */
 export type InquirySource = "contact_form" | "assess_your_risk";
@@ -110,7 +112,7 @@ export async function createHubSpotLead(lead: HubSpotLead) {
         types: [{ associationCategory: "HUBSPOT_DEFINED", associationTypeId: typeId }],
     });
 
-    await hubspot("POST", "/crm/v3/objects/deals", {
+    const deal = await hubspot<{ id: string }>("POST", "/crm/v3/objects/deals", {
         properties: {
             dealname: lead.dealName,
             pipeline: DEAL_PIPELINE,
@@ -123,4 +125,24 @@ export async function createHubSpotLead(lead: HubSpotLead) {
             association(companyId, DEAL_TO_PRIMARY_COMPANY),
         ],
     });
+
+    // The description property isn't shown on the deal record, so the details also go in a timeline note
+    await hubspot("POST", "/crm/v3/objects/notes", {
+        properties: {
+            hs_timestamp: new Date().toISOString(),
+            hs_note_body: textToHtml(lead.description),
+        },
+        associations: [
+            association(deal.id, NOTE_TO_DEAL),
+            association(contactId, NOTE_TO_CONTACT),
+        ],
+    });
+}
+
+function textToHtml(text: string) {
+    const escaped = text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    return escaped.split("\n").join("<br>");
 }
