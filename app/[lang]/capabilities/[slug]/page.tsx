@@ -9,6 +9,11 @@ import JsonLd from "@/components/lib/jsonld";
 // ── Both dynamic segments are in params ───────────────────────────────────────
 type Params = Promise<{ lang: string; slug: string }>;
 
+// ── Slugs published in Strapi after the build render on first request (then cache);
+// unknown slugs still 404 through notFound() below. Keep this true: `false` would
+// 404 every new CMS entry until the next deploy.
+export const dynamicParams = true;
+
 // ── Pre-generate all slug paths at build time ─────────────────────────────────
 export async function generateStaticParams() {
     const locales = SUPPORTED_LOCALES;
