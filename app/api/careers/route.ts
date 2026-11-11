@@ -175,10 +175,14 @@ function toStrapiEntry(payload: SubmissionPayload) {
                 v.hasDrivingLicense === "yes" && v.licenseType
                     ? findLabel(LICENSE_TYPES, v.licenseType)
                     : null,
-            // Only "Certified" rows, as a list of names (the email still lists non-certified ones too)
-            certifications: ALL_CERTIFICATIONS.filter(
-                (c) => v.certifications[c.value] === "certified"
-            ).map((c) => c.name),
+            // Every certification by name: "Yes" only when marked Certified
+            // (Non-Certified and None are "No"; the email keeps the full status)
+            certifications: Object.fromEntries(
+                ALL_CERTIFICATIONS.map((c) => [
+                    c.name,
+                    v.certifications[c.value] === "certified" ? "Yes" : "No",
+                ])
+            ),
             jobCity: clean(payload.city, 100),
             ...job,
         },
