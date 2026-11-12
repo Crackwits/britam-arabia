@@ -128,6 +128,16 @@ function buildHtml(payload: SubmissionPayload) {
     </div>`;
 }
 
+/** "fire-instructor-iii" → "certFireInstructorIII" (roman numerals stay upper-case) */
+const certFieldName = (value: string) =>
+    "cert" +
+    value
+        .split("-")
+        .map((part) =>
+            /^(i|ii|iii)$/.test(part) ? part.toUpperCase() : part[0].toUpperCase() + part.slice(1)
+        )
+        .join("");
+
 /**
  * Re-validates the raw form values with the same zod schemas the forms use and maps
  * them 1:1 to the Strapi fields (select values stored as their English labels).
@@ -175,12 +185,12 @@ function toStrapiEntry(payload: SubmissionPayload) {
                 v.hasDrivingLicense === "yes" && v.licenseType
                     ? findLabel(LICENSE_TYPES, v.licenseType)
                     : null,
-            // Every certification by name: "Yes" only when marked Certified
-            // (Non-Certified and None are "No"; the email keeps the full status)
-            certifications: Object.fromEntries(
+            // One boolean Strapi field per certification (e.g. certFirefighterI): true only when
+            // marked Certified (Non-Certified and None are false; the email keeps the full status)
+            ...Object.fromEntries(
                 ALL_CERTIFICATIONS.map((c) => [
-                    c.name,
-                    v.certifications[c.value] === "certified" ? "Yes" : "No",
+                    certFieldName(c.value),
+                    v.certifications[c.value] === "certified",
                 ])
             ),
             jobCity: clean(payload.city, 100),
