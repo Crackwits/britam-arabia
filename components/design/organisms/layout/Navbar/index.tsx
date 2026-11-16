@@ -134,13 +134,13 @@ const headerVariants: Variants = {
 const tweenInOut: Transition = { type: 'tween', duration: 0.35, ease: 'easeInOut' };
 
 const panelVariants: Variants = {
-    hidden: { x: '100%', transition: tweenInOut },
-    visible: { x: 0, transition: tweenInOut },
+    hidden: { x: '100%', pointerEvents: 'none', transition: tweenInOut },
+    visible: { x: 0, pointerEvents: 'auto', transition: tweenInOut },
 };
 
 const panelVariantsRTL: Variants = {
-    hidden: { x: '-100%', transition: tweenInOut },
-    visible: { x: 0, transition: tweenInOut },
+    hidden: { x: '-100%', pointerEvents: 'none', transition: tweenInOut },
+    visible: { x: 0, pointerEvents: 'auto', transition: tweenInOut },
 };
 
 const itemVariants: Variants = {
@@ -152,9 +152,11 @@ const itemVariants: Variants = {
     }),
 };
 
+// pointerEvents flips at the start of the exit, so the fading overlay
+// doesn't swallow taps on the header/page underneath it.
 const overlayVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.6 } },
+    hidden: { opacity: 0, pointerEvents: 'none' },
+    visible: { opacity: 1, pointerEvents: 'auto', transition: { duration: 0.6 } },
 };
 
 // ─── Main component ───────────────────────────────────────────────────────────
@@ -328,7 +330,6 @@ export default function Navbar({ activeSection, lang }: Props) {
                                 backdropFilter: 'blur(6px)',
                                 WebkitBackdropFilter: 'blur(6px)',
                                 backgroundColor: 'rgba(0,0,0,0.35)',
-                                pointerEvents: 'auto',
                             }}
                         />
 
@@ -346,7 +347,7 @@ export default function Navbar({ activeSection, lang }: Props) {
                                 ...(isArabic ? { left: 0 } : { right: 0 }),
                                 width: '100%', maxWidth: '485px',
                                 zIndex: 9999, backgroundColor: '#001F63',
-                                overflowY: 'auto', pointerEvents: 'auto',
+                                overflowY: 'auto',
                             }}
                         >
                             <div className="flex flex-col h-full p-6 max-w-[485px] w-full mx-auto">
