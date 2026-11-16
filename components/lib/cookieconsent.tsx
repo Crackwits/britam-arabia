@@ -17,7 +17,7 @@ const POLICY_URL = { en: '/en/cookies-policy', ar: '/ar/cookies-policy' };
 
 // Cookies removed when a category is refused (add your real cookie names)
 const COOKIES_BY_CATEGORY: Record<string, string[]> = {
-    analytics: ['_ga', '_gid', '_gat', '_gat_gtag_*'],
+    analytics: ['_ga', '_ga_*', '_gid', '_gat', '_gat_gtag_*'],
     marketing: ['_fbp', 'fr', 'IDE', '_gcl_au'],
     functional: [],
 };
