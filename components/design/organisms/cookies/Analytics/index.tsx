@@ -4,7 +4,17 @@ import Script from 'next/script';
 import { useCookieConsent } from '@/components/lib/cookieconsent';
 
 // Google tag (gtag.js) IDs: the script loads once (with the first ID) and each ID gets its own config
-const GOOGLE_TAG_IDS = ['G-S6VWEXZ3MF', 'GTM-58WD4JJM'];
+// (Google Analytics 4, Google tag, Google Ads)
+const GOOGLE_TAG_IDS = ['G-S6VWEXZ3MF', 'GTM-58WD4JJM', 'AW-18518886571'];
+
+/** Google Ads conversion — call after a form submits successfully. No-op until the visitor consents. */
+export function trackConversion() {
+    window.gtag?.('event', 'conversion', {
+        send_to: 'AW-18518886571/JPFUCLaShqAdEKuRv_5E',
+        value: 1.0,
+        currency: 'SAR',
+    });
+}
 
 declare global {
     interface Window {

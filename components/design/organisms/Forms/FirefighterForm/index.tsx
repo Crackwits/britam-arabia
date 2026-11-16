@@ -39,6 +39,7 @@ import {
 } from "../Formfields";
 import ResumeUpload from "../Resumeupload";
 import SubmissionModal from "../SubmissionModal";
+import { trackConversion } from "@/components/design/organisms/cookies/Analytics";
 
 interface FirefighterFormProps {
     lang: Lang;
@@ -240,6 +241,7 @@ export default function FirefighterForm({
                 readHoneypot(event)
             );
 
+            trackConversion();
             setModalType("success");
             setModalMessage(undefined);
             setShowModal(true);

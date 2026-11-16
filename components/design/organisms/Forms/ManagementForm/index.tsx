@@ -22,6 +22,7 @@ import { Field, SelectInput, TextInput } from "../Formfields";
 import ResumeUpload from "../Resumeupload";
 import SubmissionModal from "../SubmissionModal";
 import Honeypot, { readHoneypot } from "../Honeypot";
+import { trackConversion } from "@/components/design/organisms/cookies/Analytics";
 
 interface ManagementFormProps {
     lang: Lang;
@@ -159,6 +160,7 @@ export default function ManagementForm({
                 readHoneypot(event)
             );
 
+            trackConversion();
             setModalType("success");
             setModalMessage(undefined);
             setShowModal(true);

@@ -13,6 +13,7 @@ import {
     ACCEPTED_FILE_EXTENSIONS,
     MAX_FILE_SIZE,
 } from "@/components/lib/applicationSchema";
+import { trackConversion } from "@/components/design/organisms/cookies/Analytics";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -754,6 +755,7 @@ export default function RiskAssessmentForm({
                 throw new Error(result.message || "Failed to submit form");
             }
 
+            trackConversion();
             setSubmitState("success");
             setShowModal(true);
             reset(defaultValues);

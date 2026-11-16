@@ -11,6 +11,7 @@ import WhiteTriangle from "@/public/svg/whitetriangle";
 import OrangeTriangle from "@/public/svg/orangetriangle";
 import { GlobalSettingAttributes } from "@/components/lib/types";
 import Honeypot, { readHoneypot } from "@/components/design/organisms/Forms/Honeypot";
+import { trackConversion } from "@/components/design/organisms/cookies/Analytics";
 // ─── Types ────────────────────────────────────────────────────────────────────
 // type SupportedLocale = keyof typeof translations; // → "en" | "ar"
 interface ContactSectionProps {
@@ -192,6 +193,7 @@ export default function HpContactSection({ locale, globalSettings, heading, body
       if (!response.ok) throw new Error("Submission failed");
 
       reset();
+      trackConversion();
       setSubmitStatus("success");
     } catch (err) {
       console.error("Contact form submission error:", err);
